@@ -194,10 +194,10 @@ function stopObserving(){ if(observer){ observer.disconnect(); observer = null; 
 
 function activeChips(){
   const c = [];
-  if(q.value.trim()) c.push(`Search: <strong style=color:#fff>${q.value.trim()}</strong>`);
-  if(diffSel.value) c.push(`Difficulty: <strong style=color:#fff>${cap(diffSel.value)}</strong>`);
-  if(genderSel.value) c.push(`Character: <strong style=color:#fff>${cap(genderSel.value)}</strong>`);
-  if(themeSel.value) c.push(`Theme: <strong style=color:#fff>${cap(themeSel.value)}</strong>`);
+  if(q.value.trim()) c.push(`Search: <strong style=color:#000000>${q.value.trim()}</strong>`);
+  if(diffSel.value) c.push(`Difficulty: <strong style=color:#000000>${cap(diffSel.value)}</strong>`);
+  if(genderSel.value) c.push(`Character: <strong style=color:#000000>${cap(genderSel.value)}</strong>`);
+  if(themeSel.value) c.push(`Theme: <strong style=color:#000000>${cap(themeSel.value)}</strong>`);
   chips.innerHTML = c.map(badge).join('');
 }
 

@@ -11,10 +11,10 @@
   --ring: #000000;
   --text: #000000;
   --muted: #555555;
-  --chip: #f2f2f2;
+  --chip: #f7f7f7;
   --radius: 0;                         /* square corners */
   --border: 2px solid var(--ring);
-
+  --bg-tile: url("bg.png");
   /* Dual accent shadows */
   --shadow-pink: #ff4fd8;
   --shadow-yellow: #ffd166;
@@ -23,12 +23,21 @@
 /* ---------- Reset / Base ---------- */
 *{ box-sizing: border-box }
 html,body{ height:100% }
+
 body{
   margin:0;
   font-family: Inter, ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial;
-  background: var(--bg);
   color: var(--text);
+
+  /* background */
+  background-color: #fff;                /* was: background: var(--bg); */
+  background-image: var(--bg-tile);
+  background-repeat: repeat;
+  background-position: 0 0;
+  background-size: 64px 64px;            /* optional if your tile is exactly 64×64 */
+  image-rendering: pixelated;            /* nice for pixel art */
 }
+
 
 :where(a,button,input,select){ outline: none }
 :where(a,button,input,select):focus-visible{
@@ -43,6 +52,14 @@ header{
   position: sticky; top: 0; z-index: 20;
   background: var(--panel);
   border-bottom: 1px solid var(--ring);
+
+    /* background */
+  background-color: #fff;                /* was: background: var(--bg); */
+  background-image: var(--bg-tile);
+  background-repeat: repeat;
+  background-position: 0 0;
+  background-size: 64px 64px;            /* optional if your tile is exactly 64×64 */
+  image-rendering: pixelated;            /* nice for pixel art */
 }
 
 .brand{ display:flex; align-items:center; gap:14px }
@@ -261,6 +278,7 @@ input[type="search"]:focus, select:focus{ transform: translateY(-1px) }
 .btn-clear{
   padding:6px 12px;
   line-height:1;
+  background-color: rgb(255, 0, 0);
   height:32px;         /* optional: match approximate chip height */
 }
 
@@ -316,6 +334,34 @@ input[type="search"]:focus, select:focus{ transform: translateY(-1px) }
 
   /* badge not needed on mobile */
   .download-badge{ display:none !important; }
+}
+
+/* --- Social buttons next to logo --- */
+.brand{ flex-wrap: wrap; }                   /* allow wrapping on very small screens */
+.socials{
+  display:flex; align-items:center; gap:8px;
+  margin-left: 12px;                         /* space after logo/title */
+}
+.icon-btn{
+  width:28px; height:28px; display:grid; place-items:center;
+  background:#fff; color:#000; border:2px solid #000; border-radius:0;
+  text-decoration:none; font-weight:800; font-size:11px; line-height:1;
+  /* tiny dual-shadows for aesthetic pop */
+  box-shadow: 2px 2px 0 var(--shadow-pink, #ff4fd8), 4px 4px 0 var(--shadow-yellow, #ffd166);
+  transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+}
+.icon-btn:hover{ transform: translate(-1px,-1px);
+  box-shadow: 3px 3px 0 var(--shadow-pink, #ff4fd8), 6px 6px 0 var(--shadow-yellow, #ffd166);
+}
+.icon-btn:active{ transform:none; box-shadow:none; }
+.icon-btn svg{ width:16px; height:16px; display:block; }
+.icon-text{ font-family: inherit; }
+
+/* Responsive: make them a bit smaller on very narrow screens */
+@media (max-width: 420px){
+  .socials{ gap:6px; margin-left:8px; }
+  .icon-btn{ width:26px; height:26px; font-size:10px; }
+  .icon-btn svg{ width:15px; height:15px; }
 }
 
 
