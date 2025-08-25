@@ -157,7 +157,7 @@ input[type="search"]:focus, select:focus{ transform: translateY(-1px) }
 /* ---------- Overlay (Show / Download) ---------- */
 .media .overlay{
   position:absolute; inset:0; display:flex; align-items:center; justify-content:center; gap:10px;
-  background: linear-gradient(180deg, rgba(0,0,0,.0), rgba(0,0,0,.35) 60%);
+  background: linear-gradient(180deg, rgb(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7) 60%);
   opacity:0; transition: opacity .25s ease;
 }
 .card:hover .overlay{ opacity:1 }
@@ -283,3 +283,37 @@ input[type="search"]:focus, select:focus{ transform: translateY(-1px) }
 }
 
 .pill{ flex:0 0 auto; }    /* don’t shrink the difficulty pill */
+
+/* Mobile/touch: show a hint, reveal overlay only after first tap */
+@media (hover:none), (pointer:coarse){
+  /* overlay is hidden by default on touch */
+  .media .overlay{
+    z-index: 900;
+    opacity: 0 !important;
+    background: rgba(255,255,255,.7);
+    transition: opacity .2s ease;
+  }
+  /* when the card gets .show-ov (set by JS), show the overlay */
+  .card.show-ov .media .overlay{ opacity: 1 !important; }
+
+  /* tappable hint */
+  .media::before{
+    content: "Tap to view / download";
+    position: absolute; bottom: 10px; left: 50%;
+    transform: translateX(-50%);
+    background: #fff; color:#000; border:2px solid #000; border-radius:0;
+    padding: 4px 8px; font-size: 14px;
+    pointer-events: none;
+  }
+  /* hide the hint when overlay is open */
+  .card.show-ov .media::before{ display:none; }
+
+  /* clearer buttons on touch */
+  .media .overlay .btn{
+    background:#fff !important; color:#000 !important;
+    padding:12px 16px; font-size:14px;
+  }
+
+  /* badge not needed on mobile */
+  .download-badge{ display:none !important; }
+}

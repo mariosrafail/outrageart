@@ -33,6 +33,35 @@ const btnLastTop  = document.getElementById('btnLastTop');
 const pageInfoTop = document.getElementById('pageInfoTop');
 // Alpha sort helpers (locale-aware, handles numbers)
 const basename = p => (p||'').split('?')[0].split('#')[0].split('/').pop() || (p||'');
+// On touch devices, first tap shows the overlay; second tap hits the buttons
+const isTouch = window.matchMedia('(hover:none), (pointer:coarse)').matches;
+
+if (isTouch) {
+  // tap on the image area toggles the overlay for that card
+  grid.addEventListener('click', (e) => {
+    const media = e.target.closest('.media');
+    if (!media) return;
+
+    const card = media.closest('.card');
+    if (!card) return;
+
+    // if overlay not open, open it and stop here
+    if (!card.classList.contains('show-ov')) {
+      e.preventDefault();
+      // close any other open overlays
+      grid.querySelectorAll('.card.show-ov').forEach(c => c.classList.remove('show-ov'));
+      card.classList.add('show-ov');
+    }
+    // if already open, let the click proceed to the buttons
+  });
+
+  // tap outside closes any open overlay
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.media') || e.target.closest('.overlay')) return;
+    grid.querySelectorAll('.card.show-ov').forEach(c => c.classList.remove('show-ov'));
+  });
+}
+
 
 
 // Toggle visibility based on scroll
