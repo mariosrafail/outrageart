@@ -17,9 +17,10 @@
         <img src="assets/logo.png" alt="DoodleLab logo" />
         <h1>Outrage Art</h1>
         <span id="count" class="badge">0 items</span>
+        <button id="filtersToggle" class="btn ghost menu-btn" aria-expanded="false" aria-controls="controlsPanel">Filters</button>
       </div>
 
-      <div class="controls">
+      <div id="controlsPanel" class="controls">
         <div class="control search">
           <input id="q" type="search" placeholder="Search (title, theme, tags)..." />
         </div>
@@ -86,9 +87,13 @@
     <button id="btnNext"  class="btn">Next</button>
     <button id="btnLast"  class="btn">Last</button>
   </nav>
+  <br>
+  <br>
+  <br>
+  <br>
 
     <div id="loading" class="spinner" style="display:none"></div>
-    <div id="sentinel"></div>
+    
   </main>
 
   <button id="backtotop" class="backtotop" aria-label="Back to top">↑</button>

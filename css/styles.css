@@ -317,3 +317,24 @@ input[type="search"]:focus, select:focus{ transform: translateY(-1px) }
   /* badge not needed on mobile */
   .download-badge{ display:none !important; }
 }
+
+
+/* ==============================
+   Mobile Filters Panel Toggle
+   - Hide filters by default on small screens
+   - Show a 'Filters' button in the brand row
+   ============================== */
+.menu-btn{ display:none; } /* hidden on desktop */
+
+@media (max-width: 760px){
+  .menu-btn{ display:inline-block; margin-left:auto; }
+  /* Turn controls grid into an off-canvas style block */
+  #controlsPanel{
+    display:none;
+    border: var(--border);
+    padding: 10px;
+    margin-top:10px;
+    background: var(--panel);
+  }
+  #controlsPanel.open{ display:grid; }
+}

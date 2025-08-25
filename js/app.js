@@ -10,7 +10,7 @@ const chips = document.getElementById('activeChips');
 const count = document.getElementById('count');
 const clearBtn = document.getElementById('clear');
 const backToTop = document.getElementById('backtotop');
-// js/app.js — ΠΡΟΣΘΗΚΗ: λογική για το popup viewer (βάλε το ΚΑΤΩ ΑΠΟ τα const ... refs)
+// Modal viewer refs
 const viewer = document.getElementById('viewer');
 const viewerImg = document.getElementById('viewerImg');
 const viewerClose = document.getElementById('viewerClose');
@@ -31,6 +31,32 @@ const btnPrevTop  = document.getElementById('btnPrevTop');
 const btnNextTop  = document.getElementById('btnNextTop');
 const btnLastTop  = document.getElementById('btnLastTop');
 const pageInfoTop = document.getElementById('pageInfoTop');
+
+// Mobile filters toggle
+const filtersToggle = document.getElementById('filtersToggle');
+const controlsPanel = document.getElementById('controlsPanel');
+if (filtersToggle && controlsPanel){
+  filtersToggle.addEventListener('click', () => {
+    const open = controlsPanel.classList.toggle('open');
+    filtersToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  // Ensure panel is visible on resize back to desktop
+  window.addEventListener('resize', () => {
+    if (window.matchMedia('(min-width: 761px)').matches){
+      controlsPanel.classList.add('open');
+      filtersToggle.setAttribute('aria-expanded','true');
+    } else {
+      controlsPanel.classList.remove('open');
+      filtersToggle.setAttribute('aria-expanded','false');
+    }
+  });
+  // Initialize state for current viewport
+  if (window.matchMedia('(min-width: 761px)').matches){
+    controlsPanel.classList.add('open');
+    filtersToggle.setAttribute('aria-expanded','true');
+  }
+}
+
 // Alpha sort helpers (locale-aware, handles numbers)
 const basename = p => (p||'').split('?')[0].split('#')[0].split('/').pop() || (p||'');
 // On touch devices, first tap shows the overlay; second tap hits the buttons
