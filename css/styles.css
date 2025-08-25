@@ -15,6 +15,7 @@
   --radius: 0;                         /* square corners */
   --border: 2px solid var(--ring);
   --bg-tile: url("bg.png");
+  --bg-tile2: url("bg2.png");
   /* Dual accent shadows */
   --shadow-pink: #ff4fd8;
   --shadow-yellow: #ffd166;
@@ -384,3 +385,4 @@ input[type="search"]:focus, select:focus{ transform: translateY(-1px) }
   }
   #controlsPanel.open{ display:grid; }
 }
+

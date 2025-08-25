@@ -32,6 +32,7 @@ const btnNextTop  = document.getElementById('btnNextTop');
 const btnLastTop  = document.getElementById('btnLastTop');
 const pageInfoTop = document.getElementById('pageInfoTop');
 
+
 // Mobile filters toggle
 const filtersToggle = document.getElementById('filtersToggle');
 const controlsPanel = document.getElementById('controlsPanel');
