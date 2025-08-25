@@ -242,7 +242,7 @@ input[type="search"]:focus, select:focus{ transform: translateY(-1px) }
 
 /* Pager layout */
 .pager{
-  display:flex; justify-content:center; align-items:center; gap:24px;
+  display:flex; justify-content:center; align-items:center; gap:10px;
   padding:24px 0;
 }
 .pager .page-info{ font-weight:700; }
