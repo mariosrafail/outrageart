@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Outrage Art</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="brand">
+        <img src="assets/logo.png" alt="DoodleLab logo" />
+        <h1>Outrage Art</h1>
+        <span id="count" class="badge">0 items</span>
+      </div>
+
+      <div class="controls">
+        <div class="control search">
+          <input id="q" type="search" placeholder="Search (title, theme, tags)..." />
+        </div>
+        <div class="control select">
+          <select id="difficulty">
+            <option value="">Difficulty: All</option>
+            <option value="easy">Easy</option>
+            <option value="normal">Normal</option>
+            <option value="medium">Medium</option>
+            <option value="tricky">Tricky</option>
+            <option value="hard">Hard</option>
+          </select>
+        </div>
+        <div class="control select">
+          <select id="gender">
+            <option value="">Gender: All</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="neutral">Neutral</option>
+          </select>
+        </div>
+        <div class="control select">
+          <select id="theme">
+            <option value="">Theme: All</option>
+          </select>
+        </div>
+        <div class="control actions">
+
+                  <!-- Page size -->
+        <div class="control select">
+          <select id="pageSize">
+            <option value="8" selected>8 per page</option>
+            <option value="20">20 per page</option>
+            <option value="30">30 per page</option>
+          </select>
+        </div>
+
+        </div>
+        
+      </div>
+      
+      <div class="chips-row">
+  <div class="chips" id="activeChips"></div>
+  <button class="btn ghost btn-clear" id="clear">Clear</button>
+</div>
+    </div>
+  </header>
+
+  <nav id="pagerTop" class="pager" aria-label="Pagination (top)">
+  <button id="btnFirstTop" class="btn">First</button>
+  <button id="btnPrevTop"  class="btn">Previous</button>
+  <span id="pageInfoTop" class="page-info">Page 1 / 1</span>
+  <button id="btnNextTop"  class="btn">Next</button>
+  <button id="btnLastTop"  class="btn">Last</button>
+  </nav>
+
+
+  <main class="container">
+    <section id="grid" class="grid" aria-live="polite"></section>
+      <nav id="pager" class="pager" aria-label="Pagination">
+    <button id="btnFirst" class="btn">First</button>
+    <button id="btnPrev"  class="btn">Previous</button>
+    <span id="pageInfo" class="page-info">Page 1 / 1</span>
+    <button id="btnNext"  class="btn">Next</button>
+    <button id="btnLast"  class="btn">Last</button>
+  </nav>
+
+    <div id="loading" class="spinner" style="display:none"></div>
+    <div id="sentinel"></div>
+  </main>
+
+  <button id="backtotop" class="backtotop" aria-label="Back to top">↑</button>
+
+  <footer>
+    <!-- Thumbs are local WEBP for speed. Replace each <code>url</code> in <code>data/items.json</code> with your Dropbox/Nextcloud direct link (use <code>?dl=1</code> or <code>/download</code> to force download). -->
+  </footer>
+
+  
+  <!-- index.html — ΠΡΟΣΘΗΚΗ στο τέλος του <body> (πάνω από το </body>) -->
+<div id="viewer" class="viewer" hidden>
+  <div class="viewer-backdrop"></div>
+  <figure class="viewer-content" role="dialog" aria-modal="true">
+    <button id="viewerClose" class="viewer-close" aria-label="Close">×</button>
+    <img id="viewerImg" alt="">
+  </figure>
+</div>
+
+  <script src="js/app.js"></script>
+
+
+</body>
+</html>

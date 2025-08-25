@@ -1,0 +1,138 @@
+[
+  {
+    "id": 1,
+    "title": "Doodle SpongeBob",
+    "theme": "Spongebob",
+    "gender": "neutral",
+    "difficulty": "easy",
+    "thumb": "assets/thumbs/doodle_spongebob_thumb.png",
+    "url": "https://nextcloud.stinis.ddns.net/s/AzbcttMQ9Y9Hfc8/download"
+
+  },
+  {
+    "id": 2,
+    "title": "Finn the Human",
+    "theme": "Adventure time",
+    "gender": "male",
+    "difficulty": "normal",
+    "thumb": "assets/thumbs/finn_thumb.png",
+    "url": "https://nextcloud.stinis.ddns.net/s/ibr6PSo4JzqAsaw/download"
+  },
+    {
+    "id": 3,
+    "title": "Ghosty",
+    "theme": "Halloween",
+    "gender": "neutral",
+    "difficulty": "medium",
+    "thumb": "assets/thumbs/ghosty_thumb.png",
+    "url": "https://nextcloud.stinis.ddns.net/s/oCLcHZpmEBCyq6F/download"
+  },
+    {
+    "id": 4,
+    "title": "Kid Luffy",
+    "theme": "One Piece",
+    "gender": "male",
+    "difficulty": "hard",
+    "thumb": "assets/thumbs/kid_luffy_thumb.png",
+    "url": "https://nextcloud.stinis.ddns.net/s/AnR8b4Cs3LTRd2e/download"
+  },
+    {
+    "id": 5,
+    "title": "Greg",
+    "theme": "Diary of a Whimpy Kid",
+    "gender": "male",
+    "difficulty": "normal",
+    "thumb": "assets/thumbs/greg_thumb.png",
+    "url": "https://nextcloud.stinis.ddns.net/s/2gPsS85oJLWsSPr/download"
+  },
+    {
+    "id": 6,
+    "title": "Gojo",
+    "theme": "Jujutsu Kaisen",
+    "gender": "male",
+    "difficulty": "normal",
+    "thumb": "assets/thumbs/gojo_thumb.png",
+    "url": "https://nextcloud.stinis.ddns.net/s/Bi82HNP5RgMndTf/download"
+  },
+      {
+    "id": 8,
+    "title": "Grumpy Luffy",
+    "theme": "One Piece",
+    "gender": "male",
+    "difficulty": "hard",
+    "thumb": "assets/thumbs/grumpy_luffy_thumb.png",
+    "url": "https://nextcloud.stinis.ddns.net/s/jLsQi4HQwywL7bJ/download"
+  },
+      {
+    "id": 9,
+    "title": "Law",
+    "theme": "One Piece",
+    "gender": "male",
+    "difficulty": "medium",
+    "thumb": "assets/thumbs/law_thumb.png",
+    "url": "https://nextcloud.stinis.ddns.net/s/WTSECQRf5jpBYKZ/download"
+  },
+      {
+    "id": 10,
+    "title": "Law's hat",
+    "theme": "One Piece",
+    "gender": "neutral",
+    "difficulty": "normal",
+    "thumb": "assets/thumbs/lawhat_thumb.png",
+    "url": "https://nextcloud.stinis.ddns.net/s/RLDrk8NzYHbQHe8/download"
+  },
+      {
+    "id": 11,
+    "title": "Saitama",
+    "theme": "One Punch Man",
+    "gender": "male",
+    "difficulty": "easy",
+    "thumb": "assets/thumbs/saitama_thumb.png",
+    "url": "https://nextcloud.stinis.ddns.net/s/Btwb6nyL97KjXon/download"
+  },
+      {
+    "id": 12,
+    "title": "Squidward",
+    "theme": "Spongebob",
+    "gender": "male",
+    "difficulty": "tricky",
+    "thumb": "assets/thumbs/squid_thumb.png",
+    "url": "https://nextcloud.stinis.ddns.net/s/ZLa52Hwrye8xZRr/download"
+  },
+      {
+    "id": 13,
+    "title": "Straw hat",
+    "theme": "One Piece",
+    "gender": "neutral",
+    "difficulty": "normal",
+    "thumb": "assets/thumbs/strawhat_thumb.png",
+    "url": "https://nextcloud.stinis.ddns.net/s/prbjBZW5gyPycom/download"
+  },
+      {
+    "id": 14,
+    "title": "Stupid Luffy",
+    "theme": "One Piece",
+    "gender": "male",
+    "difficulty": "hard",
+    "thumb": "assets/thumbs/stupid_luffy_thumb.png",
+    "url": "https://nextcloud.stinis.ddns.net/s/FbAGtDN8ttwPRxs/download"
+  },
+      {
+    "id": 15,
+    "title": "Tung Tung Tung Sahur",
+    "theme": "Brainrot",
+    "gender": "male",
+    "difficulty": "hard",
+    "thumb": "assets/thumbs/tung_thumb.png",
+    "url": "https://nextcloud.stinis.ddns.net/s/3xiAcCRY2P924gX/download"
+  },
+      {
+    "id": 16,
+    "title": "Batman",
+    "theme": "DC",
+    "gender": "male",
+    "difficulty": "normal",
+    "thumb": "assets/thumbs/batman_thumb.png",
+    "url": "https://nextcloud.stinis.ddns.net/s/Kcb9tbn6PbSMfSQ/download"
+  }
+]
