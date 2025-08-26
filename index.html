@@ -9,6 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/newsletter.css">
+<script src="js/newsletter.js" defer></script>
 </head>
 <body>
   <header>
@@ -153,6 +155,36 @@
 
     <div id="loading" class="spinner" style="display:none"></div>
     
+    <!-- Newsletter -->
+<section id="newsletter" class="newsletter">
+  <h2>Sign up to the newsletter</h2>
+  <p class="sub">Get new doodles in your inbox.</p>
+
+  <form id="newsletterForm"
+        name="newsletter"
+        method="POST"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        action="/thanks.html">
+
+    <!-- Netlify needs this hidden field -->
+    <input type="hidden" name="form-name" value="newsletter">
+
+    <!-- Honeypot (spam trap) -->
+    <p class="hp">
+      <label>Don’t fill this out: <input name="bot-field"></label>
+    </p>
+
+    <div class="fields">
+      <input id="nlEmail" type="email" name="email" placeholder="you@example.com" required aria-label="Email address">
+      <button id="nlSubmit" class="btn" type="submit">Sign up</button>
+    </div>
+
+    <p id="nlHelp" class="help" role="status" aria-live="polite"></p>
+  </form>
+</section>
+
+
   </main>
 
   <button id="backtotop" class="backtotop" aria-label="Back to top">↑</button>
