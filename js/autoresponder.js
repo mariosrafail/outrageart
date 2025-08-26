@@ -7,18 +7,18 @@ const EMAILJS_TEMPLATE_ID = "template_c3um3cj";
 (function initEmailJS(){
   if (window.emailjs && EMAILJS_PUBLIC_KEY) {
     emailjs.init(EMAILJS_PUBLIC_KEY);
-  } else {
-    console.warn("EmailJS SDK not found or key missing.");
   }
 })();
 
-// Call this to send the welcome email
+// Call this after the Netlify form succeeds
 window.sendWelcomeEmail = function(email){
-  if (!window.emailjs) return Promise.resolve(); // no-op if SDK missing
-  // Match the variables your template expects:
-  return emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+  if (!window.emailjs) return Promise.resolve();
+  // MUST match the template variable name in "To email": {{to_email}}
+  const params = {
     to_email: email,
-    // subject: "Welcome to daily doodle challenges!",  // optional if set in template
-    // message: "Thanks for subscribing! You'll get daily prompts.", // optional
-  });
+    site_name: "Outrage Art",
+    // add more if your template uses them, e.g. to_name, message, reply_to, etc.
+  };
+  return emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
+    .catch(err => { console.warn("EmailJS send failed:", err); });
 };
