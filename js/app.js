@@ -10,11 +10,9 @@ const chips = document.getElementById('activeChips');
 const count = document.getElementById('count');
 const clearBtn = document.getElementById('clear');
 const backToTop = document.getElementById('backtotop');
-// Modal viewer refs
 const viewer = document.getElementById('viewer');
 const viewerImg = document.getElementById('viewerImg');
 const viewerClose = document.getElementById('viewerClose');
-// Put this near the other consts at the top of app.js
 const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
 const sortKey = it => ((it.title && it.title.trim()) || it.url || it.thumb || "").toString();
 const pageSizeSel = document.getElementById('pageSize');
