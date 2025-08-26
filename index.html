@@ -57,24 +57,59 @@
   </svg>
 </a>
 
-<!-- Discord -->
-<a class="icon-btn" href="https://discord.gg/3rXcCAXhdd" target="_blank" rel="noopener" aria-label="Discord">
+
+<!-- <a class="icon-btn" href="https://discord.gg/3rXcCAXhdd" target="_blank" rel="noopener" aria-label="Discord">
   <svg viewBox="0 0 24 24" aria-hidden="true">
-    <!-- simplified “controller face” -->
     <path d="M6.5 8.5c3-1.8 8.9-1.8 11.0 0 1.1 1.8 1.8 4.4 1.8 6.1-3 1.7-11.6 1.7-14.6 0 .1-1.7.8-4.3 1.8-6.1z"
           fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
     <circle cx="10" cy="12" r="1.5" fill="currentColor"/>
     <circle cx="14" cy="12" r="1.5" fill="currentColor"/>
   </svg>
-</a><br>
-<a class="btn ghost btn-clear" href="https://shadowplay875.gumroad.com" target="_blank" rel="noopener" aria-label="Email""
-   aria-label="Email">Subscribe to newsletter for daily challenges!
+ </a><br> -->
 
    
 </a>
 </nav>
 
+<button id="newsletterToggle"
+        class="btn btn-newsletter"
+        aria-controls="newsletter"
+        aria-expanded="false">
+  Subscribe to newsletter for daily challenges!
+</button>
 
+<a class="btn btn-newsletter" href="https://discord.gg/3rXcCAXhdd" target="_blank" rel="noopener" aria-label="Discord">
+...and show me on Discord!
+</a><br>
+
+    <!-- Newsletter -->
+<section id="newsletter" class="newsletter is-collapsed">
+  <h2>Sign up to the newsletter</h2>
+  <p class="sub">Get new challenges in your inbox. Daily. (Check spam)</p>
+
+  <form id="newsletterForm"
+        name="newsletter"
+        method="POST"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        action="/thanks.html">
+
+    <!-- Netlify needs this hidden field -->
+    <input type="hidden" name="form-name" value="newsletter">
+
+    <!-- Honeypot (spam trap) -->
+    <p class="hp">
+      <label>Don’t fill this out: <input name="bot-field"></label>
+    </p>
+
+    <div class="fields">
+      <input id="nlEmail" type="email" name="email" placeholder="you@example.com" required aria-label="Email address">
+      <button id="nlSubmit" class="btn" type="submit">Sign up</button>
+    </div>
+
+    <p id="nlHelp" class="help" role="status" aria-live="polite"></p>
+  </form>
+</section>
 
         <button id="filtersToggle" class="btn ghost menu-btn" aria-expanded="false" aria-controls="controlsPanel">Filters</button>
 
@@ -155,34 +190,7 @@
 
     <div id="loading" class="spinner" style="display:none"></div>
     
-    <!-- Newsletter -->
-<section id="newsletter" class="newsletter">
-  <h2>Sign up to the newsletter</h2>
-  <p class="sub">Get new doodles in your inbox.</p>
 
-  <form id="newsletterForm"
-        name="newsletter"
-        method="POST"
-        data-netlify="true"
-        netlify-honeypot="bot-field"
-        action="/thanks.html">
-
-    <!-- Netlify needs this hidden field -->
-    <input type="hidden" name="form-name" value="newsletter">
-
-    <!-- Honeypot (spam trap) -->
-    <p class="hp">
-      <label>Don’t fill this out: <input name="bot-field"></label>
-    </p>
-
-    <div class="fields">
-      <input id="nlEmail" type="email" name="email" placeholder="you@example.com" required aria-label="Email address">
-      <button id="nlSubmit" class="btn" type="submit">Sign up</button>
-    </div>
-
-    <p id="nlHelp" class="help" role="status" aria-live="polite"></p>
-  </form>
-</section>
 
 
   </main>

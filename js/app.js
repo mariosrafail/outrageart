@@ -29,6 +29,27 @@ const btnPrevTop  = document.getElementById('btnPrevTop');
 const btnNextTop  = document.getElementById('btnNextTop');
 const btnLastTop  = document.getElementById('btnLastTop');
 const pageInfoTop = document.getElementById('pageInfoTop');
+// Newsletter drop-down toggle
+const nlSection = document.getElementById('newsletter');
+const nlToggle  = document.getElementById('newsletterToggle');
+
+if (nlSection && nlToggle){
+  // ensure initial collapsed state (in case class missing)
+  if (!nlSection.classList.contains('is-open')) {
+    nlSection.classList.add('is-collapsed');
+  }
+
+  nlToggle.addEventListener('click', () => {
+    const willOpen = !nlSection.classList.contains('is-open');
+    nlSection.classList.toggle('is-open', willOpen);
+    nlSection.classList.toggle('is-collapsed', !willOpen);
+    nlToggle.setAttribute('aria-expanded', String(willOpen));
+    if (willOpen){
+      nlSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+}
+
 
 
 // Mobile filters toggle

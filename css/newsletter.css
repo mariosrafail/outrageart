@@ -53,3 +53,44 @@
   }
   .newsletter .btn{ width: 100%; }
 }
+
+/* --- Newsletter accordion behavior --- */
+.newsletter{
+  overflow: hidden;
+  max-height: 0;                 /* collapsed by default */
+  opacity: 0;
+  transition: max-height .28s ease, opacity .25s ease, margin .2s ease, padding .2s ease;
+}
+
+/* expanded state */
+.newsletter.is-open{
+  max-height: 420px;             /* big enough for the form */
+  opacity: 1;
+}
+
+/* collapsed state helper (explicit) */
+.newsletter.is-collapsed{
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;                 /* optional: reduce visual gap when closed */
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-top-width: 0;           /* optional */
+  border-bottom-width: 0;
+}
+
+/* Smaller CTA button that sits nicely near socials */
+.btn-newsletter{
+  padding: 8px 10px;
+  font-size: 14px;
+  line-height: 1.1;
+  white-space: nowrap;
+  text-decoration: underline;
+}
+
+/* Wrap gracefully on narrow screens */
+@media (max-width: 760px){
+  .brand{ gap: 10px; }
+  .btn-newsletter{ white-space: normal; }
+}
