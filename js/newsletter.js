@@ -44,6 +44,18 @@
 
       // On Netlify, successful form POST often redirects to thanks.html
       if (res.ok || res.redirected) {
+        // right before form.reset();
+        const emailValue = email.value;
+
+        if (res.ok || res.redirected) {
+          // fire-and-forget welcome email (don’t block the UI)
+          if (window.sendWelcomeEmail) {
+            window.sendWelcomeEmail(emailValue).catch(()=>{ /* ignore errors */ });
+          }
+
+          form.reset();
+          setStatus('Thanks! You’re on the list. 🎉');
+        }
         form.reset();
         // If you prefer to actually go to the thanks page when Netlify redirects:
         // if (res.redirected) return window.location.assign(res.url);
