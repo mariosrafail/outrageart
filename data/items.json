@@ -5,7 +5,7 @@
         "theme": "Spongebob",
         "gender": "neutral",
         "difficulty": "easy",
-        "thumb": "assets/thumbs/doodle_spongebob_thumb.png",
+        "thumb": "https://nextcloud.stinis.ddns.net/s/sZZn47YCqwbafDM/download",
         "url": "https://nextcloud.stinis.ddns.net/s/AzbcttMQ9Y9Hfc8/download"
     },
     {
@@ -14,7 +14,7 @@
         "theme": "Adventure time",
         "gender": "male",
         "difficulty": "normal",
-        "thumb": "assets/thumbs/finn_thumb.png",
+        "thumb": "https://nextcloud.stinis.ddns.net/s/qiB7HKRjZ4HsX4w/download",
         "url": "https://nextcloud.stinis.ddns.net/s/ibr6PSo4JzqAsaw/download"
     },
     {
@@ -23,7 +23,7 @@
         "theme": "Halloween",
         "gender": "neutral",
         "difficulty": "medium",
-        "thumb": "assets/thumbs/ghosty_thumb.png",
+        "thumb": "https://nextcloud.stinis.ddns.net/s/6ZdGtSj8fQB5jam/download",
         "url": "https://nextcloud.stinis.ddns.net/s/oCLcHZpmEBCyq6F/download"
     },
     {
@@ -32,7 +32,7 @@
         "theme": "One Piece",
         "gender": "male",
         "difficulty": "hard",
-        "thumb": "assets/thumbs/kid_luffy_thumb.png",
+        "thumb": "https://nextcloud.stinis.ddns.net/s/joNkxbA9bJoAJ5K/download",
         "url": "https://nextcloud.stinis.ddns.net/s/AnR8b4Cs3LTRd2e/download"
     },
     {
@@ -41,7 +41,7 @@
         "theme": "Diary of a Whimpy Kid",
         "gender": "male",
         "difficulty": "normal",
-        "thumb": "assets/thumbs/greg_thumb.png",
+        "thumb": "https://nextcloud.stinis.ddns.net/s/eqHoQHFcEntQeJB/download",
         "url": "https://nextcloud.stinis.ddns.net/s/2gPsS85oJLWsSPr/download"
     },
     {
@@ -50,7 +50,7 @@
         "theme": "Jujutsu Kaisen",
         "gender": "male",
         "difficulty": "normal",
-        "thumb": "assets/thumbs/gojo_thumb.png",
+        "thumb": "https://nextcloud.stinis.ddns.net/s/7qEHDKBj2EZa6z4/download",
         "url": "https://nextcloud.stinis.ddns.net/s/Bi82HNP5RgMndTf/download"
     },
     {
@@ -59,7 +59,7 @@
         "theme": "One Piece",
         "gender": "male",
         "difficulty": "hard",
-        "thumb": "assets/thumbs/grumpy_luffy_thumb.png",
+        "thumb": "https://nextcloud.stinis.ddns.net/s/Gej64FN32qWWTq5/download",
         "url": "https://nextcloud.stinis.ddns.net/s/jLsQi4HQwywL7bJ/download"
     },
     {
@@ -77,7 +77,7 @@
         "theme": "One Piece",
         "gender": "neutral",
         "difficulty": "normal",
-        "thumb": "assets/thumbs/lawhat_thumb.png",
+        "thumb": "https://nextcloud.stinis.ddns.net/s/nJo96DLtSna3xDd/download",
         "url": "https://nextcloud.stinis.ddns.net/s/RLDrk8NzYHbQHe8/download"
     },
     {
@@ -86,7 +86,7 @@
         "theme": "One Punch Man",
         "gender": "male",
         "difficulty": "easy",
-        "thumb": "assets/thumbs/saitama_thumb.png",
+        "thumb": "https://nextcloud.stinis.ddns.net/s/7ma5YpLofLHBMXw/download",
         "url": "https://nextcloud.stinis.ddns.net/s/Btwb6nyL97KjXon/download"
     },
     {
@@ -95,7 +95,7 @@
         "theme": "Spongebob",
         "gender": "male",
         "difficulty": "tricky",
-        "thumb": "assets/thumbs/squid_thumb.png",
+        "thumb": "https://nextcloud.stinis.ddns.net/s/kdYZd2ncz9k9zd4/download",
         "url": "https://nextcloud.stinis.ddns.net/s/ZLa52Hwrye8xZRr/download"
     },
     {
@@ -104,7 +104,7 @@
         "theme": "One Piece",
         "gender": "neutral",
         "difficulty": "normal",
-        "thumb": "assets/thumbs/strawhat_thumb.png",
+        "thumb": "https://nextcloud.stinis.ddns.net/s/c4D2M4Z3febdr7B/download",
         "url": "https://nextcloud.stinis.ddns.net/s/prbjBZW5gyPycom/download"
     },
     {
@@ -113,7 +113,7 @@
         "theme": "One Piece",
         "gender": "male",
         "difficulty": "hard",
-        "thumb": "assets/thumbs/stupid_luffy_thumb.png",
+        "thumb": "https://nextcloud.stinis.ddns.net/s/K5fzMQNFppdKX5K/download",
         "url": "https://nextcloud.stinis.ddns.net/s/FbAGtDN8ttwPRxs/download"
     },
     {
@@ -122,7 +122,7 @@
         "theme": "Brainrot",
         "gender": "male",
         "difficulty": "hard",
-        "thumb": "assets/thumbs/tung_thumb.png",
+        "thumb": "https://nextcloud.stinis.ddns.net/s/WoWCwsHYdgAWAbb/download",
         "url": "https://nextcloud.stinis.ddns.net/s/3xiAcCRY2P924gX/download"
     },
     {
@@ -131,7 +131,7 @@
         "theme": "DC",
         "gender": "male",
         "difficulty": "normal",
-        "thumb": "assets/thumbs/batman_thumb.png",
+        "thumb": "https://nextcloud.stinis.ddns.net/s/ZjyzG2HFm6Mb9DT/download",
         "url": "https://nextcloud.stinis.ddns.net/s/Kcb9tbn6PbSMfSQ/download"
     }
 ]
