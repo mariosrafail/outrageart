@@ -260,7 +260,7 @@ input[type="search"]:focus, select:focus{ transform: translateY(-1px) }
 
 /* Pager layout */
 .pager{
-  display:flex; justify-content:center; align-items:center; gap:10px;
+  display:flex; justify-content:center; align-items:center; gap:15px;
   padding:24px 0;
 }
 .pager .page-info{ font-weight:700; }
@@ -344,7 +344,7 @@ input[type="search"]:focus, select:focus{ transform: translateY(-1px) }
   margin-left: 12px;                         /* space after logo/title */
 }
 .icon-btn{
-  width:28px; height:28px; display:grid; place-items:center;
+  width:64px; height:34px; display:grid; place-items:center;
   background:#fff; color:#000; border:2px solid #000; border-radius:0;
   text-decoration:none; font-weight:800; font-size:11px; line-height:1;
   /* tiny dual-shadows for aesthetic pop */
@@ -361,8 +361,11 @@ input[type="search"]:focus, select:focus{ transform: translateY(-1px) }
 /* Responsive: make them a bit smaller on very narrow screens */
 @media (max-width: 420px){
   .socials{ gap:6px; margin-left:8px; }
-  .icon-btn{ width:26px; height:26px; font-size:10px; }
+  .icon-btn{ width:50px; height:30px; font-size:8px; }
   .icon-btn svg{ width:15px; height:15px; }
+  .pager{
+  display:flex; justify-content:center; align-items:center; gap:6px; padding:15px 0;
+}
 }
 
 
