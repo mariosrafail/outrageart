@@ -133,5 +133,14 @@
         "difficulty": "normal",
         "thumb": "https://nextcloud.stinis.ddns.net/s/ZjyzG2HFm6Mb9DT/download",
         "url": "https://nextcloud.stinis.ddns.net/s/Kcb9tbn6PbSMfSQ/download"
+    },
+    {
+        "id": 17,
+        "title": "Smoll Luffy",
+        "theme": "One Piece",
+        "gender": "male",
+        "difficulty": "hard",
+        "thumb": "https://nextcloud.stinis.ddns.net/s/RqLQjpgyw4aMJK3/download",
+        "url": "https://nextcloud.stinis.ddns.net/s/GHY5DtPeG4TC3LL/download"
     }
 ]
