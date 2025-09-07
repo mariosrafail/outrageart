@@ -54,7 +54,7 @@
         "url": "https://nextcloud.stinis.ddns.net/s/Bi82HNP5RgMndTf/download"
     },
     {
-        "id": 8,
+        "id": 7,
         "title": "Grumpy Luffy",
         "theme": "One Piece",
         "gender": "male",
@@ -63,7 +63,7 @@
         "url": "https://nextcloud.stinis.ddns.net/s/jLsQi4HQwywL7bJ/download"
     },
     {
-        "id": 9,
+        "id": 8,
         "title": "Law",
         "theme": "One Piece",
         "gender": "male",
@@ -72,7 +72,7 @@
         "url": "https://nextcloud.stinis.ddns.net/s/WTSECQRf5jpBYKZ/download"
     },
     {
-        "id": 10,
+        "id": 9,
         "title": "Law's hat",
         "theme": "One Piece",
         "gender": "neutral",
@@ -81,7 +81,7 @@
         "url": "https://nextcloud.stinis.ddns.net/s/RLDrk8NzYHbQHe8/download"
     },
     {
-        "id": 11,
+        "id": 10,
         "title": "Saitama",
         "theme": "One Punch Man",
         "gender": "male",
@@ -90,7 +90,7 @@
         "url": "https://nextcloud.stinis.ddns.net/s/Btwb6nyL97KjXon/download"
     },
     {
-        "id": 12,
+        "id": 11,
         "title": "Squidward",
         "theme": "Spongebob",
         "gender": "male",
@@ -99,7 +99,7 @@
         "url": "https://nextcloud.stinis.ddns.net/s/ZLa52Hwrye8xZRr/download"
     },
     {
-        "id": 13,
+        "id": 12,
         "title": "Straw hat",
         "theme": "One Piece",
         "gender": "neutral",
@@ -108,7 +108,7 @@
         "url": "https://nextcloud.stinis.ddns.net/s/prbjBZW5gyPycom/download"
     },
     {
-        "id": 14,
+        "id": 13,
         "title": "Stupid Luffy",
         "theme": "One Piece",
         "gender": "male",
@@ -117,7 +117,7 @@
         "url": "https://nextcloud.stinis.ddns.net/s/FbAGtDN8ttwPRxs/download"
     },
     {
-        "id": 15,
+        "id": 14,
         "title": "Tung Tung Tung Sahur",
         "theme": "Brainrot",
         "gender": "male",
@@ -126,7 +126,7 @@
         "url": "https://nextcloud.stinis.ddns.net/s/3xiAcCRY2P924gX/download"
     },
     {
-        "id": 16,
+        "id": 15,
         "title": "Batman",
         "theme": "DC",
         "gender": "male",
@@ -135,12 +135,57 @@
         "url": "https://nextcloud.stinis.ddns.net/s/Kcb9tbn6PbSMfSQ/download"
     },
     {
-        "id": 17,
+        "id": 16,
         "title": "Smoll Luffy",
         "theme": "One Piece",
         "gender": "male",
         "difficulty": "hard",
         "thumb": "https://nextcloud.stinis.ddns.net/s/RqLQjpgyw4aMJK3/download",
         "url": "https://nextcloud.stinis.ddns.net/s/GHY5DtPeG4TC3LL/download"
+    },
+    {
+        "id": 17,
+        "title": "Itaiii",
+        "theme": "One Piece",
+        "gender": "male",
+        "difficulty": "tricky",
+        "thumb": "https://nextcloud.stinis.ddns.net/s/MA8soRDk7QA6zoB/download",
+        "url": "https://nextcloud.stinis.ddns.net/s/3oGxFm9wzWXzcJy/download"
+    },
+    {
+        "id": 18,
+        "title": "Angry Smoll Luffy",
+        "theme": "One Piece",
+        "gender": "male",
+        "difficulty": "tricky",
+        "thumb": "https://nextcloud.stinis.ddns.net/s/wG8i3tDkEwReCfF/download",
+        "url": "https://nextcloud.stinis.ddns.net/s/QoiG5SysAnCw6cs/download"
+    },
+    {
+        "id": 19,
+        "title": "Kid Robin",
+        "theme": "One Piece",
+        "gender": "female",
+        "difficulty": "tricky",
+        "thumb": "https://nextcloud.stinis.ddns.net/s/gbYZDCLWpgYtY6s/download",
+        "url": "https://nextcloud.stinis.ddns.net/s/FYGYwJ7yJcpgP6j/download"
+    },
+    {
+        "id": 20,
+        "title": "Sad Kid Luffy",
+        "theme": "One Piece",
+        "gender": "male",
+        "difficulty": "normal",
+        "thumb": "https://nextcloud.stinis.ddns.net/s/FH4H2ZX5q5MSbQm/download",
+        "url": "https://nextcloud.stinis.ddns.net/s/qtaMKDQTkiwTYrs/download"
+    },
+    {
+        "id": 21,
+        "title": "-_- Saitama",
+        "theme": "One Punch Man",
+        "gender": "male",
+        "difficulty": "normal",
+        "thumb": "https://nextcloud.stinis.ddns.net/s/m2tGWote72ZoF4p/download",
+        "url": "https://nextcloud.stinis.ddns.net/s/cK3eXDRWr6obj2R/download"
     }
 ]
