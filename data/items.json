@@ -187,5 +187,14 @@
         "difficulty": "normal",
         "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/-_-_saitama.png",
         "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/-_-_saitama.png"
+    },
+    {
+        "id": 21,
+        "title": "Chouchou",
+        "theme": "One Piece",
+        "gender": "male",
+        "difficulty": "normal",
+        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/chouchou.png",
+        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/chouchou.png"
     }
 ]
