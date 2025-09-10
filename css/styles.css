@@ -200,13 +200,13 @@ input[type="search"]:focus, select:focus{ transform: translateY(-1px) }
   background:#fff; border: var(--border); color:#000;
   border-radius: var(--radius); padding:10px 12px; cursor:pointer; display:none;
   /* dual shadows */
-  box-shadow: -2px 2px 0 var(--shadow-pink), -4px 4px 0 var(--shadow-yellow);
+  box-shadow: -2px 2px 0 var(--shadow-pink, #ff4fd8), -4px 4px 0 var(--shadow-yellow, #ffd166);
   transition: transform .15s ease, box-shadow .15s ease;
 }
 .backtotop.show{ display:block }
 .backtotop:hover{
   transform: translate(-1px,-1px);
-  box-shadow: -3px 3px 0 var(--shadow-pink), -3px 3px 0 var(--shadow-yellow);
+  box-shadow: -3px 3px 0 var(--shadow-pink, #ff4fd8), -6px 6px 0 var(--shadow-yellow, #ffd166);
 }
 .backtotop:active{ transform: translate(0,0); box-shadow: 0 0 0 var(--shadow-pink), 0 0 0 var(--shadow-yellow) }
 
