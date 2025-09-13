@@ -64,9 +64,9 @@ header{
 }
 
 .brand{ display:flex; align-items:center; gap:14px }
-.brand img{ height:64px; width:auto; filter: grayscale(1); animation: bob 3s ease-in-out infinite }
+.brand img{ height:84px; width:auto;}
 .brand h1{ margin:0; font-size:clamp(20px,2.2vw,28px); letter-spacing:.3px }
-@keyframes bob{ 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(-2.5px) } }
+.slogan {  margin: 0;  font-style: italic;  font-size: clamp(14px, 1.4vw, 18px);  color: #555;}
 
 /* ---------- Controls ---------- */
 .controls{
