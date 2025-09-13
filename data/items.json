@@ -196,5 +196,32 @@
         "difficulty": "normal",
         "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/chouchou.png",
         "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/chouchou.png"
+    },
+    {
+        "id": 22,
+        "title": "Garp",
+        "theme": "One Piece",
+        "gender": "male",
+        "difficulty": "tricky",
+        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Garp.png",
+        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Garp.png"
+    },
+    {
+        "id": 23,
+        "title": "Sabo",
+        "theme": "One Piece",
+        "gender": "male",
+        "difficulty": "tricky",
+        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Sabo.png",
+        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Sabo.png"
+    },
+    {
+        "id": 24,
+        "title": "Marimo",
+        "theme": "One Piece",
+        "gender": "male",
+        "difficulty": "medium",
+        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Marimo.png",
+        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Marimo.png"
     }
 ]
