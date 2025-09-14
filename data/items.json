@@ -5,8 +5,8 @@
         "theme": "Spongebob",
         "gender": "neutral",
         "difficulty": "easy",
-        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/doodle_spongebob.png",
-        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/doodle_spongebob.png"
+        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Doodle_Spongebob.png",
+        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Doodle_Spongebob.png"
     },
     {
         "id": 2,
@@ -14,8 +14,8 @@
         "theme": "Adventure time",
         "gender": "male",
         "difficulty": "normal",
-        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/finn_the_human.png",
-        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/finn_the_human.png"
+        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Finn_The_Human.png",
+        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Finn_The_Human.png"
     },
     {
         "id": 3,
@@ -23,8 +23,8 @@
         "theme": "Halloween",
         "gender": "neutral",
         "difficulty": "medium",
-        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/ghosty.png",
-        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/ghosty.png"
+        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Ghosty.png",
+        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Ghosty.png"
     },
     {
         "id": 4,
@@ -32,8 +32,8 @@
         "theme": "One Piece",
         "gender": "male",
         "difficulty": "hard",
-        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/kid_luffy.png",
-        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/kid_luffy.png"
+        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Kid_Luffy.png",
+        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Kid_Luffy.png"
     },
     {
         "id": 5,
@@ -41,8 +41,8 @@
         "theme": "Diary of a Whimpy Kid",
         "gender": "male",
         "difficulty": "normal",
-        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/greg.png",
-        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/greg.png"
+        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Greg.png",
+        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Greg.png"
     },
     {
         "id": 6,
@@ -50,8 +50,8 @@
         "theme": "Jujutsu Kaisen",
         "gender": "male",
         "difficulty": "normal",
-        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/gojo.png",
-        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/gojo.png"
+        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Gojo.png",
+        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Gojo.png"
     },
     {
         "id": 7,
@@ -59,8 +59,8 @@
         "theme": "One Piece",
         "gender": "male",
         "difficulty": "hard",
-        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/grumpy_luffy.png",
-        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/grumpy_luffy.png"
+        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Grumpy_Luffy.png",
+        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Grumpy_Luffy.png"
     },
     {
         "id": 8,
@@ -68,8 +68,8 @@
         "theme": "One Piece",
         "gender": "male",
         "difficulty": "medium",
-        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/law.png",
-        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/law.png"
+        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Law.png",
+        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Law.png"
     },
     {
         "id": 9,
@@ -77,8 +77,8 @@
         "theme": "One Piece",
         "gender": "neutral",
         "difficulty": "normal",
-        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/law_hat.png",
-        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/law_hat.png"
+        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Law_Hat.png",
+        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Law_Hat.png"
     },
     {
         "id": 10,
@@ -86,8 +86,8 @@
         "theme": "One Punch Man",
         "gender": "male",
         "difficulty": "easy",
-        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/saitama.png",
-        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/saitama.png"
+        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Saitama1.png",
+        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Saitama1.png"
     },
     {
         "id": 11,
@@ -95,8 +95,8 @@
         "theme": "Spongebob",
         "gender": "male",
         "difficulty": "tricky",
-        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/squidward.png",
-        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/squidward.png"
+        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Squidward.png",
+        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Squidward.png"
     },
     {
         "id": 12,
@@ -104,8 +104,8 @@
         "theme": "One Piece",
         "gender": "neutral",
         "difficulty": "normal",
-        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/straw_hat.png",
-        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/straw_hat.png"
+        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Straw_Hat.png",
+        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Straw_Hat.png"
     },
     {
         "id": 13,
@@ -113,8 +113,8 @@
         "theme": "One Piece",
         "gender": "male",
         "difficulty": "hard",
-        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/stupid_luffy.png",
-        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/stupid_luffy.png"
+        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Stupid_Luffy.png",
+        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Stupid_Luffy.png"
     },
     {
         "id": 14,
@@ -122,8 +122,8 @@
         "theme": "Brainrot",
         "gender": "male",
         "difficulty": "hard",
-        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/tung_sahur.png",
-        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/tung_sahur.png"
+        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Tung_Sahur.png",
+        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Tung_Sahur.png"
     },
     {
         "id": 15,
@@ -131,8 +131,8 @@
         "theme": "DC",
         "gender": "male",
         "difficulty": "normal",
-        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/batman.png",
-        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/batman.png"
+        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Batman.png",
+        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Batman.png"
     },
     {
         "id": 16,
@@ -140,8 +140,8 @@
         "theme": "One Piece",
         "gender": "male",
         "difficulty": "hard",
-        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/smoll_luffy.png",
-        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/smoll_luffy.png"
+        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Smoll_Luffy.png",
+        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Smoll_Luffy.png"
     },
     {
         "id": 17,
@@ -149,8 +149,8 @@
         "theme": "One Piece",
         "gender": "male",
         "difficulty": "tricky",
-        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/itaiii.png",
-        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/itaiii.png"
+        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Itaiii.png",
+        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Itaiii.png"
     },
     {
         "id": 18,
@@ -158,8 +158,8 @@
         "theme": "One Piece",
         "gender": "male",
         "difficulty": "tricky",
-        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/angry_smoll_luffy.png",
-        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/angry_smoll_luffy.png"
+        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Angry_Smoll_Luffy.png",
+        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Angry_Smoll_Luffy.png"
     },
     {
         "id": 19,
@@ -167,8 +167,8 @@
         "theme": "One Piece",
         "gender": "female",
         "difficulty": "tricky",
-        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/kid_robin.png",
-        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/kid_robin.png"
+        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Kid_Robin.png",
+        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Kid_Robin.png"
     },
     {
         "id": 20,
@@ -176,8 +176,8 @@
         "theme": "One Piece",
         "gender": "male",
         "difficulty": "normal",
-        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/sad_kid_luffy.png",
-        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/sad_kid_luffy.png"
+        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Sad_Kid_Luffy.png",
+        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Sad_Kid_Luffy.png"
     },
     {
         "id": 21,
@@ -185,8 +185,8 @@
         "theme": "One Punch Man",
         "gender": "male",
         "difficulty": "normal",
-        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/-_-_saitama.png",
-        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/-_-_saitama.png"
+        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Saitama2.png",
+        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Saitama2.png"
     },
     {
         "id": 22,
@@ -194,8 +194,8 @@
         "theme": "One Piece",
         "gender": "male",
         "difficulty": "normal",
-        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/chouchou.png",
-        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/chouchou.png"
+        "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Chouchou.png",
+        "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Chouchou.png"
     },
     {
         "id": 23,
