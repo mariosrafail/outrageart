@@ -391,3 +391,16 @@ input[type="search"]:focus, select:focus{ transform: translateY(-1px) }
   #controlsPanel.open{ display:grid; }
 }
 
+
+
+/* --- Click-to-zoom (added) --- */
+.viewer-content{ overflow: hidden; } /* clip while panning */
+.viewer-content img.zoomable{
+  cursor: zoom-in;
+  transition: transform .15s ease;
+  transform-origin: center center;
+  will-change: transform;
+}
+.viewer-content img.zoomable.is-zoomed{
+  cursor: zoom-out;
+}
