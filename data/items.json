@@ -250,5 +250,14 @@
     "difficulty": "medium",
     "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Shiny_Nami.png",
     "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Shiny_Nami.png"
+  },
+  {
+    "id": 29,
+    "title": "PaRappa The Rapper",
+    "theme": "Random",
+    "gender": "male",
+    "difficulty": "medium",
+    "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/PaRappa_The_Rapper.png",
+    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/PaRappa_The_Rapper.png"
   }
 ]
