@@ -1,0 +1,25 @@
+/* == LAYOUT (auto-split from styles.css) == */
+
+
+header{
+  position: sticky; top: 0; z-index: 20;
+  background: var(--panel);
+  border-bottom: 1px solid var(--ring);
+
+    /* background */
+  background-color: #fff;                /* was: background: var(--bg); */
+  background-image: var(--bg-tile);
+  background-repeat: repeat;
+  background-position: 0 0;
+  background-size: 64px 64px;            /* optional if your tile is exactly 64×64 */
+  image-rendering: pixelated;            /* nice for pixel art */
+}
+
+ .grid{ grid-template-columns: repeat(2,1fr) }
+
+ .grid{ grid-template-columns: repeat(3,1fr) }
+
+ .grid{ grid-template-columns: repeat(4,1fr) }
+
+
+.row{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px }
