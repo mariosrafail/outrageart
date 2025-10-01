@@ -323,11 +323,20 @@ function card(item){
   const srcset = buildSrcset(item.thumb);
   const fileUrl = item.url; // το ίδιο external link για Show & Download (Dropbox/Nextcloud/CDN)
   const title = escapeHtml(item.title || '');
-const shopBtnHTML = (item.shop && String(item.shop).trim() !== '')
+
+  const shopBtnHTML = (item.shop && String(item.shop).trim() !== '')
   ? `<a class="btn small shop" href="${escapeHtml(item.shop)}" target="_blank" rel="noopener noreferrer">
-       <img src="https://nextcloud.stinis.ddns.net/public.php/dav/files/9gZocEqHLQa7Hwf/cart.png" alt="Buy" style="height:20px;">
+       <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+         <g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+           <path d="M3 5h3l2.2 9.5a2 2 0 0 0 2 1.5h7.8a2 2 0 0 0 1.9-1.5L22 8H7" />
+           <path d="M10 10v5M14 10v5M18 10v5M8.5 12.5h11" />
+           <circle cx="10" cy="19" r="2" />
+           <circle cx="18" cy="19" r="2" />
+         </g>
+       </svg>
      </a>`
   : '';
+
   return `<article class="card" data-id="${item.id}" tabindex="0">
     <div class="media">
       <img loading="lazy" src="${item.thumb}" ${srcset ? `srcset="${srcset}" sizes="(max-width:600px) 50vw, 25vw"` : ''} alt="${title}">
