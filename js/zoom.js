@@ -1,112 +1,116 @@
-// zoom.js — simple, snappy pan & zoom for #viewerImg inside #viewer
+
+// Lightweight Zoom & Pan for #viewerImg inside #viewer
 (function(){
   const viewer = document.getElementById('viewer');
   const img = document.getElementById('viewerImg');
-  if (!viewer || !img) return;
+  if(!viewer || !img) return;
 
   let scale = 1;
-  const minScale = 1;
-  const maxScale = 6;
+  let minScale = 1;
+  let maxScale = 6;
   let startX = 0, startY = 0;
   let lastX = 0, lastY = 0;
-  let panning = false;
+  let isPanning = false;
 
-  function setTransform() {
-    img.style.transform = `translate(${lastX}px, ${lastY}px) scale(${scale})`;
+  function setTransform(x, y, s){
+    img.style.transform = `translate(${x}px, ${y}px) scale(${s})`;
   }
 
-  function clampPan() {
+  function clampPan(x, y, s){
     const rect = viewer.getBoundingClientRect();
     const iw = img.naturalWidth;
     const ih = img.naturalHeight;
-    if (!iw || !ih) return;
-    const sw = iw * scale;
-    const sh = ih * scale;
-    const limitX = Math.max(0, (sw - rect.width) / 2);
-    const limitY = Math.max(0, (sh - rect.height) / 2);
-    lastX = Math.max(-limitX, Math.min(limitX, lastX));
-    lastY = Math.max(-limitY, Math.min(limitY, lastY));
+    if(!iw || !ih) return {x, y};
+    // image size on screen
+    const sw = iw * s;
+    const sh = ih * s;
+    const limitX = Math.max(0, (sw - rect.width)/2);
+    const limitY = Math.max(0, (sh - rect.height)/2);
+    x = Math.max(-limitX, Math.min(limitX, x));
+    y = Math.max(-limitY, Math.min(limitY, y));
+    return {x, y};
   }
 
-  function resetView() {
-    scale = 1;
-    lastX = 0;
-    lastY = 0;
-    setTransform();
-  }
-
-  function wheelZoom(e) {
+  function wheelZoom(e){
     e.preventDefault();
-    const delta = e.deltaY < 0 ? 1.2 : 0.8;
-    const newScale = Math.min(maxScale, Math.max(minScale, scale * delta));
+    const delta = Math.sign(e.deltaY) * -0.15; // invert: wheel up -> zoom in
+    const newScale = Math.min(maxScale, Math.max(minScale, scale * (1 + delta)));
 
-    // zoom around mouse pointer
+    // Zoom to cursor point: adjust pan so the point under cursor stays under cursor
     const rect = img.getBoundingClientRect();
     const cx = e.clientX - rect.left;
     const cy = e.clientY - rect.top;
-    const relX = (cx - lastX) / scale;
-    const relY = (cy - lastY) / scale;
+    const nx = (cx - lastX) / scale;
+    const ny = (cy - lastY) / scale;
 
+    const k = newScale / scale;
+    lastX = lastX - nx*(k-1)*scale;
+    lastY = lastY - ny*(k-1)*scale;
     scale = newScale;
-    lastX = e.clientX - rect.left - relX * scale;
-    lastY = e.clientY - rect.top - relY * scale;
 
-    clampPan();
-    setTransform();
+    const clamped = clampPan(lastX, lastY, scale);
+    lastX = clamped.x; lastY = clamped.y;
+    setTransform(lastX, lastY, scale);
   }
 
-  function dblToggle(e) {
+  function dblToggle(e){
     e.preventDefault();
-    if (scale === 1) {
-      scale = 3;
+    if(scale === 1){
+      scale = 2.5;
+      // center to click
       const rect = img.getBoundingClientRect();
-      const cx = e.clientX - rect.left - rect.width / 2;
-      const cy = e.clientY - rect.top - rect.height / 2;
-      lastX = -cx;
-      lastY = -cy;
-    } else {
-      resetView();
+      const cx = e.clientX - rect.left - rect.width/2;
+      const cy = e.clientY - rect.top - rect.height/2;
+      lastX = -cx; lastY = -cy;
+    }else{
+      scale = 1; lastX = 0; lastY = 0;
     }
-    clampPan();
-    setTransform();
+    const clamped = clampPan(lastX, lastY, scale);
+    lastX = clamped.x; lastY = clamped.y;
+    setTransform(lastX, lastY, scale);
   }
 
-  function startPan(e) {
-    if (scale === 1) return;
-    panning = true;
+  function startPan(e){
+    e.preventDefault();
     img.setPointerCapture(e.pointerId);
+    isPanning = true;
     startX = e.clientX - lastX;
     startY = e.clientY - lastY;
-    img.style.cursor = 'grabbing';
   }
-
-  function movePan(e) {
-    if (!panning) return;
+  function movePan(e){
+    if(!isPanning) return;
     lastX = e.clientX - startX;
     lastY = e.clientY - startY;
-    clampPan();
-    setTransform();
+    const clamped = clampPan(lastX, lastY, scale);
+    lastX = clamped.x; lastY = clamped.y;
+    setTransform(lastX, lastY, scale);
+  }
+  function endPan(e){
+    isPanning = false;
+    try{ img.releasePointerCapture(e.pointerId); }catch(_){}
   }
 
-  function endPan(e) {
-    panning = false;
-    img.style.cursor = scale > 1 ? 'grab' : 'zoom-in';
-    try { img.releasePointerCapture(e.pointerId); } catch {}
+  function onOpen(){
+    // reset on open
+    scale = 1; lastX = 0; lastY = 0; isPanning = false;
+    img.style.transformOrigin = "center center";
+    img.style.touchAction = "none";  // allow pinch/drag on touch
+    setTransform(0,0,1);
   }
 
-  function onOpen() {
-    resetView();
-    img.style.cursor = 'zoom-in';
-    img.style.touchAction = 'none';
-  }
-
-  const _open = window.openViewer || function(){ viewer.hidden = false; };
-  window.openViewer = function(url, title) {
+  // Integrate with existing openViewer/closeViewer if present
+  const _open = window.openViewer || function(){ viewer.hidden=false; };
+  window.openViewer = function(url, title){
     _open(url, title);
-    if (img.complete) onOpen();
-    else img.onload = onOpen;
+    // Wait image load to compute bounds
+    if(img.complete){
+      onOpen();
+    }else{
+      img.onload = onOpen;
+    }
   };
 
+  // Events
   viewer.addEventListener('wheel', wheelZoom, { passive: false });
   img.addEventListener('dblclick', dblToggle);
   img.addEventListener('pointerdown', startPan);
@@ -114,8 +118,29 @@
   img.addEventListener('pointerup', endPan);
   img.addEventListener('pointercancel', endPan);
 
-  // ESC resets zoom
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && scale > 1) resetView();
-  });
+  // Basic pinch-to-zoom (2 fingers): use gesture averaging
+  let touchDist0 = 0;
+  viewer.addEventListener('touchstart', (e)=>{
+    if(e.touches.length===2){
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      touchDist0 = Math.hypot(dx,dy);
+    }
+  }, {passive:false});
+  viewer.addEventListener('touchmove', (e)=>{
+    if(e.touches.length===2){
+      e.preventDefault();
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      const d = Math.hypot(dx,dy);
+      const factor = d / (touchDist0 || d);
+      const newScale = Math.min(maxScale, Math.max(minScale, scale * factor));
+      scale = newScale;
+      const clamped = clampPan(lastX, lastY, scale);
+      lastX = clamped.x; lastY = clamped.y;
+      setTransform(lastX, lastY, scale);
+      touchDist0 = d;
+    }
+  }, {passive:false});
+
 })();
