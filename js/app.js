@@ -323,12 +323,18 @@ function card(item){
   const srcset = buildSrcset(item.thumb);
   const fileUrl = item.url; // το ίδιο external link για Show & Download (Dropbox/Nextcloud/CDN)
   const title = escapeHtml(item.title || '');
+const shopBtnHTML = (item.shop && String(item.shop).trim() !== '')
+  ? `<a class="btn small shop" href="${escapeHtml(item.shop)}" target="_blank" rel="noopener noreferrer">
+       <img src="https://nextcloud.stinis.ddns.net/public.php/dav/files/9gZocEqHLQa7Hwf/cart.png" alt="Buy" style="height:20px;">
+     </a>`
+  : '';
   return `<article class="card" data-id="${item.id}" tabindex="0">
     <div class="media">
       <img loading="lazy" src="${item.thumb}" ${srcset ? `srcset="${srcset}" sizes="(max-width:600px) 50vw, 25vw"` : ''} alt="${title}">
       <div class="overlay">
         <button class="btn small ghost show-btn" data-url="${fileUrl}" data-title="${title}">Show</button>
         <a class="btn small primary" href="${fileUrl}" target="_self">Download</a>
+        ${shopBtnHTML}
       </div>
     </div>
     <div class="meta">
