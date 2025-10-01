@@ -1,4 +1,3 @@
-/* == BASE (auto-split from styles.css) == */
 /* ==============================
    DoodleLab – Monochrome Theme
    White background, black text, square buttons, dual colored shadows
@@ -22,15 +21,9 @@
   --shadow-yellow: #ffd166;
 }
 
-
-
 /* ---------- Reset / Base ---------- */
 *{ box-sizing: border-box }
-
-
 html,body{ height:100% }
-
-
 
 body{
   margin:0;
@@ -47,36 +40,53 @@ body{
 }
 
 
-
-
 :where(a,button,input,select){ outline: none }
-
-
 :where(a,button,input,select):focus-visible{
   outline: 3px solid var(--ring);
   outline-offset: 2px;
 }
 
-
-
 /* ---------- Layout ---------- */
 .container{ max-width:1200px; margin:0 auto; padding:18px 20px }
 
+header{
+  position: sticky; top: 0; z-index: 20;
+  background: var(--panel);
+  border-bottom: 1px solid var(--ring);
 
+    /* background */
+  background-color: #fff;                /* was: background: var(--bg); */
+  background-image: var(--bg-tile);
+  background-repeat: repeat;
+  background-position: 0 0;
+  background-size: 64px 64px;            /* optional if your tile is exactly 64×64 */
+  image-rendering: pixelated;            /* nice for pixel art */
+}
+
+.brand{ display:flex; align-items:center; gap:14px }
 .brand img{ height:84px; width:auto;}
-
-
 .brand h1{ margin:0; font-size:clamp(20px,2.2vw,28px); letter-spacing:.3px }
-
-
+.slogan {  margin: 0;  font-style: italic;  font-size: clamp(14px, 1.4vw, 18px);  color: #555;}
 
 /* ---------- Controls ---------- */
 .controls{
   display:grid; grid-template-columns:repeat(12,1fr);
   gap:10px; margin-top:12px;
 }
+.control{ grid-column: span 12 }
+@media (min-width:760px){
+  .control.search{ grid-column: span 6 }
+  .control.select{ grid-column: span 2 }
+  .control.actions{ grid-column: span 2; display:flex; gap:8px; justify-content:flex-end }
+}
 
-
+input[type="search"], select{
+  width:100%; appearance:none; border-radius: var(--radius);
+  border: 1px solid var(--ring);
+  background: var(--panel-2); color: var(--text);
+  padding:11px 14px; font-size:14px; transition: transform .15s ease;
+}
+input[type="search"]:focus, select:focus{ transform: translateY(-1px) }
 
 /* ---------- Buttons (square + dual shadows) ---------- */
 .btn{
@@ -86,47 +96,49 @@ body{
   transition: transform .15s ease, box-shadow .15s ease;
   box-shadow: -2px 2px 0 var(--shadow-pink, #ff4fd8), -4px 4px 0 var(--shadow-yellow, #ffd166);
 }
-
-
+.btn:hover{
+  transform: translate(-1px, -1px);
+  box-shadow: -3px 3px 0 var(--shadow-pink, #ff4fd8), -6px 6px 0 var(--shadow-yellow, #ffd166);
+}
+.btn:active{
+  transform: translate(0,0);
+  box-shadow: 0 0 0 var(--shadow-pink), 0 0 0 var(--shadow-yellow);
+}
 
 /* Default variants (kept monochrome) */
 .btn.primary{ background: var(--text); color: var(--bg); border: var(--border) }
-
-
+.btn.ghost{ background: transparent; color: var(--text); border: var(--border) }
 
 /* Overlay-specific tweak: make Show/Download buttons WHITE for readability */
 .media .overlay .btn{ background:#fff !important; color:#000 !important }
-
-
 
 /* Badge & chips */
 .badge{
   font-size:12px; color: var(--bg); background: var(--text);
   padding:4px 10px; border-radius: 999px; font-weight:700;
 }
-
-
+.chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top:10px }
 .chip{
   background: var(--chip); color: var(--muted);
   border: 1px solid var(--ring); padding:6px 10px; border-radius: 999px; font-size:12px;
 }
 
-
-
 /* ---------- Grid & Cards ---------- */
 .grid{ display:grid; gap:14px; padding:20px }
+@media (min-width:560px){ .grid{ grid-template-columns: repeat(2,1fr) } }
+@media (min-width:860px){ .grid{ grid-template-columns: repeat(3,1fr) } }
+@media (min-width:1160px){ .grid{ grid-template-columns: repeat(4,1fr) } }
 
-
+.card{
+  background: var(--panel); border: var(--border); border-radius: var(--radius);
+  overflow: hidden; display:flex; flex-direction: column; min-height: 320px; outline:none;
+  transform-origin: 50% 80%; animation: rise .35s ease both;
+}
+@keyframes rise{ from{opacity:0; transform:translateY(8px) scale(.98)} to{opacity:1; transform:translateY(0) scale(1)} }
 
 .media{ aspect-ratio: 4/5; background: #fff; position:relative; overflow:hidden }
-
-
 .media img{ width:100%; height:100%; object-fit:cover; display:block; transition: transform .3s ease }
-
-
 .card:hover .media img{ transform: scale(1.03) }
-
-
 
 /* monochrome shine */
 .media::after{
@@ -134,18 +146,22 @@ body{
   background: linear-gradient(105deg, rgba(255,255,255,.25), rgba(255,255,255,0) 60%);
   transform: translateX(-120%) rotate(8deg);
 }
-
-
 .card:hover .media::after{ animation: shine .9s ease }
-
-
+@keyframes shine{ to{ transform: translateX(120%) rotate(8deg) } }
 
 .meta{ padding:12px 14px }
-
-
 .meta h3{ margin:0 0 8px; font-size:16px }
+.row{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px }
+.pill{
+  font-size:11px; padding:4px 8px; border-radius: 999px;
+  border:1px solid var(--ring); background:#fff; color: var(--muted);
+}
 
-
+.tags{ display:flex; flex-wrap:wrap; gap:8px }
+.tag{
+  font-size:11px; background:#fff; border:1px solid var(--ring); color: var(--muted);
+  padding:4px 8px; border-radius: 8px;
+}
 
 /* hover badge */
 .download-badge{
@@ -154,8 +170,7 @@ body{
   border:1px solid var(--ring);
   transform: translateY(6px); opacity:0; transition: all .25s ease;
 }
-
-
+.card:hover .download-badge{ transform: translateY(0); opacity:1 }
 
 /* ---------- Overlay (Show / Download) ---------- */
 .media .overlay{
@@ -163,8 +178,8 @@ body{
   background: linear-gradient(180deg, rgb(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7) 60%);
   opacity:0; transition: opacity .25s ease;
 }
-
-
+.card:hover .overlay{ opacity:1 }
+.btn.small{ padding:8px 10px; font-size:12px; border-radius: var(--radius) }
 
 /* ---------- Utilities ---------- */
 .spinner{
@@ -172,8 +187,9 @@ body{
   border:3px solid #cccccc; border-top-color: #000000;
   animation: spin 1s linear infinite; margin:30px auto;
 }
+@keyframes spin{ to{ transform: rotate(360deg) } }
 
-
+.empty{ color: var(--muted); text-align:center; padding:40px 20px }
 
 .backtotop{
   z-index: 60;
@@ -187,53 +203,69 @@ body{
   box-shadow: -2px 2px 0 var(--shadow-pink, #ff4fd8), -4px 4px 0 var(--shadow-yellow, #ffd166);
   transition: transform .15s ease, box-shadow .15s ease;
 }
-
-
 .backtotop.show{ display:block }
-
-
 .backtotop:hover{
   transform: translate(-1px,-1px);
   box-shadow: -3px 3px 0 var(--shadow-pink, #ff4fd8), -6px 6px 0 var(--shadow-yellow, #ffd166);
 }
-
-
 .backtotop:active{ transform: translate(0,0); box-shadow: 0 0 0 var(--shadow-pink), 0 0 0 var(--shadow-yellow) }
-
-
 
 /* ---------- Modal Viewer (Show) ---------- */
 .viewer{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:50 }
-
-
+.viewer.show{ display:flex }
 .viewer-backdrop{ position:absolute; inset:0; background: rgba(0,0,0,.8) }
-
-
+.viewer-content{
+  position:relative; max-width:min(92vw,1200px); max-height:90vh; margin:0;
+  border: var(--border); background:#fff;
+}
 
 .viewer-content img{ max-width:100%; max-height:90vh; display:block }
+.viewer-close{
+  position:absolute; top:-2px; right:-2px; background:#ffb7b7; color:#000;
+  border: var(--border); border-radius: var(--radius); width:38px; height:38px;
+  font-size:24px; cursor:pointer; line-height:36px; text-align:center;
+  /* dual shadows */
+  /* box-shadow: -2px 2px 0 var(--shadow-pink), -4px 4px 0 var(--shadow-yellow); */
+  transition: transform .15s ease, box-shadow .15s ease;
+  box-shadow: -2px 2px 0 var(--shadow-pink, #ff4fd8), -4px 4px 0 var(--shadow-yellow, #ffd166);
+}
+.viewer-close:hover{
+  transform: translate(-1px,-1px);
+  box-shadow: -3px 3px 0 var(--shadow-pink, #ff4fd8), -6px 6px 0 var(--shadow-yellow, #ffd166);
+}
+.viewer-close:active{ transform: translate(0,0); box-shadow: 0 0 0 var(--shadow-pink), 0 0 0 var(--shadow-yellow) }
 
 
+/* ---------- Reduced Motion ---------- */
+@media (prefers-reduced-motion: reduce){
   *{ animation: none !important; transition: none !important }
-
-
+}
 
 /* Make the search its own full-width row; filters + clear sit below on one row */
 .controls{ grid-template-columns: repeat(12, 1fr) !important; }
 
-
-
 /* Base (mobile): όλα κατακόρυφα, αλλά το search πάντα πρώτο */
 .control.search{ grid-column: 1 / -1 !important; order: 0; }
+.control.select{ grid-column: 1 / -1 !important; order: 1; }
+.control.actions{ grid-column: 1 / -1 !important; order: 1; }
 
-
+/* Desktop: search full-width επάνω, από κάτω 3 selects + clear σε μία σειρά */
+@media (min-width:760px){
+  .control.search{ grid-column: 1 / -1 !important; }
+  .control.select{ grid-column: span 3 !important; order: 1; }
+  .control.actions{
+    grid-column: span 3 !important; order: 1;
+    display:flex !important; align-items:stretch; justify-content:flex-start; /* το Clear δίπλα στα filters */
+  }
+}
 
 /* Pager layout */
 .pager{
   display:flex; justify-content:center; align-items:center; gap:15px;
   padding:24px 0;
 }
-
-
+.pager .page-info{ font-weight:700; }
+.pager .btn[disabled]{ opacity:.5; cursor:not-allowed; }
 
 /* Chips row with Clear button */
 .chips-row{
@@ -244,8 +276,6 @@ body{
   margin-top:10px;     /* same spacing as chips had */
 }
 
-
-
 /* Make the Clear button compact so it sits nicely with chips */
 .btn-clear{
   padding:6px 12px;
@@ -254,16 +284,12 @@ body{
   height:32px;         /* optional: match approximate chip height */
 }
 
-
-
 /* Title + difficulty on one line */
 .row{
   display:flex;
   align-items:center;
   gap:8px;                 /* space between title and pill */
 }
-
-
 
 .meta h3{
   margin:0;
@@ -276,7 +302,10 @@ body{
   text-overflow: ellipsis; /* if it hits the min font-size, cut with … */
 }
 
+.pill{ flex:0 0 auto; }    /* don’t shrink the difficulty pill */
 
+/* Mobile/touch: show a hint, reveal overlay only after first tap */
+@media (hover:none), (pointer:coarse){
   /* overlay is hidden by default on touch */
   .media .overlay{
     z-index: 900;
@@ -284,12 +313,8 @@ body{
     background: rgba(255,255,255,.7);
     transition: opacity .2s ease;
   }
-
-
   /* when the card gets .show-ov (set by JS), show the overlay */
   .card.show-ov .media .overlay{ opacity: 1 !important; }
-
-
 
   /* tappable hint */
   .media::before{
@@ -300,12 +325,8 @@ body{
     padding: 4px 8px; font-size: 14px;
     pointer-events: none;
   }
-
-
   /* hide the hint when overlay is open */
   .card.show-ov .media::before{ display:none; }
-
-
 
   /* clearer buttons on touch */
   .media .overlay .btn{
@@ -313,23 +334,41 @@ body{
     padding:12px 16px; font-size:14px;
   }
 
-
-
   /* badge not needed on mobile */
   .download-badge{ display:none !important; }
-
-
+}
 
 /* --- Social buttons next to logo --- */
-.brand{ flex-wrap: wrap; }
-
-                   /* allow wrapping on very small screens */
+.brand{ flex-wrap: wrap; }                   /* allow wrapping on very small screens */
 .socials{
   display:flex; align-items:center; gap:8px; 
   margin-left: 12px;                         /* space after logo/title */
 }
+.icon-btn{
+  width:64px; height:34px; display:grid; place-items:center;
+  background:#fff; color:#000; border:2px solid #000; border-radius:0;
+  text-decoration:none; font-weight:800; font-size:11px; line-height:1;
+  /* tiny dual-shadows for aesthetic pop */
+  box-shadow: 2px 2px 0 var(--shadow-pink, #ff4fd8), 4px 4px 0 var(--shadow-yellow, #ffd166);
+  transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+}
+.icon-btn:hover{ transform: translate(-1px,-1px);
+  box-shadow: 3px 3px 0 var(--shadow-pink, #ff4fd8), 6px 6px 0 var(--shadow-yellow, #ffd166);
+}
+.icon-btn:active{ transform:none; box-shadow:none; }
+.icon-btn svg{ width:16px; height:16px; display:block; }
+.icon-text{ font-family: inherit; }
 
-
+/* Responsive: make them a bit smaller on very narrow screens */
+@media (max-width: 420px){
+  .socials{ margin: auto;}
+  .icon-btn{ width:50px; height:30px; font-size:8px; place-items:center;}
+  .icon-btn svg{ width:15px; height:15px; place-items:center;}
+  .pager{
+  display:flex; justify-content:center; align-items:center; gap:6px; padding:15px 0;
+  place-items:center;
+}
+}
 
 
 /* ==============================
@@ -337,9 +376,10 @@ body{
    - Hide filters by default on small screens
    - Show a 'Filters' button in the brand row
    ============================== */
-.menu-btn{ display:none; }
+.menu-btn{ display:none; } /* hidden on desktop */
 
-
+@media (max-width: 760px){
+  .menu-btn{ display:inline-block; margin-left:auto; }
   /* Turn controls grid into an off-canvas style block */
   #controlsPanel{
     display:none;
@@ -348,23 +388,19 @@ body{
     margin-top:10px;
     background: var(--panel);
   }
-
-
+  #controlsPanel.open{ display:grid; }
+}
 
 
 
 /* --- Click-to-zoom (added) --- */
-.viewer-content{ overflow: hidden; }
-
- /* clip while panning */
+.viewer-content{ overflow: hidden; } /* clip while panning */
 .viewer-content img.zoomable{
   cursor: zoom-in;
   transition: transform .15s ease;
   transform-origin: center center;
   will-change: transform;
 }
-
-
 .viewer-content img.zoomable.is-zoomed{
   cursor: zoom-out;
 }

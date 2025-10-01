@@ -147,7 +147,7 @@ grid.addEventListener('click', (e)=>{
 
 
 /* ================= Click-to-Zoom + Follow-Mouse Pan (position-based) ================= */
-/* zoom state removed */
+let _zoom = 1;
 let _tx = 0, _ty = 0;              // current translation
 let _txTarget = 0, _tyTarget = 0;  // target translation (eased)
 let _isZoomed = false;
@@ -253,7 +253,16 @@ closeViewer = function(){
   _stopAnim();
 };
 
-/* zoom handlers removed */
+// Κίνηση ποντικιού: ενημερώνει άμεσα τον στόχο, η εικόνα “πάει εκεί”
+viewerImg.addEventListener('mousemove', _updateTargetsFromMouse);
+
+// Click = toggle zoom (με μικρό anti-drag φίλτρο)
+let _downX = 0, _downY = 0, _downTime = 0;
+viewerImg.addEventListener('pointerdown', (ev) => {
+  _downX = ev.clientX; _downY = ev.clientY; _downTime = performance.now();
+});
+viewerImg.addEventListener('pointerup', (ev) => {
+  const moved = Math.hypot(ev.clientX - _downX, ev.clientY - _downY);
   const elapsed = performance.now() - _downTime;
   if (moved < 6 && elapsed < 250){ _toggleZoom(); }
 });
