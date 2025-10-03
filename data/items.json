@@ -309,5 +309,50 @@
     "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Sanji_Impression.png",
     "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Sanji_Impression.png",
 	"shop": "https://www.redbubble.com/i/sticker/Sanji-Impression-by-OutrageArts/174425401.EJUG5"
+  },
+  {
+    "id": 35,
+    "title": "Cool Gear Fifth",
+    "theme": "One Piece",
+    "gender": "male",
+    "difficulty": "medium",
+    "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Cool_Gear_Fifth.png",
+    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Cool_Gear_Fifth.png"
+  },
+  {
+    "id": 36,
+    "title": "Crying Laboon",
+    "theme": "One Piece",
+    "gender": "male",
+    "difficulty": "medium",
+    "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Crying_Laboon.png",
+    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Crying_Laboon.png"
+  },
+  {
+    "id": 37,
+    "title": "Super Happy Laboon",
+    "theme": "One Piece",
+    "gender": "male",
+    "difficulty": "normal",
+    "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Super_Happy_Laboon.png",
+    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Super_Happy_Laboon.png"
+  },
+  {
+    "id": 38,
+    "title": "Happy Laboon",
+    "theme": "One Piece",
+    "gender": "male",
+    "difficulty": "normal",
+    "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Happy_Laboon.png",
+    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Happy_Laboon.png"
+  },
+  {
+    "id": 39,
+    "title": "Laughing Laboon",
+    "theme": "One Piece",
+    "gender": "male",
+    "difficulty": "medium",
+    "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Laughing_Laboon.png",
+    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Laughing_Laboon.png"
   }
 ]
