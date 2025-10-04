@@ -355,5 +355,14 @@
     "difficulty": "medium",
     "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Laughing_Laboon.png",
     "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Laughing_Laboon.png"
+  },
+  {
+    "id": 40,
+    "title": "Gaimon",
+    "theme": "One Piece",
+    "gender": "male",
+    "difficulty": "medium",
+    "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Gaimon.png",
+    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Gaimon.png"
   }
 ]
