@@ -192,7 +192,7 @@ input[type="search"]:focus, select:focus{ transform: translateY(-1px) }
 .empty{ color: var(--muted); text-align:center; padding:40px 20px }
 
 .backtotop{
-  z-index: 60;
+  z-index: 0;
   width:64px;
   height:64px;
   position:fixed; right:18px; bottom:18px;
