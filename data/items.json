@@ -365,5 +365,14 @@
     "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Gaimon.png",
     "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Gaimon.png",
 	"shop": "https://www.redbubble.com/i/sticker/Gaimon-by-OutrageArts/174704107.EJUG5"
+  },
+  {
+    "id": 41,
+    "title": "1test",
+    "theme": "One Piece",
+    "gender": "male",
+    "difficulty": "medium",
+    "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/test1.png",
+    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/test1.png"
   }
 ]
