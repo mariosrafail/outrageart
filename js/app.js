@@ -136,11 +136,91 @@ function closeViewer(){
   document.body.style.overflow = '';
 }
 
+
+
+// ---- Slideshow state ----
+let ssBase = null;         // e.g., https://.../files/{folder}/{id}/
+let ssIndex = 1;           // current step (1-based)
+let ssMaxKnown = Infinity; // we will clamp when we hit a 404
+
+const viewerPrev = document.getElementById('viewerPrev');
+const viewerNext = document.getElementById('viewerNext');
+
+function deriveSlideshowBase(fileUrl){
+  // use the directory containing the cover image, e.g. .../tutorials/Cool_Gear_5th/
+  if (!fileUrl) return null;
+  return fileUrl.replace(/[^/]+$/, '');  // strip "Cool_Gear_5th.png"
+}
+
+function showSlide(n){
+  if (!ssBase) return;
+  if (n < 1) n = 1;
+  // optimistic bound
+  if (n > ssMaxKnown) n = ssMaxKnown;
+  ssIndex = n;
+  const nextSrc = ssBase + ssIndex + '.png';
+  // Use onerror to detect last frame and clamp
+  viewerImg.onerror = () => {
+    if (ssIndex > 1){
+      ssMaxKnown = ssIndex - 1;      // clamp maximum
+      ssIndex = ssMaxKnown;
+      viewerImg.onerror = null;
+      viewerImg.src = ssBase + ssIndex + '.png';
+      updateNavButtons();
+    } else {
+      // if even 1.png fails, fallback to the original single image
+      viewerImg.onerror = null;
+      viewerImg.src = viewerImg.dataset.fallback || nextSrc;
+      updateNavButtons();
+    }
+  };
+  viewerImg.onload = () => { viewerImg.onerror = null; updateNavButtons(); };
+  viewerImg.src = nextSrc;
+  updateNavButtons();
+}
+
+function updateNavButtons(){
+  if (!viewerPrev || !viewerNext) return;
+  viewerPrev.disabled = (ssIndex <= 1);
+  viewerNext.disabled = (ssIndex >= ssMaxKnown && ssMaxKnown !== Infinity ? true : false);
+}
+
+// Enhance openViewer to initialize slideshow starting at 1.png
+const _openViewer_original = openViewer;
+openViewer = function(fileUrl, title){
+  // set fallback to the original URL
+  viewerImg.dataset.fallback = fileUrl || '';
+  const card = document.querySelector(`.card[data-id="${CURRENT_OPEN_ID||''}"]`) || null;
+  ssBase = deriveSlideshowBase(fileUrl);
+  ssIndex = 1;
+  ssMaxKnown = Infinity;
+  _openViewer_original(fileUrl, title);
+  if (ssBase){
+    showSlide(1);
+  }
+};
+
+// Wire up nav clicks + keyboard
+if (viewerPrev && viewerNext){
+  viewerPrev.addEventListener('click', () => showSlide(ssIndex - 1));
+  viewerNext.addEventListener('click', () => showSlide(ssIndex + 1));
+  document.addEventListener('keydown', (e)=>{
+    if (viewer.hidden) return;
+    if (e.key === 'ArrowLeft') showSlide(ssIndex - 1);
+    if (e.key === 'ArrowRight') showSlide(ssIndex + 1);
+  });
+}
+
+// Track which card id is being opened
+let CURRENT_OPEN_ID = null;
+
 // event delegation για τα Show buttons
 grid.addEventListener('click', (e)=>{
   const btn = e.target.closest('.show-btn');
   if(btn){
     e.preventDefault();
+    const cardEl = btn.closest('.card');
+    CURRENT_OPEN_ID = cardEl ? (cardEl.getAttribute('data-id') || cardEl.dataset.id) : null;
     openViewer(btn.dataset.url, btn.dataset.title);
   }
 });
