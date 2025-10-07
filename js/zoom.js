@@ -12,7 +12,7 @@
   if (xBtn) xBtn.remove();
 
   // ===== Tuning =====
-  const ZOOM_CLICK_IN    = 2.4;   // single click zoom-in scale
+  const ZOOM_CLICK_IN    = 3.8;   // single click zoom-in scale
   const ZOOM_WHEEL_STEP  = 1.12;  // ctrl+wheel multiplier
   const MAX_SCALE        = 4;
   const MIN_SCALE        = 1;
