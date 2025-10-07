@@ -413,6 +413,7 @@ input[type="search"]:focus, select:focus{ transform: translateY(-1px) }
 
 /* --- Slideshow navigation --- */
 .viewer-nav{
+  z-index: 66;
   position:absolute; top:90%; transform: translateY(-50%);
   width:64px; height:64px;
   display:flex; align-items:center; justify-content:center;
