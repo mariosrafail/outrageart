@@ -452,3 +452,111 @@ input[type="search"]:focus, select:focus{ transform: translateY(-1px) }
 /* Force high-contrast buttons inside viewer on all devices */
 .viewer-content .viewer-nav{ background:#fff !important; color:#000 !important; }
 .viewer-content .viewer-close{ background:#e02424 !important; color:#fff !important; }
+
+/* === Responsive overrides (2025-10-08) === */
+
+/* 1) Grid: phones = 2 per row; small tablets ~ >=760px = 3; desktop >=1160px = 4 (already) */
+.grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (min-width: 760px){
+  .grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (min-width: 1160px){
+  .grid{ grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+/* Slightly tighter spacing on very small screens */
+@media (max-width: 400px){
+  .grid{ gap: 10px; padding: 14px }
+}
+
+/* 2) Cards: make smaller on mobile to fit two comfortably */
+@media (max-width: 480px){
+  .card{ min-height: 220px; }
+  .media{ height: 160px; }
+  .meta{ padding: 10px; }
+  .meta h3{ font-size: clamp(14px, 4.2vw, 16px); }
+}
+
+/* 3) Social icon buttons: smaller on mobile so they don't wrap awkwardly */
+@media (max-width: 600px){
+  .icon-btn{ width: 52px; height: 30px; font-size: 10px; }
+  .icon-btn svg{ width: 14px; height: 14px; }
+  .socials{ gap: 6px; margin-left: 8px; }
+  .brand img{ height: 64px; }
+}
+
+/* 4) Pagination: allow wrapping and smaller buttons so nothing gets cut */
+.pager{ flex-wrap: wrap; row-gap: 8px; }
+.pager .btn{ padding: 8px 10px; font-size: 13px; line-height: 1; }
+@media (max-width: 480px){
+  .pager{ gap: 8px; padding: 14px 0; }
+  .pager .page-info{ width: 100%; text-align: center; order: 3; }
+  .pager .btn{ flex: 1 1 auto; min-width: 96px; }
+}
+
+/* 5) Controls: prevent search/select row from overflowing */
+@media (max-width: 600px){
+  .controls{ gap: 8px; }
+  .control.actions{ justify-content: stretch; }
+  .control.actions .btn{ flex: 1 1 auto; }
+}
+
+/* 6) Viewer nav: ensure arrows never overlap content and remain clickable */
+@media (max-width: 480px){
+  .viewer-nav{ padding: 8px 10px; font-size: 16px; }
+  .viewer-close{ width: 34px; height: 34px; font-size: 22px; }
+}
+
+/* 7) Safety: avoid horizontal scroll from long words in titles */
+.meta h3{ overflow-wrap: anywhere; }
+
+/* === Mobile-first refinements (2025-10-08 – v2) === */
+
+/* Grid: only 2 on narrow, 4 on wide (no 3-col breakpoint) */
+.grid{ grid-template-columns: repeat(2, minmax(0,1fr)) !important; }
+@media (min-width:1160px){
+  .grid{ grid-template-columns: repeat(4, minmax(0,1fr)) !important; }
+}
+
+/* Pager: stack as 1) First + Previous, 2) Page X / Y, 3) Next + Last on narrow */
+@media (max-width: 640px){
+  .pager{
+    display:flex;
+    flex-wrap: wrap;
+    gap: 8px 10px;
+    align-items: center;
+    justify-content: center;
+  }
+  /* Base sizing for buttons on narrow */
+  .pager .btn{
+    padding: 8px 10px;
+    font-size: 13px;
+    line-height: 1;
+  }
+  /* Order and line layout */
+  #btnFirst, #btnPrev{ order: 1; flex: 1 0 48%; }
+  #pageInfo{ order: 2; flex-basis: 100%; text-align: center; }
+  #btnNext, #btnLast{ order: 3; flex: 1 0 48%; }
+}
+
+/* Ensure wide layouts look tidy: put everything on one row */
+@media (min-width: 641px){
+  .pager{
+    display:flex; flex-wrap: nowrap; gap: 12px; justify-content: center; align-items: center;
+  }
+  .pager .btn{ padding: 10px 14px; font-size: 14px; }
+  /* Reset any ordering to natural document order */
+  #btnFirst{ order: 0; } #btnPrev{ order: 0; } #pageInfo{ order: 0; flex-basis: auto; }
+  #btnNext{ order: 0; } #btnLast{ order: 0; }
+}
+
+/* Overlay "Show" / "Download" buttons: scale with viewport to suit small cards */
+.media .overlay .btn{
+  padding: clamp(6px, 1.2vw, 12px) clamp(8px, 1.6vw, 16px);
+  font-size: clamp(12px, 2.6vw, 16px);
+  line-height: 1.2;
+}
+/* When the screen is tiny, tighten spacing between overlay buttons too */
+@media (max-width: 480px){
+  .media .overlay{ gap: 8px; }
+}
