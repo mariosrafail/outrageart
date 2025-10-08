@@ -4,7 +4,7 @@
     "title": "Doodle SpongeBob",
     "theme": "Spongebob",
     "gender": "neutral",
-    "difficulty": "easy",
+    "difficulty": "medium",
     "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Doodle_Spongebob.png",
     "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Doodle_Spongebob/Doodle_Spongebob.png"
   },
@@ -22,7 +22,7 @@
     "title": "Ghosty",
     "theme": "Halloween",
     "gender": "neutral",
-    "difficulty": "medium",
+    "difficulty": "normal",
     "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Ghosty.png",
     "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Ghosty/Ghosty.png"
   },
@@ -31,7 +31,7 @@
     "title": "Kid Luffy",
     "theme": "One Piece",
     "gender": "male",
-    "difficulty": "hard",
+    "difficulty": "tricky",
     "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Kid_Luffy.png",
     "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Kid_Luffy/Kid_Luffy.png"
   },
@@ -112,7 +112,7 @@
     "title": "Stupid Luffy",
     "theme": "One Piece",
     "gender": "male",
-    "difficulty": "hard",
+    "difficulty": "tricky",
     "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Stupid_Luffy.png",
     "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Stupid_Luffy/Stupid_Luffy.png"
   },
@@ -121,7 +121,7 @@
     "title": "Tung Tung Tung Sahur",
     "theme": "Brainrot",
     "gender": "male",
-    "difficulty": "hard",
+    "difficulty": "tricky",
     "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Tung_Sahur.png",
     "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Tung_Sahur/Tung_Sahur.png"
   },
@@ -139,7 +139,7 @@
     "title": "Smoll Luffy",
     "theme": "One Piece",
     "gender": "male",
-    "difficulty": "hard",
+    "difficulty": "tricky",
     "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Smoll_Luffy.png",
     "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Smoll_Luffy/Smoll_Luffy.png"
   },
@@ -166,7 +166,7 @@
     "title": "Kid Robin",
     "theme": "One Piece",
     "gender": "female",
-    "difficulty": "tricky",
+    "difficulty": "hard",
     "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Kid_Robin.png",
     "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Kid_Robin/Kid_Robin.png"
   },
@@ -175,7 +175,7 @@
     "title": "Sad Kid Luffy",
     "theme": "One Piece",
     "gender": "male",
-    "difficulty": "normal",
+    "difficulty": "medium",
     "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Sad_Kid_Luffy.png",
     "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Sad_Kid_Luffy/Sad_Kid_Luffy.png"
   },
@@ -249,7 +249,7 @@
     "title": "PaRappa The Rapper",
     "theme": "Random",
     "gender": "male",
-    "difficulty": "medium",
+    "difficulty": "tricky",
     "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/PaRappa_The_Rapper.png",
     "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/PaRappa_The_Rapper/PaRappa_The_Rapper.png"
   },
