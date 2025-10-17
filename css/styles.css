@@ -452,3 +452,77 @@ input[type="search"]:focus, select:focus{ transform: translateY(-1px) }
 /* Force high-contrast buttons inside viewer on all devices */
 .viewer-content .viewer-nav{ background:#fff !important; color:#000 !important; }
 .viewer-content .viewer-close{ background:#e02424 !important; color:#fff !important; }
+
+
+/* --- Injected styles for Batman vertical viewer --- */
+
+/* Batman vertical overlay */
+.batman-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  display: none;
+  z-index: 9999;
+}
+.batman-overlay.is-open { display: block; }
+.batman-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-size: 28px;
+  line-height: 1;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 18px;
+  cursor: pointer;
+}
+.batman-frame {
+  position: absolute;
+  top: 56px;
+  bottom: 16px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  background: #111;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+/* Mobile: stretch horizontally */
+@media (max-width: 767px) {
+  .batman-frame img {
+    width: 100vw;
+    height: auto;
+    display: block;
+  }
+}
+/* Desktop: fixed 600px wide */
+@media (min-width: 768px) {
+  .batman-frame {
+    width: 600px;
+  }
+  .batman-frame img {
+    width: 600px;
+    height: auto;
+    display: block;
+  }
+}
+
+
+/* Hide download only on Batman cards (heuristic by filename/alt) */
+.card:has(img[src*="batman" i]),
+.item:has(img[src*="batman" i]),
+.gallery-item:has(img[src*="batman" i]) {
+  /* no-op container selector */
+}
+.card:has(img[src*="batman" i]) .download,
+.item:has(img[src*="batman" i]) .download,
+.gallery-item:has(img[src*="batman" i]) .download,
+.card:has(img[alt*="batman" i]) .download,
+.item:has(img[alt*="batman" i]) .download,
+.gallery-item:has(img[alt*="batman" i]) .download {
+  display: none !important;
+}
