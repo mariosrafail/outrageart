@@ -291,7 +291,7 @@ function card(item){
 	  
 	  const showBtn = `<button class="btn small ghost show-btn" data-url="${fileUrl}" data-title="${title}" >Show</button>`;
 	  const dlBtn = `<a class="btn small primary" href="${fileUrl}" target="_self">Download</a>`;
-	  return `<div class="overlay">${showBtn}${dlBtn}${shopBtnHTML}</div>`;})()}
+	  return `<div class="overlay">${showBtn}${shopBtnHTML}</div>`;})()}
     </div>
     <div class="meta">
       <div class="row">
