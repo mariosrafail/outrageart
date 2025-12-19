@@ -219,19 +219,14 @@ grid.addEventListener('click', (e)=>{
   const btn = e.target.closest('.show-btn');
   if(btn){
     e.preventDefault();
-    if (btn.dataset.batman === '1') {
-      // open the special Batman vertical viewer
-      try {
-        // derive Batman_Vertical.png in same folder as original URL
-        const u = new URL(btn.dataset.url, window.location.href);
-        const parts = u.pathname.split('/'); parts.pop(); parts.push('Batman_Vertical.png'); u.pathname = parts.join('/');
-        const verticalUrl = u.toString();
-        if (typeof openBatman === 'function') { openBatman(verticalUrl); return; }
-      } catch (err) {
-        if (typeof openBatman === 'function') { openBatman('Batman_Vertical.png'); return; }
-      }
+
+    // Open steps-based tutorial modal (1.png, 2.png, ... in same folder)
+    if (typeof window.openTutorialModal === 'function') {
+      window.openTutorialModal(btn.dataset.url, btn.dataset.title);
+    } else {
+      // fallback to legacy viewer
+      openViewer(btn.dataset.url, btn.dataset.title);
     }
-    openViewer(btn.dataset.url, btn.dataset.title);
   }
 });
 
@@ -292,7 +287,11 @@ function card(item){
   return `<article class="card" data-id="${item.id}" tabindex="0">
     <div class="media">
       <img loading="lazy" src="${item.thumb}" ${srcset ? `srcset="${srcset}" sizes="(max-width:600px) 50vw, 25vw"` : ''} alt="${title}">
-      ${(()=>{const isBatman = String(item.title||"").toLowerCase()==="batman";const showBtn = `<button class="btn small ghost show-btn" data-url="${fileUrl}" data-title="${title}" ${isBatman? "data-batman=\"1\"" : ""}>Show</button>`;const dlBtn = isBatman ? "" : `<a class="btn small primary" href="${fileUrl}" target="_self">Download</a>`;return `<div class="overlay">${showBtn}${dlBtn}${shopBtnHTML}</div>`;})()}
+      ${(()=>{
+	  
+	  const showBtn = `<button class="btn small ghost show-btn" data-url="${fileUrl}" data-title="${title}" >Show</button>`;
+	  const dlBtn = `<a class="btn small primary" href="${fileUrl}" target="_self">Download</a>`;
+	  return `<div class="overlay">${showBtn}${dlBtn}${shopBtnHTML}</div>`;})()}
     </div>
     <div class="meta">
       <div class="row">
@@ -484,136 +483,32 @@ btnNextTop .addEventListener('click', () => gotoPage(currentPage + 1));
 btnLastTop .addEventListener('click', () => gotoPage(totalPages()));
 
 
-/* --- Injected Batman vertical viewer --- */
+
 (function() {
-  function resolveVerticalPathFromCard(card) {
-    // Prefer the main preview image within the card
-    var img = card.querySelector('img');
-    if (!img) return null;
-    var src = img.getAttribute('src') || '';
-    try {
-      // Build URL using same directory as the image src
-      var u = new URL(src, window.location.href);
-      var parts = u.pathname.split('/');
-      parts.pop(); // remove filename
-      parts.push('Batman_Vertical.png'); // desired file in the same folder
-      u.pathname = parts.join('/');
-      return u.toString();
-    } catch (e) {
-      // Fallback for relative paths
-      var base = src.split('?')[0].split('#')[0];
-      var idx = base.lastIndexOf('/');
-      if (idx !== -1) {
-        return base.slice(0, idx + 1) + 'Batman_Vertical.png';
-      }
-      return 'Batman_Vertical.png';
-    }
-  }
 
-  function findBatmanCards() {
-    var candidates = [];
-    var imgs = document.querySelectorAll('img');
-    imgs.forEach(function(img) {
-      var src = (img.getAttribute('src')||'').toLowerCase();
-      var alt = (img.getAttribute('alt')||'').toLowerCase();
-      var title = '';
-      var titleEl = img.closest('.card, .item, .gallery-item, .image-card, li, .thumb, .tile, .grid-item, .col')?.querySelector('.title, .card-title, h3, h4, [data-title]');
-      if (titleEl) title = (titleEl.textContent||titleEl.getAttribute('data-title')||'').toLowerCase();
-      if (src.includes('batman') || alt.includes('batman') || title.includes('batman')) {
-        var card = img.closest('.card, .item, .gallery-item, .image-card, li, .thumb, .tile, .grid-item, .col');
-        if (card && !candidates.includes(card)) candidates.push(card);
-      }
-    });
-    return candidates;
-  }
 
-  function hideBatmanDownload(card) {
-    var sel = '.download, .download-btn, .btn-download, [data-action="download"], a[href*="download"]';
-    card.querySelectorAll(sel).forEach(function(dl){ dl.style.display = 'none'; });
-  }
 
-  function wireBatmanShow(card) {
-    var buttons = Array.from(card.querySelectorAll('button, a'));
-    var best = null;
-    buttons.forEach(function(b) {
-      var t = (b.textContent||'').trim().toLowerCase();
-      if (t === 'show' || t.includes('show')) best = b;
-      if (!best && (b.className||'').toLowerCase().includes('show')) best = b;
-      if (!best && (b.getAttribute('data-action')||'').toLowerCase()==='show') best = b;
-    });
-    if (best) {
-      best.addEventListener('click', function(e) {
-        e.preventDefault();
-        openBatman(resolveVerticalPathFromCard(card));
-      });
-    }
-  }
 
-  function ensureOverlay() {
-    if (!document.getElementById('batmanOverlay')) {
-      var wrapper = document.createElement('div');
-      wrapper.innerHTML = `<!-- Batman Vertical Overlay -->
-<div id="batmanOverlay" class="batman-overlay" aria-hidden="true">
-  <button class="batman-close" aria-label="Close">×</button>
-  <div class="batman-frame">
-    <img id="batmanVerticalImg" alt="Batman Vertical">
-  </div>
-</div>`;
-      document.body.appendChild(wrapper.firstElementChild);
-    }
-  }
+
+
+
+
+
 
   function injectStyles() {
-    if (document.getElementById('batman-vertical-styles')) return;
+
     var style = document.createElement('style');
-    style.id = 'batman-vertical-styles';
-    style.textContent = `/* Batman vertical overlay */
-.batman-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; z-index: 9999; }
-.batman-overlay.is-open { display: block; }
-.batman-close { position: absolute; top: 10px; right: 12px; font-size: 28px; line-height: 1; width: 36px; height: 36px; border: none; border-radius: 18px; background: rgba(255,255,255,0.9); cursor: pointer; }
-.batman-frame { position: absolute; top: 56px; bottom: 16px; left: 0; right: 0; margin: 0 auto; overflow: auto; -webkit-overflow-scrolling: touch; background: #111; padding: 0; display: flex; justify-content: center; }
-/* Mobile: stretch horizontally */
-@media (max-width: 767px) { .batman-frame img { width: 100vw; height: auto; display: block; } }
-/* Desktop: fixed 600px wide */
-@media (min-width: 768px) { .batman-frame { width: 600px; } .batman-frame img { width: 600px; height: auto; display: block; } }
-`;
+
     document.head.appendChild(style);
   }
 
-  function openBatman(verticalUrl) {
-    ensureOverlay();
-    injectStyles();
-    var overlay = document.getElementById('batmanOverlay');
-    var img = document.getElementById('batmanVerticalImg');
-    if (verticalUrl) img.setAttribute('src', verticalUrl);
-    overlay.classList.add('is-open');
-    overlay.setAttribute('aria-hidden','false');
-  }
 
-  function closeBatman() {
-    var overlay = document.getElementById('batmanOverlay');
-    if (overlay) {
-      overlay.classList.remove('is-open');
-      overlay.setAttribute('aria-hidden','true');
-    }
-  }
-
-  document.addEventListener('click', function(e) {
-    if (e.target && (e.target.id === 'batmanOverlay' || e.target.classList.contains('batman-close'))) {
-      closeBatman();
-    }
-  });
 
   function ready(fn) {
     if (document.readyState !== 'loading') fn();
     else document.addEventListener('DOMContentLoaded', fn);
   }
 
-  ready(function() {
-    var cards = findBatmanCards();
-    cards.forEach(function(card) {
-      hideBatmanDownload(card);
-      wireBatmanShow(card);
-    });
-  });
-})();
+
+}
+)();

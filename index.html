@@ -13,6 +13,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/newsletter.css">
+  <link rel="stylesheet" href="css/tutorial-viewer.css" />
 <script src="js/newsletter.js" defer></script>
 <script defer src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script defer src="js/autoresponder.js"></script>
@@ -249,8 +250,29 @@ They are not affiliated with, endorsed by, or sponsored by the respective rights
   </figure>
 </div>
 
+<!-- Steps tutorial modal (opens from View) -->
+<div id="tutorialModal" class="tut-modal" hidden>
+  <div class="tut-backdrop" data-tut-close></div>
+  <div class="tut-shell" role="dialog" aria-modal="true" aria-label="Tutorial viewer">
+    <button id="tutClose" class="tut-close" aria-label="Close">×</button>
+
+    <div class="tut-stage" id="tutStage">
+      <img id="tutMain" class="tut-img" alt="" />
+      <button id="tutPrev" class="tut-nav tut-prev" type="button" aria-label="Previous">&#10094;</button>
+      <button id="tutNext" class="tut-nav tut-next" type="button" aria-label="Next">&#10095;</button>
+      <div class="tut-meta">
+        <span id="tutCounter" class="tut-counter">1 / 1</span>
+      </div>
+    </div>
+
+    <div id="tutThumbs" class="tut-thumbs" aria-label="Thumbnails"></div>
+  </div>
+</div>
+
   <script src="js/app.js"></script>
 
+  <!-- Tutorial viewer (steps modal) -->
+  <script src="js/tutorial-viewer.js" defer></script>
 
   <script src="js/zoom.js"></script>
 
