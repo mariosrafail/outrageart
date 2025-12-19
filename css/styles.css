@@ -14,7 +14,7 @@
   --chip: #f7f7f7;
   --radius: 0;                         /* square corners */
   --border: 2px solid var(--ring);
-  --bg-tile: url("bg.png");
+  --bg-tile: url("bg2.png");
   --bg-tile2: url("bg2.png");
   /* Dual accent shadows */
   --shadow-pink: #ff4fd8;
@@ -33,10 +33,9 @@ body{
   /* background */
   background-color: #fff;                /* was: background: var(--bg); */
   background-image: var(--bg-tile);
-  background-repeat: repeat;
-  background-position: 0 0;
-  background-size: 64px 64px;            /* optional if your tile is exactly 64×64 */
-  image-rendering: pixelated;            /* nice for pixel art */
+  /* background-repeat: repeat; */
+background-size: 2040px 2040px; 
+  
 }
 
 
@@ -58,9 +57,8 @@ header{
   background-color: #fff;                /* was: background: var(--bg); */
   background-image: var(--bg-tile);
   background-repeat: repeat;
-  background-position: 0 0;
-  background-size: 64px 64px;            /* optional if your tile is exactly 64×64 */
-  image-rendering: pixelated;            /* nice for pixel art */
+
+  background-size: 2040px 2040px;            /* optional if your tile is exactly 64×64 */
 }
 
 .brand{ display:flex; align-items:center; gap:14px }

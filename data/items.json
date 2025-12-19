@@ -38,7 +38,7 @@
   {
     "id": 5,
     "title": "Greg",
-    "theme": "Diary of a Whimpy Kid",
+    "theme": "Diary of a Wimpy Kid",
     "gender": "male",
     "difficulty": "normal",
     "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Greg.png",
@@ -180,7 +180,7 @@
     "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Sad_Kid_Luffy/Sad_Kid_Luffy.png"
   },
   {
-    "id": 22,
+    "id": 31,
     "title": "Chouchou",
     "theme": "One Piece",
     "gender": "male",
@@ -189,7 +189,7 @@
     "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Chouchou/Chouchou.png"
   },
   {
-    "id": 23,
+    "id": 22,
     "title": "Garp",
     "theme": "One Piece",
     "gender": "male",
@@ -198,7 +198,7 @@
     "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Garp/Garp.png"
   },
   {
-    "id": 24,
+    "id": 23,
     "title": "Sabo",
     "theme": "One Piece",
     "gender": "male",
@@ -207,17 +207,16 @@
     "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Sabo/Sabo.png"
   },
   {
-    "id": 25,
+    "id": 24,
     "title": "Marimo",
     "theme": "One Piece",
     "gender": "male",
     "difficulty": "medium",
     "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Marimo.png",
-    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Marimo/Marimo.png",
-	"shop": "https://www.redbubble.com/i/sticker/Angry-Marimo-by-OutrageArts/174427929.EJUG5"
+    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Marimo/Marimo.png"
   },
   {
-    "id": 26,
+    "id": 25,
     "title": "Gear 5th",
     "theme": "One Piece",
     "gender": "male",
@@ -226,7 +225,7 @@
     "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Gear_5th/Gear_5th.png"
   },
   {
-    "id": 27,
+    "id": 26,
     "title": "Dressrosa Luffy",
     "theme": "One Piece",
     "gender": "male",
@@ -235,17 +234,16 @@
     "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Dressrosa_Luffy/Dressrosa_Luffy.png"
   },
   {
-    "id": 28,
+    "id": 27,
     "title": "Shiny Nami",
     "theme": "One Piece",
     "gender": "female",
     "difficulty": "medium",
     "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Shiny_Nami.png",
-    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Shiny_Nami/Shiny_Nami.png",
-	"shop": "https://www.redbubble.com/i/sticker/Shiny-Nami-by-OutrageArts/174634586.EJUG5"
+    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Shiny_Nami/Shiny_Nami.png"
   },
   {
-    "id": 29,
+    "id": 28,
     "title": "PaRappa The Rapper",
     "theme": "Random",
     "gender": "male",
@@ -254,17 +252,16 @@
     "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/PaRappa_The_Rapper/PaRappa_The_Rapper.png"
   },
   {
-    "id": 30,
+    "id": 29,
     "title": "Beehive Luffy",
     "theme": "One Piece",
     "gender": "male",
     "difficulty": "normal",
     "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Beehive_Luffy.png",
-    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Beehive_Luffy/Beehive_Luffy.png",
-	"shop": "https://www.redbubble.com/i/sticker/Beehive-Luffy-by-OutrageArts/174429460.EJUG5"
+    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Beehive_Luffy/Beehive_Luffy.png"
   },
   {
-    "id": 31,
+    "id": 30,
     "title": "Angry Afro Luffy",
     "theme": "One Piece",
     "gender": "male",
@@ -273,7 +270,7 @@
     "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Angry_Afro_Luffy/Angry_Afro_Luffy.png"
   },
   {
-    "id": 32,
+    "id": 31,
     "title": "Unbothered Luffy",
     "theme": "One Piece",
     "gender": "male",
@@ -282,27 +279,25 @@
     "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Unbothered_Luffy/Unbothered_Luffy.png"
   },
   {
-    "id": 33,
+    "id": 32,
     "title": "Trolling Luffy",
     "theme": "One Piece",
     "gender": "male",
     "difficulty": "tricky",
     "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Trolling_Luffy.png",
-    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Trolling_Luffy/Trolling_Luffy.png",
-    "shop": "https://www.redbubble.com/i/sticker/Luffy-Trolling-Marine-by-OutrageArts/174517110.EJUG5"
+    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Trolling_Luffy/Trolling_Luffy.png"
   },
   {
-    "id": 34,
+    "id": 33,
     "title": "Sanji Impression",
     "theme": "One Piece",
     "gender": "male",
     "difficulty": "tricky",
     "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Sanji_Impression.png",
-    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Sanji_Impression/Sanji_Impression.png",
-	"shop": "https://www.redbubble.com/i/sticker/Sanji-Impression-by-OutrageArts/174425401.EJUG5"
+    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Sanji_Impression/Sanji_Impression.png"
   },
   {
-    "id": 35,
+    "id": 34,
     "title": "Cool Gear Fifth",
     "theme": "One Piece",
     "gender": "male",
@@ -311,7 +306,7 @@
     "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Cool_Gear_5th/Cool_Gear_5th.png"
   },
   {
-    "id": 36,
+    "id": 35,
     "title": "Crying Laboon",
     "theme": "One Piece",
     "gender": "male",
@@ -326,8 +321,7 @@
     "gender": "male",
     "difficulty": "normal",
     "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Super_Happy_Laboon.png",
-    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Super_Happy_Laboon/Super_Happy_Laboon.png",
-	"shop" : "https://www.redbubble.com/i/sticker/Super-Happy-Laboon-by-OutrageArts/174681047.EJUG5"
+    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Super_Happy_Laboon/Super_Happy_Laboon.png"
   },
   {
     "id": 38,
@@ -354,7 +348,6 @@
     "gender": "male",
     "difficulty": "medium",
     "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Gaimon.png",
-    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Gaimon/Gaimon.png",
-	"shop": "https://www.redbubble.com/i/sticker/Gaimon-by-OutrageArts/174704107.EJUG5"
+    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Gaimon/Gaimon.png"
   }
 ]
