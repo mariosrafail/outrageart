@@ -1,1 +1,0 @@
-/* zoom placeholder (intentionally empty) */
