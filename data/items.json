@@ -367,5 +367,14 @@
     "difficulty": "medium",
     "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Rengoku.png",
     "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Rengoku/Rengoku.png"
+  },
+  {
+    "id": 43,
+    "title": "Tanjiro",
+    "theme": "Demon Slayer",
+    "gender": "male",
+    "difficulty": "medium",
+    "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Tanjiro.png",
+    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Tanjiro/Tanjiro.png"
   }
 ]
