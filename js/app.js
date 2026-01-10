@@ -232,72 +232,46 @@ function getOrCreateBrowserId(){
   return v;
 }
 
-async function fetchJsonWithTimeout(url, timeoutMs=1400){
+// ---- Views (Netlify Function) ----
+function getClientId(){
+  const k = 'oa_client_id';
+  try{
+    let v = localStorage.getItem(k);
+    if (!v){
+      v = (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2);
+      localStorage.setItem(k, v);
+    }
+    return v;
+  }catch{
+    return String(Date.now()) + Math.random().toString(16).slice(2);
+  }
+}
+
+async function fetchJsonWithTimeout(url, opts={}, timeoutMs=2500){
   const ac = new AbortController();
   const t = setTimeout(()=>ac.abort(), timeoutMs);
   try{
-    const r = await fetch(url, { cache: 'no-store', signal: ac.signal });
+    const r = await fetch(url, { ...opts, cache: 'no-store', signal: ac.signal });
     return r;
   }finally{
     clearTimeout(t);
   }
 }
 
-async function getPublicIPFast(timeoutMs=1400){
-  if (__cachedIP) return __cachedIP;
-  try{
-    const r = await fetchJsonWithTimeout('https://api.ipify.org?format=json', timeoutMs);
-    if (!r.ok) return null;
-    const j = await r.json();
-    __cachedIP = j && j.ip ? String(j.ip) : null;
-    return __cachedIP;
-  }catch{
-    return null;
+async function fetchViewsFromApi(itemId){
+  const clientId = getClientId();
+  const url = `/api/views?id=${encodeURIComponent(itemId)}`;
+  const headers = { 'x-client-id': clientId };
+  let r = await fetchJsonWithTimeout(url, { headers }, 2500);
+  if (!r.ok){
+    // one retry, a bit longer
+    r = await fetchJsonWithTimeout(url, { headers }, 4000);
   }
-}
-
-function simpleHash(str){
-  // lightweight hash for keys, not for security
-  let h = 2166136261;
-  for (let i = 0; i < str.length; i++){
-    h ^= str.charCodeAt(i);
-    h = Math.imul(h, 16777619);
-  }
-  return (h >>> 0).toString(16);
-}
-
-async function ensureCountapiKey(namespace, key, value=0){
-  const createUrl = `https://api.countapi.xyz/create?namespace=${encodeURIComponent(namespace)}&key=${encodeURIComponent(key)}&value=${encodeURIComponent(String(value))}`;
-  try{
-    const r = await fetchJsonWithTimeout(createUrl, 6000);
-    return r && r.ok;
-  }catch{
-    return false;
-  }
-}
-
-async function countapiGet(namespace, key){
-  const url = `https://api.countapi.xyz/get/${encodeURIComponent(namespace)}/${encodeURIComponent(key)}`;
-  try{
-    const r = await fetchJsonWithTimeout(url, 6000);
-    if (!r.ok) return { ok:false, status:r.status, value:null };
-    const j = await r.json();
-    return { ok:true, status:r.status, value: (j && typeof j.value === 'number') ? j.value : 0 };
-  }catch{
-    return { ok:false, status:0, value:null };
-  }
-}
-
-async function countapiHit(namespace, key){
-  const url = `https://api.countapi.xyz/hit/${encodeURIComponent(namespace)}/${encodeURIComponent(key)}`;
-  try{
-    const r = await fetchJsonWithTimeout(url, 6000);
-    if (!r.ok) return { ok:false, status:r.status, value:null };
-    const j = await r.json();
-    return { ok:true, status:r.status, value: (j && typeof j.value === 'number') ? j.value : 0 };
-  }catch{
-    return { ok:false, status:0, value:null };
-  }
+  if (!r.ok) throw new Error('views request failed');
+  const data = await r.json();
+  const v = Number(data && data.views);
+  if (!Number.isFinite(v) || v < 0) throw new Error('invalid views');
+  return v;
 }
 
 function setViewsText(n){
@@ -308,69 +282,30 @@ function setViewsText(n){
 }
 
 async function updateViews(itemId){
-  const namespace = 'outrageart_tutorials';
-  const totalKey = `item_${itemId}`;
   const cacheKey = `oa_views_cache_${itemId}`;
 
-  // show cached value instantly (if we have it)
-  let cached = null;
+  // show cached value instantly
   try{
     const c = localStorage.getItem(cacheKey);
-    cached = c !== null ? Number(c) : null;
-    if (Number.isFinite(cached)) setViewsText(cached);
+    const cached = c !== null ? Number(c) : 0;
+    if (Number.isFinite(cached) && cached >= 0) setViewsText(cached);
     else setViewsText(0);
   }catch{
     setViewsText(0);
   }
 
-  // run network logic without blocking UI
+  // refresh from server in background
   (async ()=>{
-    // 1) fetch total
-    let totalRes = await countapiGet(namespace, totalKey);
-
-    // If key missing, create it once
-    if (!totalRes.ok && (totalRes.status === 404 || totalRes.status === 400)){
-      await ensureCountapiKey(namespace, totalKey, 0);
-      totalRes = await countapiGet(namespace, totalKey);
-    }
-
-    // If still not ok, retry once (transient network / abort)
-    if (!totalRes.ok){
-      await new Promise(r=>setTimeout(r, 350));
-      totalRes = await countapiGet(namespace, totalKey);
-    }
-
-    if (totalRes.ok){
-      setViewsText(totalRes.value);
-      try{ localStorage.setItem(cacheKey, String(totalRes.value)); }catch{}
-    }
-
-    // 2) unique viewer key (prefer IP, fallback to browser id)
-    const ip = await getPublicIPFast(1200);
-    const uid = ip ? `ip_${simpleHash(ip)}` : `br_${simpleHash(getOrCreateBrowserId())}`;
-    const seenKey = `seen_${itemId}_${uid}`;
-
-    // extra local guard to avoid double-hits from rapid reopens
-    const localSeenKey = `oa_seen_${seenKey}`;
     try{
-      if (localStorage.getItem(localSeenKey) === '1') return;
-      localStorage.setItem(localSeenKey, '1');
-    }catch{}
-
-    // 3) check/create seen key; if first time then increment total
-    let seenRes = await countapiGet(namespace, seenKey);
-    if (!seenRes.ok && (seenRes.status === 404 || seenRes.status === 400)){
-      const created = await ensureCountapiKey(namespace, seenKey, 1);
-      if (created){
-        const hitRes = await countapiHit(namespace, totalKey);
-        if (hitRes.ok){
-          setViewsText(hitRes.value);
-          try{ localStorage.setItem(cacheKey, String(hitRes.value)); }catch{}
-        }
-      }
+      const v = await fetchViewsFromApi(itemId);
+      setViewsText(v);
+      try{ localStorage.setItem(cacheKey, String(v)); }catch{}
+    }catch{
+      // keep cached value, do nothing
     }
   })();
 }
+
 
 // event delegation για τα Show buttons
 grid.addEventListener('click', (e)=>{
