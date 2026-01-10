@@ -14,7 +14,7 @@ const viewer = document.getElementById('viewer');
 const viewerImg = document.getElementById('viewerImg');
 const viewerClose = document.getElementById('viewerClose');
 const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
-const sortKey = it => ((it.title && it.title.trim()) || it.thumb || "").toString();
+const sortKey = it => ((it.title && it.title.trim()) || it.url || it.thumb || "").toString();
 const pageSizeSel = document.getElementById('pageSize');
 const pager   = document.getElementById('pager');
 const btnFirst = document.getElementById('btnFirst');
@@ -130,8 +130,6 @@ function openViewer(url, title){
   document.body.style.overflow = 'hidden';
 }
 function closeViewer(){
-  if (viewerViews) viewerViews.textContent = "";
-  if (tutViews) tutViews.textContent = "";
   viewer.classList.remove('show');
   viewer.hidden = true;
   viewerImg.src = '';
@@ -216,115 +214,63 @@ if (viewerPrev && viewerNext){
 // Track which card id is being opened
 let CURRENT_OPEN_ID = null;
 
-// Views counter (unique per IP, not strict).
-const viewerViews = document.getElementById('viewerViews');
-const tutViews = document.getElementById('tutViews');
-let __cachedIP = null;
-
-function getOrCreateBrowserId(){
-  const k = 'oa_browser_id_v1';
-  let v = null;
-  try{ v = localStorage.getItem(k); }catch{}
-  if (!v){
-    v = (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Math.random()).slice(2) + String(Date.now());
-    try{ localStorage.setItem(k, v); }catch{}
-  }
-  return v;
-}
-
-// ---- Views (Netlify Function) ----
-function getClientId(){
-  const k = 'oa_client_id';
+// ---- Views counter (Netlify Function + Postgres) ----
+const __viewsClientIdKey = "views_client_id";
+function __getViewsClientId(){
   try{
-    let v = localStorage.getItem(k);
-    if (!v){
-      v = (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2);
-      localStorage.setItem(k, v);
+    let v = localStorage.getItem(__viewsClientIdKey);
+    if(!v){
+      v = (crypto && crypto.randomUUID) ? crypto.randomUUID() : (Date.now() + "-" + Math.random().toString(16).slice(2));
+      localStorage.setItem(__viewsClientIdKey, v);
     }
     return v;
-  }catch{
-    return String(Date.now()) + Math.random().toString(16).slice(2);
+  } catch {
+    return "";
   }
 }
 
-async function fetchJsonWithTimeout(url, opts={}, timeoutMs=2500){
-  const ac = new AbortController();
-  const t = setTimeout(()=>ac.abort(), timeoutMs);
+async function __recordViewAndUpdateUI(itemId){
+  const badge = document.getElementById("tutViews") || document.getElementById("viewerViews");
+  if (badge) badge.textContent = "views: 0";
+
+  if (!itemId) return;
+
+  const cid = __getViewsClientId();
+  const url = `/api/views?id=${encodeURIComponent(itemId)}`;
+
   try{
-    const r = await fetch(url, { ...opts, cache: 'no-store', signal: ac.signal });
-    return r;
-  }finally{
-    clearTimeout(t);
-  }
-}
-
-async function fetchViewsFromApi(itemId){
-  const clientId = getClientId();
-  // Call the function directly to avoid redirect / caching edge cases.
-  // Also send duplicate param name (imageId) for backwards compatibility.
-  const qs = `id=${encodeURIComponent(itemId)}&imageId=${encodeURIComponent(itemId)}`;
-  const url = `/.netlify/functions/views?${qs}`;
-  const headers = { 'x-client-id': clientId };
-  let r = await fetchJsonWithTimeout(url, { headers }, 2500);
-  if (!r.ok){
-    // one retry, a bit longer
-    r = await fetchJsonWithTimeout(url, { headers }, 4000);
-  }
-  if (!r.ok) throw new Error('views request failed');
-  const data = await r.json();
-  const v = Number(data && data.views);
-  if (!Number.isFinite(v) || v < 0) throw new Error('invalid views');
-  return v;
-}
-
-function setViewsText(n){
-  const val = (typeof n === 'number' && Number.isFinite(n)) ? n : 0;
-  const txt = `views: ${val}`;
-  if (viewerViews) viewerViews.textContent = txt;
-  if (tutViews) tutViews.textContent = txt;
-}
-
-async function updateViews(itemId){
-  const cacheKey = `oa_views_cache_${itemId}`;
-
-  // show cached value instantly
-  try{
-    const c = localStorage.getItem(cacheKey);
-    const cached = c !== null ? Number(c) : 0;
-    if (Number.isFinite(cached) && cached >= 0) setViewsText(cached);
-    else setViewsText(0);
-  }catch{
-    setViewsText(0);
-  }
-
-  // refresh from server in background
-  (async ()=>{
-    try{
-      const v = await fetchViewsFromApi(itemId);
-      setViewsText(v);
-      try{ localStorage.setItem(cacheKey, String(v)); }catch{}
-    }catch{
-      // keep cached value, do nothing
+    const res = await fetch(url, {
+      method: "GET",
+      headers: cid ? { "x-client-id": cid } : {}
+    });
+    const data = await res.json().catch(() => null);
+    if (badge && data && typeof data.views !== "undefined") {
+      badge.textContent = `views: ${data.views}`;
     }
-  })();
+  } catch {
+    // leave default
+  }
 }
-
 
 // event delegation για τα Show buttons
 grid.addEventListener('click', (e)=>{
   const btn = e.target.closest('.show-btn');
   if(btn){
     e.preventDefault();
-    CURRENT_OPEN_ID = btn.dataset.id ? Number(btn.dataset.id) : null;
+
+    const itemId = btn.dataset.id || "";
+    const tutViewsEl = document.getElementById("tutViews");
+    if (tutViewsEl) tutViewsEl.textContent = "views: 0";
+    bumpAndFetchViews(itemId).then((data)=>{
+      if (tutViewsEl && data && typeof data.views !== "undefined") tutViewsEl.textContent = `views: `;
+    }).catch(()=>{});
 
     // Open steps-based tutorial modal (1.png, 2.png, ... in same folder)
     if (typeof window.openTutorialModal === 'function') {
       window.openTutorialModal(btn.dataset.url, btn.dataset.title);
-      if (CURRENT_OPEN_ID) updateViews(CURRENT_OPEN_ID);
     } else {
       // fallback to legacy viewer
       openViewer(btn.dataset.url, btn.dataset.title);
-      if (CURRENT_OPEN_ID) updateViews(CURRENT_OPEN_ID);
     }
   }
 });
@@ -367,7 +313,7 @@ function card(item){
   const tags = [...new Set([item.theme, item.gender, ...(item.tags||[])])].slice(0,4)
     .map(t=>`<span class=tag>${escapeHtml(t)}</span>`).join('');
   const srcset = buildSrcset(item.thumb);
-  const fileUrl = (window.TUTORIAL_URLS && window.TUTORIAL_URLS[item.id]) || item.thumb;
+  const fileUrl = item.url; // το ίδιο external link για Show & Download (Dropbox/Nextcloud/CDN)
   const title = escapeHtml(item.title || '');
 
   const shopBtnHTML = (item.shop && String(item.shop).trim() !== '')
@@ -388,7 +334,7 @@ function card(item){
       <img loading="lazy" src="${item.thumb}" ${srcset ? `srcset="${srcset}" sizes="(max-width:600px) 50vw, 25vw"` : ''} alt="${title}">
       ${(()=>{
 	  
-	  const showBtn = `<button class="btn small ghost show-btn" data-id="${item.id}" data-url="${fileUrl}" data-title="${title}" >Show</button>`;
+	  const showBtn = `<button class="btn small ghost show-btn" data-id="" data-id="" data-id="" data-url="${fileUrl}" data-title="${title}" >Show</button>`;
 	  const dlBtn = `<a class="btn small primary" href="${fileUrl}" target="_self">Download</a>`;
 	  return `<div class="overlay">${showBtn}${shopBtnHTML}</div>`;})()}
     </div>

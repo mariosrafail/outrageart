@@ -1,8 +1,9 @@
 {
-  "name": "outrageart-site",
+  "name": "outrage-art-site",
   "private": true,
   "version": "1.0.0",
+  "type": "commonjs",
   "dependencies": {
-    "@netlify/blobs": "^8.0.0"
+    "@neondatabase/serverless": "^0.10.4"
   }
 }
