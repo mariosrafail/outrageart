@@ -260,7 +260,10 @@ async function fetchJsonWithTimeout(url, opts={}, timeoutMs=2500){
 
 async function fetchViewsFromApi(itemId){
   const clientId = getClientId();
-  const url = `/api/views?id=${encodeURIComponent(itemId)}`;
+  // Call the function directly to avoid redirect / caching edge cases.
+  // Also send duplicate param name (imageId) for backwards compatibility.
+  const qs = `id=${encodeURIComponent(itemId)}&imageId=${encodeURIComponent(itemId)}`;
+  const url = `/.netlify/functions/views?${qs}`;
   const headers = { 'x-client-id': clientId };
   let r = await fetchJsonWithTimeout(url, { headers }, 2500);
   if (!r.ok){

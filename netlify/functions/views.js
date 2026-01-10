@@ -28,16 +28,22 @@ exports.handler = async (event) => {
   }
 
   const qs = event.queryStringParameters || {};
-  const id = (qs.id || "").trim();
+  // Accept multiple param names to avoid frontend mismatches.
+  // Prefer numeric ids but keep as string key.
+  const idRaw = (qs.id ?? qs.imageId ?? qs.itemId ?? qs.tutorialId ?? "");
+  const id = String(idRaw).trim();
   if (!id) {
     return { statusCode: 400, headers, body: JSON.stringify({ error: "Missing id" }) };
   }
 
-  // Visitor identity: prefer IP, fallback to client id
-  const xff = (event.headers && (event.headers["x-forwarded-for"] || event.headers["X-Forwarded-For"])) || "";
-  const ip = xff.split(",")[0].trim();
-  const clientId = (event.headers && (event.headers["x-client-id"] || event.headers["X-Client-Id"])) || "";
-  const visitorRaw = ip || clientId || (event.headers && (event.headers["user-agent"] || "")) || "unknown";
+  // Visitor identity: prefer Netlify-provided IP headers, fallback to forwarded-for, then client id.
+  const h = (event.headers || {});
+  const nfIp = h["x-nf-client-connection-ip"] || h["X-NF-Client-Connection-Ip"] || h["x-nf-client-connection-ipv6"] || h["X-NF-Client-Connection-Ipv6"] || "";
+  const xff = h["x-forwarded-for"] || h["X-Forwarded-For"] || "";
+  const ip = String(nfIp || xff).split(",")[0].trim();
+  const clientId = h["x-client-id"] || h["X-Client-Id"] || "";
+  const ua = h["user-agent"] || h["User-Agent"] || "";
+  const visitorRaw = ip || clientId || ua || "unknown";
   const visitor = sha256(visitorRaw);
 
   // If blobs are unavailable, degrade gracefully to per-request 0 (client cache still works)
