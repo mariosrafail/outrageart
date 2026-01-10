@@ -14,7 +14,7 @@ const viewer = document.getElementById('viewer');
 const viewerImg = document.getElementById('viewerImg');
 const viewerClose = document.getElementById('viewerClose');
 const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
-const sortKey = it => ((it.title && it.title.trim()) || it.url || it.thumb || "").toString();
+const sortKey = it => ((it.title && it.title.trim()) || it.thumb || "").toString();
 const pageSizeSel = document.getElementById('pageSize');
 const pager   = document.getElementById('pager');
 const btnFirst = document.getElementById('btnFirst');
@@ -130,6 +130,8 @@ function openViewer(url, title){
   document.body.style.overflow = 'hidden';
 }
 function closeViewer(){
+  if (viewerViews) viewerViews.textContent = "";
+  if (tutViews) tutViews.textContent = "";
   viewer.classList.remove('show');
   viewer.hidden = true;
   viewerImg.src = '';
@@ -214,18 +216,92 @@ if (viewerPrev && viewerNext){
 // Track which card id is being opened
 let CURRENT_OPEN_ID = null;
 
+// Views counter (unique per IP, not strict).
+const viewerViews = document.getElementById('viewerViews');
+const tutViews = document.getElementById('tutViews');
+let __cachedIP = null;
+
+async function getPublicIP(){
+  if (__cachedIP) return __cachedIP;
+  try{
+    const r = await fetch('https://api.ipify.org?format=json', { cache: 'no-store' });
+    const j = await r.json();
+    __cachedIP = j && j.ip ? String(j.ip) : null;
+    return __cachedIP;
+  }catch{
+    return null;
+  }
+}
+
+function simpleHash(str){
+  // lightweight hash for keys, not for security
+  let h = 2166136261;
+  for (let i = 0; i < str.length; i++){
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return (h >>> 0).toString(16);
+}
+
+async function updateViews(itemId){
+  if (viewerViews) viewerViews.textContent = 'views: …';
+  if (tutViews) tutViews.textContent = 'views: …';
+
+  const namespace = 'outrageart_tutorials';
+  const totalKey = `item_${itemId}`;
+  const ip = await getPublicIP();
+  const ipKey = ip ? `seen_${itemId}_${simpleHash(ip)}` : null;
+
+  try{
+    if (ipKey){
+      const mr = await fetch(`https://api.countapi.xyz/get/${namespace}/${ipKey}`, { cache: 'no-store' });
+      if (!mr.ok){
+        await fetch(
+          `https://api.countapi.xyz/create?namespace=${encodeURIComponent(namespace)}&key=${encodeURIComponent(ipKey)}&value=1`,
+          { cache: 'no-store' }
+        );
+        await fetch(`https://api.countapi.xyz/hit/${namespace}/${totalKey}`, { cache: 'no-store' });
+      }
+    } else {
+      const lsKey = `viewed_${itemId}`;
+      if (!localStorage.getItem(lsKey)){
+        localStorage.setItem(lsKey,'1');
+        await fetch(`https://api.countapi.xyz/hit/${namespace}/${totalKey}`, { cache: 'no-store' });
+      }
+    }
+
+    const gr = await fetch(`https://api.countapi.xyz/get/${namespace}/${totalKey}`, { cache: 'no-store' });
+    if (gr.ok){
+      const gj = await gr.json();
+      const v = (gj && typeof gj.value === 'number') ? gj.value : 0;
+      if (viewerViews) viewerViews.textContent = `views: ${v}`;
+      if (tutViews) tutViews.textContent = `views: ${v}`;
+      return v;
+    }
+  }catch{}
+
+  if (viewerViews) viewerViews.textContent = 'views: 0';
+  if (tutViews) tutViews.textContent = 'views: 0';
+  return 0;
+}
+
+
+
 // event delegation για τα Show buttons
 grid.addEventListener('click', (e)=>{
   const btn = e.target.closest('.show-btn');
   if(btn){
     e.preventDefault();
+    CURRENT_OPEN_ID = btn.dataset.id ? Number(btn.dataset.id) : null;
 
     // Open steps-based tutorial modal (1.png, 2.png, ... in same folder)
     if (typeof window.openTutorialModal === 'function') {
       window.openTutorialModal(btn.dataset.url, btn.dataset.title);
+      if (CURRENT_OPEN_ID) updateViews(CURRENT_OPEN_ID);
     } else {
       // fallback to legacy viewer
       openViewer(btn.dataset.url, btn.dataset.title);
+      if (CURRENT_OPEN_ID) updateViews(CURRENT_OPEN_ID);
     }
   }
 });
@@ -268,7 +344,7 @@ function card(item){
   const tags = [...new Set([item.theme, item.gender, ...(item.tags||[])])].slice(0,4)
     .map(t=>`<span class=tag>${escapeHtml(t)}</span>`).join('');
   const srcset = buildSrcset(item.thumb);
-  const fileUrl = item.url; // το ίδιο external link για Show & Download (Dropbox/Nextcloud/CDN)
+  const fileUrl = (window.TUTORIAL_URLS && window.TUTORIAL_URLS[item.id]) || item.thumb;
   const title = escapeHtml(item.title || '');
 
   const shopBtnHTML = (item.shop && String(item.shop).trim() !== '')
@@ -289,7 +365,7 @@ function card(item){
       <img loading="lazy" src="${item.thumb}" ${srcset ? `srcset="${srcset}" sizes="(max-width:600px) 50vw, 25vw"` : ''} alt="${title}">
       ${(()=>{
 	  
-	  const showBtn = `<button class="btn small ghost show-btn" data-url="${fileUrl}" data-title="${title}" >Show</button>`;
+	  const showBtn = `<button class="btn small ghost show-btn" data-id="${item.id}" data-url="${fileUrl}" data-title="${title}" >Show</button>`;
 	  const dlBtn = `<a class="btn small primary" href="${fileUrl}" target="_self">Download</a>`;
 	  return `<div class="overlay">${showBtn}${shopBtnHTML}</div>`;})()}
     </div>
