@@ -1,9 +1,0 @@
-{
-  "name": "outrage-art-site",
-  "private": true,
-  "version": "1.0.0",
-  "type": "commonjs",
-  "dependencies": {
-    "@neondatabase/serverless": "^0.10.4"
-  }
-}

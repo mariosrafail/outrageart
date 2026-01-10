@@ -214,56 +214,11 @@ if (viewerPrev && viewerNext){
 // Track which card id is being opened
 let CURRENT_OPEN_ID = null;
 
-// ---- Views counter (Netlify Function + Postgres) ----
-const __viewsClientIdKey = "views_client_id";
-function __getViewsClientId(){
-  try{
-    let v = localStorage.getItem(__viewsClientIdKey);
-    if(!v){
-      v = (crypto && crypto.randomUUID) ? crypto.randomUUID() : (Date.now() + "-" + Math.random().toString(16).slice(2));
-      localStorage.setItem(__viewsClientIdKey, v);
-    }
-    return v;
-  } catch {
-    return "";
-  }
-}
-
-async function __recordViewAndUpdateUI(itemId){
-  const badge = document.getElementById("tutViews") || document.getElementById("viewerViews");
-  if (badge) badge.textContent = "views: 0";
-
-  if (!itemId) return;
-
-  const cid = __getViewsClientId();
-  const url = `/api/views?id=${encodeURIComponent(itemId)}`;
-
-  try{
-    const res = await fetch(url, {
-      method: "GET",
-      headers: cid ? { "x-client-id": cid } : {}
-    });
-    const data = await res.json().catch(() => null);
-    if (badge && data && typeof data.views !== "undefined") {
-      badge.textContent = `views: ${data.views}`;
-    }
-  } catch {
-    // leave default
-  }
-}
-
 // event delegation για τα Show buttons
 grid.addEventListener('click', (e)=>{
   const btn = e.target.closest('.show-btn');
   if(btn){
     e.preventDefault();
-
-    const itemId = btn.dataset.id || "";
-    const tutViewsEl = document.getElementById("tutViews");
-    if (tutViewsEl) tutViewsEl.textContent = "views: 0";
-    bumpAndFetchViews(itemId).then((data)=>{
-      if (tutViewsEl && data && typeof data.views !== "undefined") tutViewsEl.textContent = `views: `;
-    }).catch(()=>{});
 
     // Open steps-based tutorial modal (1.png, 2.png, ... in same folder)
     if (typeof window.openTutorialModal === 'function') {
@@ -334,7 +289,7 @@ function card(item){
       <img loading="lazy" src="${item.thumb}" ${srcset ? `srcset="${srcset}" sizes="(max-width:600px) 50vw, 25vw"` : ''} alt="${title}">
       ${(()=>{
 	  
-	  const showBtn = `<button class="btn small ghost show-btn" data-id="" data-id="" data-id="" data-url="${fileUrl}" data-title="${title}" >Show</button>`;
+	  const showBtn = `<button class="btn small ghost show-btn" data-url="${fileUrl}" data-title="${title}" >Show</button>`;
 	  const dlBtn = `<a class="btn small primary" href="${fileUrl}" target="_self">Download</a>`;
 	  return `<div class="overlay">${showBtn}${shopBtnHTML}</div>`;})()}
     </div>
