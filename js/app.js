@@ -269,7 +269,7 @@ function simpleHash(str){
 async function ensureCountapiKey(namespace, key, value=0){
   const createUrl = `https://api.countapi.xyz/create?namespace=${encodeURIComponent(namespace)}&key=${encodeURIComponent(key)}&value=${encodeURIComponent(String(value))}`;
   try{
-    const r = await fetchJsonWithTimeout(createUrl, 1800);
+    const r = await fetchJsonWithTimeout(createUrl, 6000);
     return r && r.ok;
   }catch{
     return false;
@@ -279,7 +279,7 @@ async function ensureCountapiKey(namespace, key, value=0){
 async function countapiGet(namespace, key){
   const url = `https://api.countapi.xyz/get/${encodeURIComponent(namespace)}/${encodeURIComponent(key)}`;
   try{
-    const r = await fetchJsonWithTimeout(url, 1800);
+    const r = await fetchJsonWithTimeout(url, 6000);
     if (!r.ok) return { ok:false, status:r.status, value:null };
     const j = await r.json();
     return { ok:true, status:r.status, value: (j && typeof j.value === 'number') ? j.value : 0 };
@@ -291,7 +291,7 @@ async function countapiGet(namespace, key){
 async function countapiHit(namespace, key){
   const url = `https://api.countapi.xyz/hit/${encodeURIComponent(namespace)}/${encodeURIComponent(key)}`;
   try{
-    const r = await fetchJsonWithTimeout(url, 1800);
+    const r = await fetchJsonWithTimeout(url, 6000);
     if (!r.ok) return { ok:false, status:r.status, value:null };
     const j = await r.json();
     return { ok:true, status:r.status, value: (j && typeof j.value === 'number') ? j.value : 0 };
@@ -301,7 +301,8 @@ async function countapiHit(namespace, key){
 }
 
 function setViewsText(n){
-  const txt = (typeof n === 'number') ? `views: ${n}` : 'views: …';
+  const val = (typeof n === 'number' && Number.isFinite(n)) ? n : 0;
+  const txt = `views: ${val}`;
   if (viewerViews) viewerViews.textContent = txt;
   if (tutViews) tutViews.textContent = txt;
 }
@@ -317,19 +318,28 @@ async function updateViews(itemId){
     const c = localStorage.getItem(cacheKey);
     cached = c !== null ? Number(c) : null;
     if (Number.isFinite(cached)) setViewsText(cached);
-    else setViewsText(null);
+    else setViewsText(0);
   }catch{
-    setViewsText(null);
+    setViewsText(0);
   }
 
   // run network logic without blocking UI
   (async ()=>{
     // 1) fetch total
     let totalRes = await countapiGet(namespace, totalKey);
+
+    // If key missing, create it once
     if (!totalRes.ok && (totalRes.status === 404 || totalRes.status === 400)){
       await ensureCountapiKey(namespace, totalKey, 0);
       totalRes = await countapiGet(namespace, totalKey);
     }
+
+    // If still not ok, retry once (transient network / abort)
+    if (!totalRes.ok){
+      await new Promise(r=>setTimeout(r, 350));
+      totalRes = await countapiGet(namespace, totalKey);
+    }
+
     if (totalRes.ok){
       setViewsText(totalRes.value);
       try{ localStorage.setItem(cacheKey, String(totalRes.value)); }catch{}
