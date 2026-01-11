@@ -412,5 +412,14 @@
     "difficulty": "medium",
     "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Jazz.png",
     "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Jazz/Jazz.png"
+  },
+  {
+    "id": 48,
+    "title": "Gunter",
+    "theme": "Adventure time",
+    "gender": "male",
+    "difficulty": "medium",
+    "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Gunter.png",
+    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Gunter/Gunter.png"
   }
 ]
