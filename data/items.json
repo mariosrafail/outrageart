@@ -448,5 +448,14 @@
     "difficulty": "medium",
     "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Darwin.png",
     "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Darwin/Darwin.png"
+  },
+  {
+    "id": 52,
+    "title": "Princess_Cookie",
+    "theme": "Adventure time",
+    "gender": "male",
+    "difficulty": "normal",
+    "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Princess_Cookie.png",
+    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Princess_Cookie/Princess_Cookie.png"
   }
 ]
