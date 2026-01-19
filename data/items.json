@@ -457,5 +457,23 @@
     "difficulty": "normal",
     "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Princess_Cookie.png",
     "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Princess_Cookie/Princess_Cookie.png"
+  },
+  {
+    "id": 53,
+    "title": "Mooonster",
+    "theme": "Outrage Art",
+    "gender": "male",
+    "difficulty": "normal",
+    "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Mooonster.png",
+    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Mooonster/Mooonster.png"
+  },
+  {
+    "id": 54,
+    "title": "Mr Fish",
+    "theme": "Outrage Art",
+    "gender": "male",
+    "difficulty": "normal",
+    "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Mr_Fish.png",
+    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Mr_Fish/Mr_Fish.png"
   }
 ]
