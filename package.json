@@ -1,0 +1,9 @@
+{
+  "name": "site-neon-visits",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Static site with Netlify Functions for Neon visit tracking",
+  "dependencies": {
+    "pg": "^8.11.5"
+  }
+}
