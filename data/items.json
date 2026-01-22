@@ -493,5 +493,14 @@
     "difficulty": "normal",
     "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Jeff.png",
     "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Jeff/Jeff.png"
+  },
+  {
+    "id": 57,
+    "title": "Please give me a name",
+    "theme": "Outrage Art",
+    "gender": "male",
+    "difficulty": "normal",
+    "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/noname.png",
+    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/noname/noname.png"
   }
 ]
