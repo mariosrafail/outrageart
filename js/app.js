@@ -511,19 +511,4 @@ btnLastTop .addEventListener('click', () => gotoPage(totalPages()));
 
 
 }
-
-// === Visit tracking (Neon via Netlify Functions) ===
-(function trackVisitOnce() {
-  try {
-    fetch("/api/visit", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      keepalive: true,
-      body: JSON.stringify({
-        page: location.pathname,
-        referrer: document.referrer || ""
-      })
-    }).catch(() => {});
-  } catch (_) {}
-})();
 )();
