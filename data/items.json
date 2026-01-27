@@ -496,11 +496,20 @@
   },
   {
     "id": 57,
+    "title": "Lil Gary",
+    "theme": "Outrage Art",
+    "gender": "male",
+    "difficulty": "normal",
+    "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/Lil_Gary.png",
+    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/Lil_Gary/Lil_Gary.png"
+  },
+  {
+    "id": 58,
     "title": "Please give me a name",
     "theme": "Outrage Art",
     "gender": "male",
     "difficulty": "normal",
-    "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/noname.png",
-    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/noname/noname.png"
+    "thumb": "https://nextcloud.stinis.ddns.net/public.php/dav/files/PiFECGsHptZpn8c/puff.png",
+    "url": "https://nextcloud.stinis.ddns.net/public.php/dav/files/NdgnpbrbjtNC42b/puff/puff.png"
   }
 ]
