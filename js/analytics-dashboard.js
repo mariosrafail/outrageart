@@ -6,8 +6,10 @@
   const tblSource = $('tblSource');
   const tblRef = $('tblRef');
   const tblDaily = $('tblDaily');
+  const analyticsRoot = $('analyticsRoot');
   const loginCard = $('loginCard');
   const dashboard = $('dashboard');
+  const adminUsername = $('adminUsername');
   const adminPassword = $('adminPassword');
   const btnAdminLogin = $('btnAdminLogin');
   const btnAdminLogout = $('btnAdminLogout');
@@ -20,11 +22,13 @@
 
   function num(n){ return Number(n || 0).toLocaleString(); }
   function showDashboard(){
+    if (analyticsRoot) analyticsRoot.classList.remove('auth-mode');
     loginCard.style.display = 'none';
     dashboard.style.display = 'block';
     if (btnAdminLogout) btnAdminLogout.style.display = 'inline-block';
   }
   function showLogin(msg){
+    if (analyticsRoot) analyticsRoot.classList.add('auth-mode');
     dashboard.style.display = 'none';
     loginCard.style.display = 'block';
     if (btnAdminLogout) btnAdminLogout.style.display = 'none';
@@ -208,7 +212,12 @@
 
   btnAdminLogin.addEventListener('click', async () => {
     loginMsg.textContent = '';
+    const username = (adminUsername && adminUsername.value ? adminUsername.value : 'adminrage').trim();
     const password = (adminPassword.value || '').trim();
+    if (!username){
+      loginMsg.textContent = 'Type username';
+      return;
+    }
     if (!password){
       loginMsg.textContent = 'Type password';
       return;
@@ -219,18 +228,30 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'same-origin',
-        body: JSON.stringify({ password })
+        body: JSON.stringify({ username, password })
       });
       if (!res.ok){
-        showLogin('Invalid password');
+        if (res.status === 429){
+          showLogin('Too many attempts. Try again later.');
+          return;
+        }
+        showLogin('Invalid credentials');
         return;
       }
-      const data = await res.json();
+      await res.json();
+      if (adminUsername) adminUsername.value = 'adminrage';
       adminPassword.value = '';
       await loadAnalytics();
     }catch{
       showLogin('Login failed');
     }
+  });
+
+  [adminUsername, adminPassword].forEach((el) => {
+    if (!el) return;
+    el.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Enter') btnAdminLogin.click();
+    });
   });
 
   if (btnAdminLogout){

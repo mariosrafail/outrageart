@@ -7,6 +7,11 @@
   <link rel="stylesheet" href="css/styles.css" />
   <style>
     .analytics-wrap{ max-width: 1100px; margin: 0 auto; padding: 20px; }
+    .analytics-wrap.auth-mode{
+      min-height: calc(100vh - 40px);
+      display:flex;
+      flex-direction:column;
+    }
     .analytics-head{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; }
     .analytics-grid{ display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:12px; }
     .analytics-grid-full{ display:grid; grid-template-columns: 1fr; gap:12px; margin-bottom:12px; }
@@ -23,14 +28,42 @@
     #dailyLineChart{ width:100%; height:280px; display:block; background:#fff; border:1px solid #e4e4e4; }
     .legend{ display:flex; gap:16px; font-size:12px; color:#444; margin-top:8px; }
     .legend .dot{ width:10px; height:10px; border-radius:50%; display:inline-block; margin-right:6px; }
+    .admin-login-card{
+      width:min(460px, 100%);
+      margin:auto;
+      border: var(--border);
+      background:#fff;
+      padding:18px;
+    }
+    .admin-login-card h2{ margin:0; font-size:20px; }
+    .admin-login-sub{ margin:6px 0 14px; color:#555; font-size:13px; }
+    .login-grid{ display:grid; gap:10px; }
+    .login-label{ display:block; font-size:12px; color:#555; margin:0 0 4px; }
+    .login-input{
+      width:100%;
+      border:1px solid var(--ring);
+      border-radius: var(--radius);
+      padding:10px 11px;
+      font-size:14px;
+      color:var(--text);
+      background:#fff;
+      box-sizing:border-box;
+    }
+    .login-btn{
+      width:100%;
+      text-align:center;
+    }
+    .login-hint{ margin:8px 0 0; color:#555; font-size:12px; }
     @media (max-width:760px){
+      .analytics-wrap.auth-mode{ min-height:auto; }
       .analytics-grid{ grid-template-columns: 1fr; }
       .kpis{ grid-template-columns: 1fr; }
+      .admin-login-card{ margin:16px auto 0; }
     }
   </style>
 </head>
 <body>
-  <main class="analytics-wrap">
+  <main id="analyticsRoot" class="analytics-wrap auth-mode">
     <div class="analytics-head">
       <h1 style="margin:0;">Analytics</h1>
       <div style="display:flex; gap:8px;">
@@ -39,12 +72,21 @@
       </div>
     </div>
 
-    <section id="loginCard" class="analytics-card" style="max-width:420px;">
+    <section id="loginCard" class="analytics-card admin-login-card">
       <h2>Admin Login</h2>
-      <div style="display:flex; gap:8px; align-items:center;">
-        <input id="adminPassword" type="password" placeholder="Admin password" />
-        <button id="btnAdminLogin" class="btn" type="button">Login</button>
+      <p class="admin-login-sub">Sign in to access private analytics.</p>
+      <div class="login-grid">
+        <label>
+          <span class="login-label">Username</span>
+          <input id="adminUsername" class="login-input" type="text" autocomplete="username" value="adminrage" />
+        </label>
+        <label>
+          <span class="login-label">Password</span>
+          <input id="adminPassword" class="login-input" type="password" autocomplete="current-password" placeholder="Admin password" />
+        </label>
+        <button id="btnAdminLogin" class="btn login-btn" type="button">Login</button>
       </div>
+      <p class="login-hint">Default username: <strong>adminrage</strong></p>
       <p id="loginMsg" class="muted" style="margin:8px 0 0;"></p>
     </section>
 
