@@ -24,7 +24,7 @@
     wrap.style.alignItems = 'center';
     wrap.innerHTML = [
       '<span style="font-size:13px; flex:1 1 280px;">',
-      'This site uses cookies for view counting and analytics. Allow cookies?',
+      'Grab a cookie?',
       '</span>',
       '<button id="ccAccept" class="btn" type="button">Accept</button>',
       '<button id="ccDecline" class="btn ghost" type="button">Decline</button>'

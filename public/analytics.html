@@ -13,21 +13,50 @@
       flex-direction:column;
     }
     .analytics-head{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; }
-    .analytics-grid{ display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:12px; }
-    .analytics-grid-full{ display:grid; grid-template-columns: 1fr; gap:12px; margin-bottom:12px; }
     .analytics-card{ border: var(--border); background:#fff; padding:12px; }
     .analytics-card h2{ margin:0 0 8px; font-size:16px; }
-    .kpis{ display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:8px; margin-bottom:12px; }
-    .kpi{ border: var(--border); padding:10px; background:#fff; }
-    .kpi .label{ font-size:12px; color:#555; display:block; }
-    .kpi .value{ font-size:24px; font-weight:800; }
+    .toolbar{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
+    .toolbar-left,.toolbar-right{ display:flex; gap:8px; flex-wrap:wrap; }
+    .chip{
+      border:1px solid #cbd2dd;
+      background:#fff;
+      border-radius:8px;
+      padding:7px 10px;
+      font-size:13px;
+      color:#2a2f37;
+      cursor:pointer;
+    }
+    .chip.active{ background:#e8f0fe; border-color:#8ab4f8; color:#174ea6; font-weight:700; }
+    .meta-row{ display:flex; justify-content:flex-end; margin:4px 0 8px; }
+    .metrics{ border:var(--border); background:#fff; padding:0; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); margin-bottom:12px; }
+    .metric{ border-right:1px solid #e6e6e6; padding:12px; min-height:78px; }
+    .metric:last-child{ border-right:0; }
+    .metric-label{ font-size:12px; color:#5d6673; display:flex; align-items:center; gap:6px; }
+    .metric-value{ font-size:38px; line-height:1; margin-top:8px; color:#202124; }
+    .metric-primary{ background:#4285f4; color:#fff; }
+    .metric-secondary{ background:#673ab7; color:#fff; }
+    .metric-primary .metric-label,.metric-secondary .metric-label,.metric-primary .metric-value,.metric-secondary .metric-value{ color:#fff; }
+    .data-card{ border:var(--border); background:#fff; }
+    .tabs{ display:flex; border-bottom:1px solid #e9edf3; overflow-x:auto; }
+    .tab{
+      border:0;
+      border-bottom:2px solid transparent;
+      background:transparent;
+      color:#6a7280;
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.02em;
+      padding:14px 12px 13px;
+      text-transform:uppercase;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .tab.active{ color:#1f2937; border-bottom-color:#1f2937; }
+    .table-head{ display:flex; align-items:center; justify-content:space-between; padding:10px 12px; border-bottom:1px solid #e9edf3; gap:10px; flex-wrap:wrap; }
+    .table-wrap{ overflow-x:auto; }
     table{ width:100%; border-collapse:collapse; font-size:13px; }
     th, td{ border-bottom:1px solid #ddd; text-align:left; padding:6px; }
     .muted{ color:#666; font-size:12px; }
-    .chart-wrap{ width:100%; overflow-x:auto; }
-    #dailyLineChart{ width:100%; height:280px; display:block; background:#fff; border:1px solid #e4e4e4; }
-    .legend{ display:flex; gap:16px; font-size:12px; color:#444; margin-top:8px; }
-    .legend .dot{ width:10px; height:10px; border-radius:50%; display:inline-block; margin-right:6px; }
     .admin-login-card{
       width:min(460px, 100%);
       margin:auto;
@@ -49,15 +78,11 @@
       background:#fff;
       box-sizing:border-box;
     }
-    .login-btn{
-      width:100%;
-      text-align:center;
-    }
+    .login-btn{ width:100%; text-align:center; }
     .login-hint{ margin:8px 0 0; color:#555; font-size:12px; }
     @media (max-width:760px){
       .analytics-wrap.auth-mode{ min-height:auto; }
-      .analytics-grid{ grid-template-columns: 1fr; }
-      .kpis{ grid-template-columns: 1fr; }
+      .metrics{ grid-template-columns:1fr 1fr; }
       .admin-login-card{ margin:16px auto 0; }
     }
   </style>
@@ -92,59 +117,64 @@
     </section>
 
     <section id="dashboard" style="display:none;">
-    <div class="kpis">
-      <div class="kpi"><span class="label">Total visits</span><span id="kpiVisits" class="value">0</span></div>
-      <div class="kpi"><span class="label">Unique visitors</span><span id="kpiUnique" class="value">0</span></div>
-    </div>
-
-    <div class="analytics-grid-full">
-      <section class="analytics-card">
-        <h2>Daily Trend (Last 30 Days)</h2>
-        <div class="chart-wrap">
-          <canvas id="dailyLineChart" width="1000" height="280" aria-label="Daily views line chart"></canvas>
+      <div class="toolbar">
+        <div id="rangeControls" class="toolbar-left">
+          <button type="button" class="chip" data-range="1">24 hours</button>
+          <button type="button" class="chip" data-range="7">7 days</button>
+          <button type="button" class="chip" data-range="28">28 days</button>
+          <button type="button" class="chip active" data-range="90">3 months</button>
+          <button type="button" class="chip" data-range="all">More</button>
         </div>
-        <div class="legend">
-          <span><span class="dot" style="background:#ef4444;"></span>Views</span>
-          <span><span class="dot" style="background:#2563eb;"></span>Unique</span>
-          <span id="nextRefreshInfo" class="muted"></span>
+        <div class="toolbar-right">
+          <button type="button" class="chip" id="searchTypeBtn">Search type: Web</button>
+          <button type="button" class="chip" id="addFilterBtn">+ Add filter</button>
+          <button type="button" class="chip">Daily</button>
+        </div>
+      </div>
+
+      <div class="meta-row">
+        <span id="nextRefreshInfo" class="muted"></span>
+      </div>
+
+      <div class="metrics">
+        <div class="metric metric-primary">
+          <span class="metric-label"><input type="checkbox" checked disabled /> Total clicks</span>
+          <div id="kpiClicks" class="metric-value">0</div>
+        </div>
+        <div class="metric metric-secondary">
+          <span class="metric-label"><input type="checkbox" checked disabled /> Total impressions</span>
+          <div id="kpiImpressions" class="metric-value">0</div>
+        </div>
+        <div class="metric">
+          <span class="metric-label"><input type="checkbox" disabled /> Average CTR</span>
+          <div id="kpiCtr" class="metric-value">0%</div>
+        </div>
+        <div class="metric">
+          <span class="metric-label"><input type="checkbox" disabled /> Average position</span>
+          <div id="kpiPosition" class="metric-value">-</div>
+        </div>
+      </div>
+
+      <section class="data-card">
+        <div id="dimensionTabs" class="tabs">
+          <button type="button" class="tab active" data-tab="queries">Queries</button>
+          <button type="button" class="tab" data-tab="pages">Pages</button>
+          <button type="button" class="tab" data-tab="countries">Countries</button>
+          <button type="button" class="tab" data-tab="devices">Devices</button>
+          <button type="button" class="tab" data-tab="appearance">Search appearance</button>
+          <button type="button" class="tab" data-tab="days">Days</button>
+        </div>
+        <div class="table-head">
+          <strong id="tableTitle">Top queries</strong>
+          <span class="muted">Data source: /api/analytics</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead id="tableHead"></thead>
+            <tbody id="tableBody"></tbody>
+          </table>
         </div>
       </section>
-    </div>
-
-    <div class="analytics-grid">
-      <section class="analytics-card">
-        <h2>By Country</h2>
-        <table>
-          <thead><tr><th>Country</th><th>Visits</th></tr></thead>
-          <tbody id="tblCountry"></tbody>
-        </table>
-      </section>
-
-      <section class="analytics-card">
-        <h2>By Source</h2>
-        <table>
-          <thead><tr><th>Source</th><th>Visits</th></tr></thead>
-          <tbody id="tblSource"></tbody>
-        </table>
-      </section>
-
-      <section class="analytics-card">
-        <h2>Top Referrer Hosts</h2>
-        <table>
-          <thead><tr><th>Host</th><th>Visits</th></tr></thead>
-          <tbody id="tblRef"></tbody>
-        </table>
-      </section>
-
-      <section class="analytics-card">
-        <h2>Last 30 Days</h2>
-        <table>
-          <thead><tr><th>Date</th><th>Visits</th><th>Unique</th></tr></thead>
-          <tbody id="tblDaily"></tbody>
-        </table>
-      </section>
-    </div>
-    <p class="muted">Data source: /api/analytics</p>
     </section>
   </main>
 
