@@ -1,19 +1,11 @@
 (async function(){
   const $ = (id) => document.getElementById(id);
-
-  const kpiClicks = $('kpiClicks');
-  const kpiImpressions = $('kpiImpressions');
-  const kpiCtr = $('kpiCtr');
-  const kpiPosition = $('kpiPosition');
-
-  const tableTitle = $('tableTitle');
-  const tableHead = $('tableHead');
-  const tableBody = $('tableBody');
-  const rangeControls = $('rangeControls');
-  const dimensionTabs = $('dimensionTabs');
-  const searchTypeBtn = $('searchTypeBtn');
-  const addFilterBtn = $('addFilterBtn');
-
+  const kpiVisits = $('kpiVisits');
+  const kpiUnique = $('kpiUnique');
+  const tblCountry = $('tblCountry');
+  const tblSource = $('tblSource');
+  const tblRef = $('tblRef');
+  const tblDaily = $('tblDaily');
   const analyticsRoot = $('analyticsRoot');
   const loginCard = $('loginCard');
   const dashboard = $('dashboard');
@@ -22,43 +14,33 @@
   const btnAdminLogin = $('btnAdminLogin');
   const btnAdminLogout = $('btnAdminLogout');
   const loginMsg = $('loginMsg');
+  const chartCanvas = $('dailyLineChart');
   const nextRefreshInfo = $('nextRefreshInfo');
-
   let athensDateKeyAtLastLoad = null;
   let minuteWatcherId = null;
-  let analyticsData = null;
+  let latestDailyRows = [];
 
-  const state = {
-    range: '90',
-    tab: 'queries'
-  };
-
-  function num(n){
-    return Number(n || 0).toLocaleString();
-  }
-
-  function esc(v){
-    return String(v == null ? '' : v)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
-  }
-
+  function num(n){ return Number(n || 0).toLocaleString(); }
   function showDashboard(){
     if (analyticsRoot) analyticsRoot.classList.remove('auth-mode');
     loginCard.style.display = 'none';
     dashboard.style.display = 'block';
     if (btnAdminLogout) btnAdminLogout.style.display = 'inline-block';
   }
-
   function showLogin(msg){
     if (analyticsRoot) analyticsRoot.classList.add('auth-mode');
     dashboard.style.display = 'none';
     loginCard.style.display = 'block';
     if (btnAdminLogout) btnAdminLogout.style.display = 'none';
     loginMsg.textContent = msg || '';
+  }
+
+  function fillTable(tbody, rows, cols){
+    if (!rows || !rows.length){
+      tbody.innerHTML = '<tr><td colspan="' + cols + '">No data yet</td></tr>';
+      return;
+    }
+    tbody.innerHTML = rows.map(r => r).join('');
   }
 
   function getAthensParts(){
@@ -91,7 +73,87 @@
 
   function setNextRefreshLabel(){
     if (!nextRefreshInfo) return;
-    nextRefreshInfo.textContent = 'Last update: just now. Auto refresh at 00:00 (Europe/Athens)';
+    nextRefreshInfo.textContent = 'Auto refresh at 00:00 (Europe/Athens)';
+  }
+
+  function drawDailyChart(rows){
+    if (!chartCanvas) return;
+    const ctx = chartCanvas.getContext('2d');
+    if (!ctx) return;
+
+    const cssWidth = chartCanvas.clientWidth || 1000;
+    const cssHeight = chartCanvas.clientHeight || 280;
+    const dpr = Math.max(1, window.devicePixelRatio || 1);
+    chartCanvas.width = Math.floor(cssWidth * dpr);
+    chartCanvas.height = Math.floor(cssHeight * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, cssWidth, cssHeight);
+
+    const pad = { top: 14, right: 14, bottom: 28, left: 42 };
+    const w = cssWidth - pad.left - pad.right;
+    const h = cssHeight - pad.top - pad.bottom;
+    if (w <= 10 || h <= 10) return;
+
+    const safeRows = Array.isArray(rows) ? rows : [];
+    const labels = safeRows.map(r => String(r.date || '').slice(5));
+    const views = safeRows.map(r => Number(r.visits || 0));
+    const unique = safeRows.map(r => Number(r.uniqueVisitors || 0));
+    const maxY = Math.max(5, ...views, ...unique);
+
+    ctx.strokeStyle = '#e6e6e6';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= 4; i++){
+      const y = pad.top + (h * i / 4);
+      ctx.beginPath();
+      ctx.moveTo(pad.left, y);
+      ctx.lineTo(pad.left + w, y);
+      ctx.stroke();
+    }
+
+    ctx.fillStyle = '#666';
+    ctx.font = '11px Inter, sans-serif';
+    for (let i = 0; i <= 4; i++){
+      const v = Math.round(maxY - (maxY * i / 4));
+      const y = pad.top + (h * i / 4) + 4;
+      ctx.fillText(String(v), 6, y);
+    }
+
+    const count = safeRows.length;
+    const xAt = (idx) => {
+      if (count <= 1) return pad.left;
+      return pad.left + (w * idx / (count - 1));
+    };
+    const yAt = (val) => pad.top + h - ((val / maxY) * h);
+
+    function drawLine(values, color){
+      if (!values.length) return;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      values.forEach((v, i) => {
+        const x = xAt(i);
+        const y = yAt(v);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+    }
+
+    drawLine(views, '#ef4444');
+    drawLine(unique, '#2563eb');
+
+    ctx.fillStyle = '#777';
+    const step = Math.max(1, Math.ceil(count / 6));
+    for (let i = 0; i < count; i += step){
+      const x = xAt(i);
+      const label = labels[i] || '';
+      ctx.fillText(label, x - 14, pad.top + h + 16);
+    }
+    if (count > 1){
+      const lx = xAt(count - 1);
+      const label = labels[count - 1] || '';
+      ctx.fillText(label, lx - 14, pad.top + h + 16);
+    }
   }
 
   function armMidnightRefresh(){
@@ -106,114 +168,6 @@
     }, 60000);
   }
 
-  function getFilteredDays(rows){
-    const safeRows = Array.isArray(rows) ? rows : [];
-    if (state.range === 'all') return safeRows;
-    const days = Number(state.range || 0);
-    if (!Number.isFinite(days) || days <= 0) return safeRows;
-    return safeRows.slice(-days);
-  }
-
-  function metricFromRows(rows){
-    const clicks = rows.reduce((sum, row) => sum + Number(row && row.visits || 0), 0);
-    const impressions = rows.reduce((sum, row) => sum + Number(row && row.uniqueVisitors || 0), 0);
-    const ctr = impressions > 0 ? ((clicks / impressions) * 100) : 0;
-    return {
-      clicks,
-      impressions,
-      ctr
-    };
-  }
-
-  function getTabConfig(data, filteredDays){
-    const bySource = Array.isArray(data && data.bySource) ? data.bySource : [];
-    const byReferrerHost = Array.isArray(data && data.byReferrerHost) ? data.byReferrerHost : [];
-    const byCountry = Array.isArray(data && data.byCountry) ? data.byCountry : [];
-
-    const tabMap = {
-      queries: {
-        title: 'Top queries',
-        headers: ['Query', 'Clicks'],
-        rows: bySource.map(x => [x.key, num(x.value)])
-      },
-      pages: {
-        title: 'Top pages',
-        headers: ['Page', 'Clicks'],
-        rows: byReferrerHost.map(x => [x.key, num(x.value)])
-      },
-      countries: {
-        title: 'Top countries',
-        headers: ['Country', 'Clicks'],
-        rows: byCountry.map(x => [String(x.key || '').toUpperCase(), num(x.value)])
-      },
-      devices: {
-        title: 'Top devices',
-        headers: ['Device', 'Clicks'],
-        rows: []
-      },
-      appearance: {
-        title: 'Search appearance',
-        headers: ['Appearance', 'Clicks'],
-        rows: []
-      },
-      days: {
-        title: 'Top days',
-        headers: ['Date', 'Clicks', 'Impressions'],
-        rows: filteredDays.slice().reverse().map(x => [x.date, num(x.visits), num(x.uniqueVisitors)])
-      }
-    };
-
-    return tabMap[state.tab] || tabMap.queries;
-  }
-
-  function renderTable(config){
-    tableTitle.textContent = config.title;
-    tableHead.innerHTML = `<tr>${config.headers.map(h => `<th>${esc(h)}</th>`).join('')}</tr>`;
-
-    if (!config.rows.length){
-      tableBody.innerHTML = `<tr><td colspan="${config.headers.length}">No data yet</td></tr>`;
-      return;
-    }
-
-    tableBody.innerHTML = config.rows
-      .map(row => `<tr>${row.map(cell => `<td>${esc(cell)}</td>`).join('')}</tr>`)
-      .join('');
-  }
-
-  function refreshRangeButtons(){
-    if (!rangeControls) return;
-    const buttons = rangeControls.querySelectorAll('[data-range]');
-    buttons.forEach((btn) => {
-      const isActive = btn.getAttribute('data-range') === state.range;
-      btn.classList.toggle('active', isActive);
-    });
-  }
-
-  function refreshTabs(){
-    if (!dimensionTabs) return;
-    const tabs = dimensionTabs.querySelectorAll('[data-tab]');
-    tabs.forEach((tab) => {
-      const isActive = tab.getAttribute('data-tab') === state.tab;
-      tab.classList.toggle('active', isActive);
-    });
-  }
-
-  function renderDashboard(){
-    if (!analyticsData) return;
-
-    const filteredDays = getFilteredDays(analyticsData.dailyLast30 || []);
-    const metrics = metricFromRows(filteredDays);
-
-    kpiClicks.textContent = num(metrics.clicks);
-    kpiImpressions.textContent = num(metrics.impressions);
-    kpiCtr.textContent = `${metrics.ctr.toFixed(1)}%`;
-    kpiPosition.textContent = '-';
-
-    renderTable(getTabConfig(analyticsData, filteredDays));
-    refreshRangeButtons();
-    refreshTabs();
-  }
-
   async function loadAnalytics(){
     const res = await fetch('/api/analytics', {
       cache: 'no-store',
@@ -224,50 +178,42 @@
       return;
     }
     if (!res.ok) throw new Error('HTTP ' + res.status);
-
-    analyticsData = await res.json();
+    const data = await res.json();
     athensDateKeyAtLastLoad = getAthensDateKey();
-
     showDashboard();
-    renderDashboard();
+
+    kpiVisits.textContent = num(data?.totals?.totalVisits);
+    kpiUnique.textContent = num(data?.totals?.uniqueVisitors);
+
+    fillTable(
+      tblCountry,
+      (data.byCountry || []).map(x => `<tr><td>${x.key.toUpperCase()}</td><td>${num(x.value)}</td></tr>`),
+      2
+    );
+    fillTable(
+      tblSource,
+      (data.bySource || []).map(x => `<tr><td>${x.key}</td><td>${num(x.value)}</td></tr>`),
+      2
+    );
+    fillTable(
+      tblRef,
+      (data.byReferrerHost || []).map(x => `<tr><td>${x.key}</td><td>${num(x.value)}</td></tr>`),
+      2
+    );
+    fillTable(
+      tblDaily,
+      (data.dailyLast30 || []).map(x => `<tr><td>${x.date}</td><td>${num(x.visits)}</td><td>${num(x.uniqueVisitors)}</td></tr>`),
+      3
+    );
+    latestDailyRows = data.dailyLast30 || [];
+    drawDailyChart(latestDailyRows);
     armMidnightRefresh();
-  }
-
-  if (rangeControls){
-    rangeControls.addEventListener('click', (ev) => {
-      const btn = ev.target.closest('[data-range]');
-      if (!btn) return;
-      state.range = btn.getAttribute('data-range') || '90';
-      renderDashboard();
-    });
-  }
-
-  if (dimensionTabs){
-    dimensionTabs.addEventListener('click', (ev) => {
-      const btn = ev.target.closest('[data-tab]');
-      if (!btn) return;
-      state.tab = btn.getAttribute('data-tab') || 'queries';
-      renderDashboard();
-    });
-  }
-
-  if (searchTypeBtn){
-    searchTypeBtn.addEventListener('click', () => {
-      searchTypeBtn.textContent = 'Search type: Web';
-    });
-  }
-
-  if (addFilterBtn){
-    addFilterBtn.addEventListener('click', () => {
-      if (loginMsg) loginMsg.textContent = '';
-    });
   }
 
   btnAdminLogin.addEventListener('click', async () => {
     loginMsg.textContent = '';
     const username = (adminUsername && adminUsername.value ? adminUsername.value : 'adminrage').trim();
     const password = (adminPassword.value || '').trim();
-
     if (!username){
       loginMsg.textContent = 'Type username';
       return;
@@ -319,9 +265,13 @@
 
   try{
     await loadAnalytics();
+    window.addEventListener('resize', () => drawDailyChart(latestDailyRows));
   }catch{
+    const msg = '<tr><td colspan="3">Failed to load analytics</td></tr>';
+    tblCountry.innerHTML = msg;
+    tblSource.innerHTML = msg;
+    tblRef.innerHTML = msg;
+    tblDaily.innerHTML = msg;
     showLogin('Failed to load analytics');
-    tableHead.innerHTML = '<tr><th>Metric</th><th>Value</th></tr>';
-    tableBody.innerHTML = '<tr><td colspan="2">Failed to load analytics</td></tr>';
   }
 })();

@@ -13,112 +13,21 @@
       flex-direction:column;
     }
     .analytics-head{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; }
+    .analytics-grid{ display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:12px; }
+    .analytics-grid-full{ display:grid; grid-template-columns: 1fr; gap:12px; margin-bottom:12px; }
     .analytics-card{ border: var(--border); background:#fff; padding:12px; }
     .analytics-card h2{ margin:0 0 8px; font-size:16px; }
-    .toolbar{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
-    .toolbar-left,.toolbar-right{ display:flex; gap:8px; flex-wrap:wrap; }
-    .chip{
-      cursor:pointer;
-      font-weight:700;
-      padding:9px 12px;
-      font-size:13px;
-      border-radius: var(--radius);
-      border: var(--border);
-      background: var(--panel);
-      color: var(--text);
-      transition: transform .15s ease, box-shadow .15s ease;
-      box-shadow: -2px 2px 0 var(--shadow-pink, #ff4fd8), -4px 4px 0 var(--shadow-yellow, #ffd166);
-    }
-    .chip:hover{
-      transform: translate(-1px, -1px);
-      box-shadow: -3px 3px 0 var(--shadow-pink, #ff4fd8), -6px 6px 0 var(--shadow-yellow, #ffd166);
-    }
-    .chip:active{
-      transform: translate(0,0);
-      box-shadow: 0 0 0 var(--shadow-pink), 0 0 0 var(--shadow-yellow);
-    }
-    .chip.active{
-      background: var(--shadow-pink, #ff4fd8);
-      color: #000;
-      border: var(--border);
-    }
-    .meta-row{ display:flex; justify-content:flex-end; margin:4px 0 8px; }
-    .metrics{
-      border:var(--border);
-      background:#fff;
-      padding:0;
-      display:grid;
-      grid-template-columns:repeat(4,minmax(0,1fr));
-      margin-bottom:12px;
-      box-shadow: -2px 2px 0 var(--shadow-pink, #ff4fd8), -4px 4px 0 var(--shadow-yellow, #ffd166);
-    }
-    .metric{ border-right:2px solid var(--ring); padding:12px; min-height:78px; background:#fff; }
-    .metric:last-child{ border-right:0; }
-    .metric-label{ font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px; }
-    .metric-label input{ accent-color: var(--text); }
-    .metric-value{ font-size:38px; line-height:1; margin-top:8px; color:var(--text); }
-    .metric-primary{ border-top:5px solid #000; }
-    .metric-secondary{ border-top:5px solid #000; }
-    .data-card{
-      border:var(--border);
-      background:#fff;
-      box-shadow: -2px 2px 0 var(--shadow-pink, #ff4fd8), -4px 4px 0 var(--shadow-yellow, #ffd166);
-    }
-    .tabs{ display:flex; border-bottom:2px solid var(--ring); overflow-x:auto; }
-    .tab{
-      position:relative;
-      border:0;
-      border-bottom:2px solid transparent;
-      background:transparent;
-      color:var(--muted);
-      font-size:12px;
-      font-weight:700;
-      letter-spacing:.02em;
-      padding:14px 12px 13px;
-      text-transform:uppercase;
-      cursor:pointer;
-      white-space:nowrap;
-    }
-    .tab::before{
-      content:"";
-      position:absolute;
-      left:10px;
-      right:10px;
-      bottom:0;
-      height:2px;
-      background:transparent;
-      transition: background .15s ease;
-    }
-    .tab::after{
-      content:"";
-      position:absolute;
-      width:8px;
-      height:8px;
-      border-radius:50%;
-      border:2px solid var(--text);
-      background:#fff;
-      left:50%;
-      transform:translateX(-50%) scale(0);
-      bottom:-5px;
-      transition: transform .15s ease;
-    }
-    .tab:hover::after{ transform:translateX(-50%) scale(1); }
-    .tab.active{
-      color:var(--text);
-      border-bottom-color:transparent;
-      background:var(--chip);
-    }
-    .tab.active::before{ background:var(--text); }
-    .tab.active::after{
-      transform:translateX(-50%) scale(1);
-      background: var(--shadow-pink, #ff4fd8);
-    }
-    .table-head{ display:flex; align-items:center; justify-content:space-between; padding:10px 12px; border-bottom:2px solid var(--ring); gap:10px; flex-wrap:wrap; }
-    .table-wrap{ overflow-x:auto; }
+    .kpis{ display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:8px; margin-bottom:12px; }
+    .kpi{ border: var(--border); padding:10px; background:#fff; }
+    .kpi .label{ font-size:12px; color:#555; display:block; }
+    .kpi .value{ font-size:24px; font-weight:800; }
     table{ width:100%; border-collapse:collapse; font-size:13px; }
-    th, td{ border-bottom:1px solid #ddd; text-align:left; padding:8px 6px; }
-    th{ font-size:12px; text-transform:uppercase; letter-spacing:.02em; color:var(--muted); }
-    .muted{ color:var(--muted); font-size:12px; }
+    th, td{ border-bottom:1px solid #ddd; text-align:left; padding:6px; }
+    .muted{ color:#666; font-size:12px; }
+    .chart-wrap{ width:100%; overflow-x:auto; }
+    #dailyLineChart{ width:100%; height:280px; display:block; background:#fff; border:1px solid #e4e4e4; }
+    .legend{ display:flex; gap:16px; font-size:12px; color:#444; margin-top:8px; }
+    .legend .dot{ width:10px; height:10px; border-radius:50%; display:inline-block; margin-right:6px; }
     .admin-login-card{
       width:min(460px, 100%);
       margin:auto;
@@ -140,17 +49,16 @@
       background:#fff;
       box-sizing:border-box;
     }
-    .login-btn{ width:100%; text-align:center; }
+    .login-btn{
+      width:100%;
+      text-align:center;
+    }
     .login-hint{ margin:8px 0 0; color:#555; font-size:12px; }
     @media (max-width:760px){
       .analytics-wrap.auth-mode{ min-height:auto; }
-      .metrics{ grid-template-columns:1fr 1fr; }
+      .analytics-grid{ grid-template-columns: 1fr; }
+      .kpis{ grid-template-columns: 1fr; }
       .admin-login-card{ margin:16px auto 0; }
-    }
-    @media (max-width:520px){
-      .metrics{ grid-template-columns:1fr; }
-      .metric{ border-right:0; border-bottom:2px solid var(--ring); }
-      .metric:last-child{ border-bottom:0; }
     }
   </style>
 </head>
@@ -184,64 +92,59 @@
     </section>
 
     <section id="dashboard" style="display:none;">
-      <div class="toolbar">
-        <div id="rangeControls" class="toolbar-left">
-          <button type="button" class="chip" data-range="1">24 hours</button>
-          <button type="button" class="chip" data-range="7">7 days</button>
-          <button type="button" class="chip" data-range="28">28 days</button>
-          <button type="button" class="chip active" data-range="90">3 months</button>
-          <button type="button" class="chip" data-range="all">More</button>
-        </div>
-        <div class="toolbar-right">
-          <button type="button" class="chip" id="searchTypeBtn">Search type: Web</button>
-          <button type="button" class="chip" id="addFilterBtn">+ Add filter</button>
-          <button type="button" class="chip">Daily</button>
-        </div>
-      </div>
+    <div class="kpis">
+      <div class="kpi"><span class="label">Total visits</span><span id="kpiVisits" class="value">0</span></div>
+      <div class="kpi"><span class="label">Unique visitors</span><span id="kpiUnique" class="value">0</span></div>
+    </div>
 
-      <div class="meta-row">
-        <span id="nextRefreshInfo" class="muted"></span>
-      </div>
-
-      <div class="metrics">
-        <div class="metric metric-primary">
-          <span class="metric-label"><input type="checkbox" checked disabled /> Total clicks</span>
-          <div id="kpiClicks" class="metric-value">0</div>
+    <div class="analytics-grid-full">
+      <section class="analytics-card">
+        <h2>Daily Trend (Last 30 Days)</h2>
+        <div class="chart-wrap">
+          <canvas id="dailyLineChart" width="1000" height="280" aria-label="Daily views line chart"></canvas>
         </div>
-        <div class="metric metric-secondary">
-          <span class="metric-label"><input type="checkbox" checked disabled /> Total impressions</span>
-          <div id="kpiImpressions" class="metric-value">0</div>
-        </div>
-        <div class="metric">
-          <span class="metric-label"><input type="checkbox" disabled /> Average CTR</span>
-          <div id="kpiCtr" class="metric-value">0%</div>
-        </div>
-        <div class="metric">
-          <span class="metric-label"><input type="checkbox" disabled /> Average position</span>
-          <div id="kpiPosition" class="metric-value">-</div>
-        </div>
-      </div>
-
-      <section class="data-card">
-        <div id="dimensionTabs" class="tabs">
-          <button type="button" class="tab active" data-tab="queries">Queries</button>
-          <button type="button" class="tab" data-tab="pages">Pages</button>
-          <button type="button" class="tab" data-tab="countries">Countries</button>
-          <button type="button" class="tab" data-tab="devices">Devices</button>
-          <button type="button" class="tab" data-tab="appearance">Search appearance</button>
-          <button type="button" class="tab" data-tab="days">Days</button>
-        </div>
-        <div class="table-head">
-          <strong id="tableTitle">Top queries</strong>
-          <span class="muted">Data source: /api/analytics</span>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead id="tableHead"></thead>
-            <tbody id="tableBody"></tbody>
-          </table>
+        <div class="legend">
+          <span><span class="dot" style="background:#ef4444;"></span>Views</span>
+          <span><span class="dot" style="background:#2563eb;"></span>Unique</span>
+          <span id="nextRefreshInfo" class="muted"></span>
         </div>
       </section>
+    </div>
+
+    <div class="analytics-grid">
+      <section class="analytics-card">
+        <h2>By Country</h2>
+        <table>
+          <thead><tr><th>Country</th><th>Visits</th></tr></thead>
+          <tbody id="tblCountry"></tbody>
+        </table>
+      </section>
+
+      <section class="analytics-card">
+        <h2>By Source</h2>
+        <table>
+          <thead><tr><th>Source</th><th>Visits</th></tr></thead>
+          <tbody id="tblSource"></tbody>
+        </table>
+      </section>
+
+      <section class="analytics-card">
+        <h2>Top Referrer Hosts</h2>
+        <table>
+          <thead><tr><th>Host</th><th>Visits</th></tr></thead>
+          <tbody id="tblRef"></tbody>
+        </table>
+      </section>
+
+      <section class="analytics-card">
+        <h2>Last 30 Days</h2>
+        <table>
+          <thead><tr><th>Date</th><th>Visits</th><th>Unique</th></tr></thead>
+          <tbody id="tblDaily"></tbody>
+        </table>
+      </section>
+    </div>
+    <p class="muted">Data source: /api/analytics</p>
     </section>
   </main>
 
