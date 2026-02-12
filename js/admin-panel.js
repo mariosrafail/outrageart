@@ -12,9 +12,12 @@
   const formMsg = $('formMsg');
   const itemsBody = $('itemsBody');
   const mediaInfo = $('mediaInfo');
+  const itemsSearch = $('itemsSearch');
+  const itemsPrev = $('itemsPrev');
+  const itemsNext = $('itemsNext');
+  const itemsPageInfo = $('itemsPageInfo');
 
   const fields = {
-    id: $('fId'),
     title: $('fTitle'),
     theme: $('fTheme'),
     gender: $('fGender'),
@@ -28,6 +31,9 @@
 
   let editingId = null;
   let latestItems = [];
+  let filteredItems = [];
+  let page = 1;
+  const PAGE_SIZE = 20;
 
   function showPanel(){
     adminRoot.classList.remove('auth-mode');
@@ -48,7 +54,6 @@
     editingId = null;
     formTitle.textContent = 'Create Item';
     formMsg.textContent = '';
-    fields.id.disabled = false;
     Object.values(fields).forEach((el) => { el.value = ''; });
     fields.gender.value = 'male';
     fields.difficulty.value = 'normal';
@@ -58,8 +63,6 @@
     editingId = item.id;
     formTitle.textContent = `Edit Item #${item.id}`;
     formMsg.textContent = '';
-    fields.id.value = item.id;
-    fields.id.disabled = true;
     fields.title.value = item.title || '';
     fields.theme.value = item.theme || '';
     fields.gender.value = item.gender || 'male';
@@ -81,13 +84,36 @@
 
   function renderItems(items){
     latestItems = Array.isArray(items) ? items : [];
-    if (!latestItems.length){
-      itemsBody.innerHTML = '<tr><td colspan="5">No items</td></tr>';
+    applyListFilter();
+  }
+
+  function applyListFilter(){
+    const q = (itemsSearch.value || '').trim().toLowerCase();
+    filteredItems = latestItems.filter((it) => {
+      if (!q) return true;
+      const hay = `${it.title || ''} ${it.slug || ''} ${it.theme || ''}`.toLowerCase();
+      return hay.includes(q);
+    });
+    page = 1;
+    renderPage();
+  }
+
+  function renderPage(){
+    const totalPages = Math.max(1, Math.ceil(filteredItems.length / PAGE_SIZE));
+    if (page > totalPages) page = totalPages;
+    const start = (page - 1) * PAGE_SIZE;
+    const slice = filteredItems.slice(start, start + PAGE_SIZE);
+
+    if (!slice.length){
+      itemsBody.innerHTML = '<tr><td colspan="4">No items</td></tr>';
+      itemsPrev.disabled = true;
+      itemsNext.disabled = true;
+      itemsPageInfo.textContent = 'Page 1 / 1';
       return;
     }
-    itemsBody.innerHTML = latestItems.map((it) => (
+
+    itemsBody.innerHTML = slice.map((it) => (
       `<tr>
-        <td>${it.id}</td>
         <td>${escapeHtml(it.title || '')}</td>
         <td>${escapeHtml(it.slug || '')}</td>
         <td>${escapeHtml(it.theme || '')}</td>
@@ -99,6 +125,9 @@
         </td>
       </tr>`
     )).join('');
+    itemsPrev.disabled = page <= 1;
+    itemsNext.disabled = page >= totalPages;
+    itemsPageInfo.textContent = `Page ${page} / ${totalPages}`;
   }
 
   function escapeHtml(s){
@@ -149,7 +178,6 @@
   $('btnSave').addEventListener('click', async () => {
     formMsg.textContent = '';
     const payload = {
-      id: Number(fields.id.value),
       title: (fields.title.value || '').trim(),
       theme: (fields.theme.value || '').trim(),
       gender: (fields.gender.value || '').trim(),
@@ -161,11 +189,12 @@
       tags: (fields.tags.value || '').split(',').map(v => v.trim()).filter(Boolean)
     };
 
-    if (!payload.id || !payload.title || !payload.theme || !payload.gender || !payload.difficulty || !payload.slug){
+    if (!payload.title || !payload.theme || !payload.gender || !payload.difficulty || !payload.slug){
       formMsg.textContent = 'Fill required fields.';
       return;
     }
 
+    if (editingId) payload.id = editingId;
     const method = editingId ? 'PUT' : 'POST';
     const res = await api('/api/admin-items', {
       method,
@@ -213,10 +242,16 @@
     });
   });
 
+  itemsSearch.addEventListener('input', applyListFilter);
+  itemsPrev.addEventListener('click', () => { if (page > 1){ page -= 1; renderPage(); } });
+  itemsNext.addEventListener('click', () => {
+    const totalPages = Math.max(1, Math.ceil(filteredItems.length / PAGE_SIZE));
+    if (page < totalPages){ page += 1; renderPage(); }
+  });
+
   try{
     await loadItems();
   }catch{
     showLogin('Failed to load admin data.');
   }
 })();
-

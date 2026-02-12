@@ -28,6 +28,12 @@ function toInt(value){
   return Number.isInteger(n) ? n : null;
 }
 
+async function allocateNextId(pool){
+  await pool.query('LOCK TABLE items IN EXCLUSIVE MODE');
+  const next = await pool.query('SELECT COALESCE(MAX(id), 0) + 1 AS id FROM items');
+  return Number(next.rows[0] && next.rows[0].id);
+}
+
 async function readAll(pool){
   const [mediaRes, itemsRes] = await Promise.all([
     pool.query(
@@ -118,7 +124,7 @@ exports.handler = async function handler(event){
     const body = event.body ? JSON.parse(event.body) : {};
 
     if (event.httpMethod === 'POST'){
-      const id = toInt(body.id);
+      const explicitId = toInt(body.id);
       const title = trim(body.title);
       const theme = trim(body.theme);
       const gender = trim(body.gender);
@@ -129,12 +135,14 @@ exports.handler = async function handler(event){
       const shop = trim(body.shop) || null;
       const tags = parseTags(body.tags);
 
-      if (!id || !title || !theme || !gender || !difficulty || !slug){
+      if (!title || !theme || !gender || !difficulty || !slug){
         return json(400, { error: 'Missing required fields' });
       }
 
+      let id = explicitId;
       try{
         await pool.query('BEGIN');
+        if (!id) id = await allocateNextId(pool);
         await pool.query(
           `INSERT INTO items (
             id, title, theme, gender, difficulty, slug, url_override, thumb_override, shop, updated_at
@@ -156,7 +164,7 @@ exports.handler = async function handler(event){
         throw err;
       }
 
-      return json(200, { ok: true });
+      return json(200, { ok: true, id });
     }
 
     if (event.httpMethod === 'PUT'){
@@ -221,4 +229,3 @@ exports.handler = async function handler(event){
     return json(500, { error: 'Server error', detail: String(err && err.message || err) });
   }
 };
-
