@@ -400,9 +400,8 @@ input[type="search"]:focus, select:focus{ transform: translateY(-1px) }
 
   .menu-btn{
     display:block;
-    width:100%;
-    max-width:260px;
-    margin:8px auto 0;
+    width:auto;
+    margin:0;
   }
   /* Turn controls grid into an off-canvas style block */
   #controlsPanel{
@@ -430,6 +429,13 @@ input[type="search"]:focus, select:focus{ transform: translateY(-1px) }
     min-height: 44px;
   }
 
+  .btn.menu-btn,
+  .btn-clear{
+    min-height: 36px;
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+
   /* Cleaner mobile filter panel */
   #controlsPanel{ grid-template-columns: 1fr; gap: 8px; }
 
@@ -446,8 +452,10 @@ input[type="search"]:focus, select:focus{ transform: translateY(-1px) }
 
   .chips-row{
     display: flex;
-    flex-direction: column;
-    align-items: stretch;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
     gap: 8px;
   }
   .chips{
@@ -455,11 +463,9 @@ input[type="search"]:focus, select:focus{ transform: translateY(-1px) }
     justify-content: center;
   }
   .btn-clear{
-    width: 100%;
-    max-width: 220px;
-    margin: 0 auto;
-    min-height: 40px;
-    line-height: 1.2;
+    width: auto;
+    margin: 0;
+    line-height: 1;
   }
 
   /* Pagination: tighter + no overflow on mobile */
