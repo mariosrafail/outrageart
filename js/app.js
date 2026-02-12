@@ -225,11 +225,9 @@ grid.addEventListener('click', (e)=>{
         .then(v => {
           const nextCount = setViews(itemId, v);
           updateCardViewsLabel(itemId, nextCount);
+          VIEWS_SYNCED.add(String(itemId));
         })
-        .catch(() => {
-          const nextCount = setViews(itemId, (getViews(itemId) ?? 0) + 1);
-          updateCardViewsLabel(itemId, nextCount);
-        });
+        .catch(() => {});
     }
 
     // Open steps-based tutorial modal (1.png, 2.png, ... in same folder)
@@ -267,12 +265,29 @@ const badge = text => `<span class="chip">${text}</span>`;
 
 function safeName(s){ return String(s).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); }
 
-const VIEW_STORAGE_KEY = 'outrageart_views_fallback_v1';
+const VIEW_STORAGE_KEY = 'outrageart_views_cache_v1';
+const VIEWER_ID_KEY = 'outrageart_viewer_id_v1';
 const VIEWS_API_BASE = '/api/views';
-let VIEW_COUNTS = loadFallbackViews();
+let VIEW_COUNTS = loadCachedViews();
 const VIEWS_LOADING = new Set();
+const VIEWS_SYNCED = new Set();
+const VIEWER_ID = getOrCreateViewerId();
 
-function loadFallbackViews(){
+function getOrCreateViewerId(){
+  try{
+    const existing = localStorage.getItem(VIEWER_ID_KEY);
+    if (existing) return existing;
+    const created = (globalThis.crypto && globalThis.crypto.randomUUID)
+      ? globalThis.crypto.randomUUID()
+      : `v_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    localStorage.setItem(VIEWER_ID_KEY, created);
+    return created;
+  }catch{
+    return `ephemeral_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+  }
+}
+
+function loadCachedViews(){
   try{
     const raw = localStorage.getItem(VIEW_STORAGE_KEY);
     const parsed = raw ? JSON.parse(raw) : {};
@@ -282,7 +297,7 @@ function loadFallbackViews(){
   }
 }
 
-function saveFallbackViews(){
+function saveCachedViews(){
   try{ localStorage.setItem(VIEW_STORAGE_KEY, JSON.stringify(VIEW_COUNTS)); }catch{}
 }
 
@@ -297,7 +312,7 @@ function setViews(id, value){
   const key = String(id);
   const n = Number(value);
   VIEW_COUNTS[key] = Number.isFinite(n) && n >= 0 ? Math.floor(n) : 0;
-  saveFallbackViews();
+  saveCachedViews();
   return VIEW_COUNTS[key];
 }
 
@@ -317,7 +332,7 @@ async function incrementViewsOnServer(id){
   const res = await fetch(VIEWS_API_BASE, {
     method:'POST',
     headers:{ 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id, action:'increment' })
+    body: JSON.stringify({ id, action:'view', viewerId: VIEWER_ID })
   });
   if (!res.ok) throw new Error(`views POST failed: ${res.status}`);
   const data = await res.json();
@@ -328,18 +343,16 @@ function hydrateViewsForVisibleCards(){
   grid.querySelectorAll('.card[data-id]').forEach(cardEl => {
     const id = cardEl.dataset.id;
     if (!id || VIEWS_LOADING.has(id)) return;
-    if (getViews(id) !== null) return;
+    if (VIEWS_SYNCED.has(id)) return;
 
     VIEWS_LOADING.add(id);
     fetchViewsFromServer(id)
       .then(v => {
         const next = setViews(id, v);
         updateCardViewsLabel(id, next);
+        VIEWS_SYNCED.add(id);
       })
-      .catch(() => {
-        const fallback = setViews(id, 0);
-        updateCardViewsLabel(id, fallback);
-      })
+      .catch(() => {})
       .finally(() => VIEWS_LOADING.delete(id));
   });
 }
