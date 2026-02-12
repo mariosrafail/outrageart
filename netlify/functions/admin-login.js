@@ -38,6 +38,13 @@ function sign(payload, secret){
   return `${data}.${sig}`;
 }
 
+function safeEqual(a, b){
+  const x = Buffer.from(String(a || ''), 'utf8');
+  const y = Buffer.from(String(b || ''), 'utf8');
+  if (x.length !== y.length) return false;
+  return crypto.timingSafeEqual(x, y);
+}
+
 function buildCookie(token, secure = true){
   const secureAttr = secure ? '; Secure' : '';
   return `${COOKIE_NAME}=${encodeURIComponent(token)}; Path=/; Max-Age=28800; HttpOnly${secureAttr}; SameSite=Lax`;
@@ -147,7 +154,7 @@ exports.handler = async function handler(event){
     const body = event.body ? JSON.parse(event.body) : {};
     const username = String(body.username || '').trim();
     const password = String(body.password || '');
-    if (!username || !password || username !== adminUsername || password !== adminPassword){
+    if (!username || !password || !safeEqual(username, adminUsername) || !safeEqual(password, adminPassword)){
       if (rateState){
         try{
           await registerFailedAttempt(store, rateState.key, rateState.record, now);

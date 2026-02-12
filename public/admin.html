@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Outrage Art Admin</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <style>
+    .admin-wrap{ max-width:1200px; margin:0 auto; padding:20px; }
+    .admin-wrap.auth-mode{ min-height:calc(100vh - 40px); display:flex; flex-direction:column; }
+    .admin-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; }
+    .admin-grid{ display:grid; grid-template-columns: 420px 1fr; gap:12px; }
+    .admin-card{ border:var(--border); background:#fff; padding:12px; }
+    .admin-card h2{ margin:0 0 10px; font-size:18px; }
+    .login-card{ width:min(460px, 100%); margin:auto; }
+    .field{ margin-bottom:8px; }
+    .field label{ display:block; font-size:12px; color:#555; margin-bottom:4px; }
+    .field input, .field select{ width:100%; border:1px solid #000; padding:10px; }
+    .row{ display:flex; gap:8px; align-items:center; }
+    .muted{ color:#666; font-size:12px; }
+    table{ width:100%; border-collapse:collapse; font-size:13px; }
+    th, td{ border-bottom:1px solid #ddd; padding:6px; text-align:left; vertical-align:top; }
+    .actions{ display:flex; gap:6px; }
+    @media (max-width:980px){ .admin-grid{ grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <main id="adminRoot" class="admin-wrap auth-mode">
+    <div class="admin-head">
+      <h1 style="margin:0;">Admin Panel</h1>
+      <div class="row">
+        <a class="btn ghost" href="/analytics.html">Analytics</a>
+        <a class="btn ghost" href="/index.html">Back</a>
+        <button id="btnAdminLogout" class="btn ghost" type="button" style="display:none;">Logout</button>
+      </div>
+    </div>
+
+    <section id="loginCard" class="admin-card login-card">
+      <h2>Admin Login</h2>
+      <p class="muted" style="margin:0 0 12px;">Use the same credentials as analytics/admin.</p>
+      <div class="field">
+        <label for="adminUsername">Username</label>
+        <input id="adminUsername" type="text" autocomplete="username" value="adminrage" />
+      </div>
+      <div class="field">
+        <label for="adminPassword">Password</label>
+        <input id="adminPassword" type="password" autocomplete="current-password" />
+      </div>
+      <button id="btnAdminLogin" class="btn" type="button">Login</button>
+      <p id="loginMsg" class="muted" style="margin:8px 0 0;"></p>
+    </section>
+
+    <section id="panel" style="display:none;">
+      <div class="admin-grid">
+        <section class="admin-card">
+          <h2 id="formTitle">Create Item</h2>
+          <div class="field"><label>ID</label><input id="fId" type="number" /></div>
+          <div class="field"><label>Title</label><input id="fTitle" type="text" /></div>
+          <div class="field"><label>Theme</label><input id="fTheme" type="text" /></div>
+          <div class="field"><label>Gender</label><select id="fGender"><option value="male">male</option><option value="female">female</option><option value="neutral">neutral</option></select></div>
+          <div class="field"><label>Difficulty</label><select id="fDifficulty"><option value="easy">easy</option><option value="normal">normal</option><option value="medium">medium</option><option value="tricky">tricky</option><option value="hard">hard</option></select></div>
+          <div class="field"><label>Slug</label><input id="fSlug" type="text" /></div>
+          <div class="field"><label>URL Override (optional)</label><input id="fUrl" type="text" /></div>
+          <div class="field"><label>Thumb Override (optional)</label><input id="fThumb" type="text" /></div>
+          <div class="field"><label>Shop URL (optional)</label><input id="fShop" type="text" /></div>
+          <div class="field"><label>Tags comma-separated</label><input id="fTags" type="text" /></div>
+          <div class="actions">
+            <button id="btnSave" class="btn" type="button">Save</button>
+            <button id="btnReset" class="btn ghost" type="button">Reset</button>
+          </div>
+          <p id="formMsg" class="muted" style="margin:8px 0 0;"></p>
+        </section>
+
+        <section class="admin-card">
+          <h2>Items</h2>
+          <p id="mediaInfo" class="muted" style="margin:0 0 8px;"></p>
+          <table>
+            <thead><tr><th>ID</th><th>Title</th><th>Slug</th><th>Theme</th><th>Actions</th></tr></thead>
+            <tbody id="itemsBody"></tbody>
+          </table>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <script src="/js/admin-panel.js" defer></script>
+</body>
+</html>
+

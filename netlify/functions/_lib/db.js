@@ -10,10 +10,12 @@ function getDbPool(){
   }
   pool = new Pool({
     connectionString,
-    ssl: { rejectUnauthorized: false }
+    ssl: { rejectUnauthorized: false },
+    max: 2,
+    idleTimeoutMillis: 10000,
+    connectionTimeoutMillis: 5000
   });
   return pool;
 }
 
 module.exports = { getDbPool };
-

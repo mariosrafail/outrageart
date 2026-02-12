@@ -27,6 +27,21 @@
   status = 200
 
 [[redirects]]
+  from = "/api/admin-items"
+  to = "/.netlify/functions/admin-items"
+  status = 200
+
+[[redirects]]
   from = "/api/items"
   to = "/.netlify/functions/items"
+  status = 200
+
+[[redirects]]
+  from = "/admin.html"
+  to = "/public/admin.html"
+  status = 200
+
+[[redirects]]
+  from = "/analytics.html"
+  to = "/public/analytics.html"
   status = 200
