@@ -25,3 +25,8 @@
   from = "/api/admin-logout"
   to = "/.netlify/functions/admin-logout"
   status = 200
+
+[[redirects]]
+  from = "/api/items"
+  to = "/.netlify/functions/items"
+  status = 200

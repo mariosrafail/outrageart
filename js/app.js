@@ -505,15 +505,44 @@ pageSizeSel.addEventListener('change', () => {
   renderPager();
 });
 
+function trimSlash(s){
+  return String(s || '').replace(/\/+$/g, '');
+}
+
+function normalizeItemsPayload(payload){
+  if (Array.isArray(payload)) return payload;
+  if (!payload || typeof payload !== 'object') return [];
+
+  const rawItems = Array.isArray(payload.items) ? payload.items : [];
+  const artBaseUrl = trimSlash(payload.media && payload.media.artBaseUrl);
+  const thumbBaseUrl = trimSlash(payload.media && payload.media.thumbBaseUrl);
+  const artDefaultFile = String((payload.media && payload.media.artDefaultFile) || '1.png');
+
+  return rawItems.map((it) => {
+    const slug = String(it.slug || '').trim();
+    const url = String(it.url || '').trim() || (slug && artBaseUrl ? `${artBaseUrl}/${slug}/${artDefaultFile}` : '');
+    const thumb = String(it.thumb || '').trim() || (slug && thumbBaseUrl ? `${thumbBaseUrl}/${slug}.png` : '');
+    return Object.assign({}, it, { slug, url, thumb });
+  });
+}
+
 
 async function init(){
   document.getElementById('loading').style.display = 'block';
   try{
-    const res = await fetch('data/items.json', {cache:'no-store'});
-    ALL_ITEMS = await res.json();
+    let payload = null;
+    try{
+      const apiRes = await fetch('/api/items', { cache: 'no-store' });
+      if (apiRes.ok) payload = await apiRes.json();
+    }catch{}
+    if (!payload){
+      const res = await fetch('data/items.json', { cache: 'no-store' });
+      payload = await res.json();
+    }
+    ALL_ITEMS = normalizeItemsPayload(payload);
   }catch(e){
     console.error(e);
-    grid.innerHTML = '<div class=empty>Could not load data/items.json</div>'; return;
+    grid.innerHTML = '<div class=empty>Could not load items data</div>'; return;
   }finally{
     document.getElementById('loading').style.display = 'none';
   }
