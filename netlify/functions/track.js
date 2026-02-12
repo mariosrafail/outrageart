@@ -3,14 +3,15 @@ const { connectLambda, getStore } = require('@netlify/blobs');
 
 const STORE_NAME = 'site-analytics';
 const STATS_KEY = 'stats:v1';
+const TRACK_COOKIE_NAME = 'oa_tvid';
 
-function json(statusCode, body){
+function json(statusCode, body, extraHeaders = {}){
   return {
     statusCode,
-    headers: {
+    headers: Object.assign({
       'Content-Type': 'application/json; charset=utf-8',
       'Cache-Control': 'no-store'
-    },
+    }, extraHeaders),
     body: JSON.stringify(body)
   };
 }
@@ -28,6 +29,44 @@ function normalizeVisitorId(value){
   const id = String(value || '').trim();
   if (!id || id.length > 200) return null;
   return id;
+}
+
+function parseCookies(cookieHeader){
+  const out = {};
+  const src = String(cookieHeader || '');
+  if (!src) return out;
+  src.split(';').forEach(part => {
+    const i = part.indexOf('=');
+    if (i <= 0) return;
+    const k = part.slice(0, i).trim();
+    const v = part.slice(i + 1).trim();
+    if (k) out[k] = decodeURIComponent(v);
+  });
+  return out;
+}
+
+function signVisitorId(visitorId, secret){
+  return crypto.createHmac('sha256', secret).update(visitorId).digest('hex');
+}
+
+function makeVisitorToken(visitorId, secret){
+  return `${visitorId}.${signVisitorId(visitorId, secret)}`;
+}
+
+function parseVisitorToken(token, secret){
+  const t = String(token || '');
+  const dot = t.indexOf('.');
+  if (dot <= 0) return null;
+  const visitorId = t.slice(0, dot);
+  const sig = t.slice(dot + 1);
+  if (!/^[a-f0-9]{32,128}$/i.test(visitorId)) return null;
+  const expected = signVisitorId(visitorId, secret);
+  if (sig !== expected) return null;
+  return visitorId;
+}
+
+function createVisitorId(){
+  return crypto.randomBytes(16).toString('hex');
 }
 
 function getAthensDateKey(){
@@ -131,6 +170,10 @@ async function loadStats(store){
   return safe;
 }
 
+function getCookieSecret(){
+  return process.env.TRACK_COOKIE_SECRET || process.env.VIEW_COOKIE_SECRET || process.env.ADMIN_SESSION_SECRET || '';
+}
+
 exports.handler = async function handler(event){
   try{
     if (event.httpMethod === 'OPTIONS') return json(204, {});
@@ -139,12 +182,27 @@ exports.handler = async function handler(event){
     connectLambda(event);
     const store = getStore(STORE_NAME);
     const payload = event.body ? JSON.parse(event.body) : {};
-    const visitorId = normalizeVisitorId(payload.visitorId);
-    if (!visitorId) return json(400, { error: 'Missing or invalid visitorId' });
-
     const headers = Object.fromEntries(
       Object.entries(event.headers || {}).map(([k, v]) => [String(k).toLowerCase(), v])
     );
+    const secret = getCookieSecret();
+    const cookies = parseCookies(headers.cookie || '');
+    let cookieHeader = null;
+    let visitorId = null;
+
+    if (secret){
+      visitorId = parseVisitorToken(cookies[TRACK_COOKIE_NAME], secret);
+      if (!visitorId){
+        visitorId = createVisitorId();
+        const token = makeVisitorToken(visitorId, secret);
+        cookieHeader = `${TRACK_COOKIE_NAME}=${encodeURIComponent(token)}; Path=/; Max-Age=31536000; HttpOnly; Secure; SameSite=Lax`;
+        return json(200, { ok: true, countedVisit: false, reason: 'cookie_issued' }, { 'Set-Cookie': cookieHeader });
+      }
+    }else{
+      visitorId = normalizeVisitorId(payload.visitorId);
+      if (!visitorId) return json(400, { error: 'Missing or invalid visitorId' });
+    }
+
     const configuredHosts = getConfiguredPublicHosts();
     const day = getAthensDateKey();
     const country = getCountryFromHeaders(headers);
@@ -196,7 +254,7 @@ exports.handler = async function handler(event){
         totalVisits: stats.totalVisits,
         uniqueVisitors: stats.uniqueVisitors
       }
-    });
+    }, cookieHeader ? { 'Set-Cookie': cookieHeader } : {});
   }catch (err){
     return json(500, { error: 'Server error', detail: String(err && err.message || err) });
   }

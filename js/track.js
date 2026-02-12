@@ -44,9 +44,23 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
       keepalive: true
-    }).catch(() => {});
+    })
+      .then(async (res) => {
+        if (!res || !res.ok) return;
+        const data = await res.json().catch(() => null);
+        if (!data || data.reason !== 'cookie_issued') return;
 
-    markSent();
+        return fetch('/api/track', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          keepalive: true
+        }).catch(() => {});
+      })
+      .catch(() => {})
+      .finally(() => {
+        markSent();
+      });
   }
 
   if (!location.pathname.toLowerCase().includes('analytics.html')) {
