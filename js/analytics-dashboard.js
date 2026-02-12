@@ -15,12 +15,16 @@
   const btnAdminLogout = $('btnAdminLogout');
   const loginMsg = $('loginMsg');
   const chartCanvas = $('dailyLineChart');
+  const chartRangeControls = $('chartRangeControls');
   const nextRefreshInfo = $('nextRefreshInfo');
   let athensDateKeyAtLastLoad = null;
   let minuteWatcherId = null;
   let latestDailyRows = [];
+  let latestDailyMapRows = [];
+  let latestTotals = { totalVisits: 0, uniqueVisitors: 0 };
   let chartHoverIndex = null;
   let chartMeta = null;
+  let selectedRangeDays = 28;
 
   function num(n){ return Number(n || 0).toLocaleString(); }
   function showDashboard(){
@@ -78,11 +82,6 @@
     nextRefreshInfo.textContent = 'Auto refresh at 00:00 (Europe/Athens)';
   }
 
-  function setHoverInfoLabel(row){
-    if (!nextRefreshInfo || !row) return;
-    nextRefreshInfo.textContent = `${row.date}: ${num(row.visits)} views, ${num(row.uniqueVisitors)} unique`;
-  }
-
   function buildLastNDaysKeys(days){
     const todayKey = getAthensDateKey();
     const parts = todayKey.split('-').map(Number);
@@ -99,7 +98,7 @@
     return out;
   }
 
-  function normalizeDailyRows(rawRows, totals){
+  function normalizeDailyRows(rawRows, totals, days){
     const rowMap = new Map();
     (Array.isArray(rawRows) ? rawRows : []).forEach((row) => {
       const key = String(row && row.date || '');
@@ -111,7 +110,8 @@
       });
     });
 
-    const keys = buildLastNDaysKeys(30);
+    const safeDays = Math.max(1, Number(days || 28));
+    const keys = buildLastNDaysKeys(safeDays);
     const out = keys.map((key) => {
       const existing = rowMap.get(key);
       if (existing) return existing;
@@ -126,6 +126,31 @@
     }
 
     return out;
+  }
+
+  function drawHoverLabel(ctx, x, y, text, bounds){
+    const padX = 8;
+    const boxH = 20;
+    const tw = Math.ceil(ctx.measureText(text).width);
+    const boxW = tw + (padX * 2);
+    const bxMin = bounds.left;
+    const bxMax = bounds.right - boxW;
+    const byMin = bounds.top;
+    const byMax = bounds.bottom - boxH;
+    const bx = Math.max(bxMin, Math.min(bxMax, Math.round(x - (boxW / 2))));
+    const by = Math.max(byMin, Math.min(byMax, Math.round(y - boxH - 10)));
+
+    ctx.fillStyle = '#fff';
+    ctx.strokeStyle = '#111';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.rect(bx, by, boxW, boxH);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#111';
+    ctx.font = '11px Inter, sans-serif';
+    ctx.fillText(text, bx + padX, by + 14);
   }
 
   function drawDailyChart(rows, hoverIndex = null){
@@ -235,6 +260,15 @@
     }
     drawPoint(hx, yv, '#ef4444');
     drawPoint(hx, yu, '#2563eb');
+
+    const tip = `${num(hv)} views, ${num(hu)} unique`;
+    const tipY = Math.min(yv, yu);
+    drawHoverLabel(ctx, hx, tipY, tip, {
+      left: pad.left,
+      right: pad.left + w,
+      top: pad.top,
+      bottom: pad.top + h
+    });
   }
 
   function bindChartHover(){
@@ -257,7 +291,6 @@
       if (idx === chartHoverIndex) return;
       chartHoverIndex = idx;
       drawDailyChart(latestDailyRows, chartHoverIndex);
-      setHoverInfoLabel(latestDailyRows[idx]);
     });
 
     chartCanvas.addEventListener('mouseleave', () => {
@@ -265,6 +298,27 @@
       drawDailyChart(latestDailyRows, null);
       setNextRefreshLabel();
     });
+  }
+
+  function setActiveRangeButton(){
+    if (!chartRangeControls) return;
+    chartRangeControls.querySelectorAll('[data-range-days]').forEach((btn) => {
+      const days = Number(btn.getAttribute('data-range-days'));
+      btn.classList.toggle('active', days === selectedRangeDays);
+    });
+  }
+
+  function renderDailyFromRange(data){
+    latestDailyRows = normalizeDailyRows(latestDailyMapRows, data && data.totals, selectedRangeDays);
+    chartHoverIndex = null;
+    setActiveRangeButton();
+
+    fillTable(
+      tblDaily,
+      latestDailyRows.map(x => `<tr><td>${x.date}</td><td>${num(x.visits)}</td><td>${num(x.uniqueVisitors)}</td></tr>`),
+      3
+    );
+    drawDailyChart(latestDailyRows, null);
   }
 
   function armMidnightRefresh(){
@@ -311,14 +365,12 @@
       (data.byReferrerHost || []).map(x => `<tr><td>${x.key}</td><td>${num(x.value)}</td></tr>`),
       2
     );
-    fillTable(
-      tblDaily,
-      normalizeDailyRows(data.dailyLast30, data.totals).map(x => `<tr><td>${x.date}</td><td>${num(x.visits)}</td><td>${num(x.uniqueVisitors)}</td></tr>`),
-      3
-    );
-    latestDailyRows = normalizeDailyRows(data.dailyLast30, data.totals);
-    chartHoverIndex = null;
-    drawDailyChart(latestDailyRows, null);
+    latestDailyMapRows = Array.isArray(data.dailyLast30) ? data.dailyLast30 : [];
+    latestTotals = {
+      totalVisits: Number(data?.totals?.totalVisits || 0),
+      uniqueVisitors: Number(data?.totals?.uniqueVisitors || 0)
+    };
+    renderDailyFromRange(data);
     armMidnightRefresh();
   }
 
@@ -372,6 +424,17 @@
         await fetch('/api/admin-logout', { method:'POST', credentials:'same-origin' });
       }catch{}
       showLogin('Logged out.');
+    });
+  }
+
+  if (chartRangeControls){
+    chartRangeControls.addEventListener('click', (ev) => {
+      const btn = ev.target.closest('[data-range-days]');
+      if (!btn) return;
+      const days = Number(btn.getAttribute('data-range-days'));
+      if (!Number.isFinite(days) || days <= 0) return;
+      selectedRangeDays = days;
+      renderDailyFromRange({ totals: latestTotals });
     });
   }
 
