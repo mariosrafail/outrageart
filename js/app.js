@@ -219,6 +219,18 @@ grid.addEventListener('click', (e)=>{
   const btn = e.target.closest('.show-btn');
   if(btn){
     e.preventDefault();
+    const itemId = btn.dataset.id;
+    if (itemId){
+      incrementViewsOnServer(itemId)
+        .then(v => {
+          const nextCount = setViews(itemId, v);
+          updateCardViewsLabel(itemId, nextCount);
+        })
+        .catch(() => {
+          const nextCount = setViews(itemId, (getViews(itemId) ?? 0) + 1);
+          updateCardViewsLabel(itemId, nextCount);
+        });
+    }
 
     // Open steps-based tutorial modal (1.png, 2.png, ... in same folder)
     if (typeof window.openTutorialModal === 'function') {
@@ -255,6 +267,83 @@ const badge = text => `<span class="chip">${text}</span>`;
 
 function safeName(s){ return String(s).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); }
 
+const VIEW_STORAGE_KEY = 'outrageart_views_fallback_v1';
+const VIEWS_API_BASE = '/api/views';
+let VIEW_COUNTS = loadFallbackViews();
+const VIEWS_LOADING = new Set();
+
+function loadFallbackViews(){
+  try{
+    const raw = localStorage.getItem(VIEW_STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : {};
+    return (parsed && typeof parsed === 'object') ? parsed : {};
+  }catch{
+    return {};
+  }
+}
+
+function saveFallbackViews(){
+  try{ localStorage.setItem(VIEW_STORAGE_KEY, JSON.stringify(VIEW_COUNTS)); }catch{}
+}
+
+function getViews(id){
+  const n = VIEW_COUNTS[String(id)];
+  if (n === undefined || n === null) return null;
+  const num = Number(n);
+  return Number.isFinite(num) && num >= 0 ? Math.floor(num) : 0;
+}
+
+function setViews(id, value){
+  const key = String(id);
+  const n = Number(value);
+  VIEW_COUNTS[key] = Number.isFinite(n) && n >= 0 ? Math.floor(n) : 0;
+  saveFallbackViews();
+  return VIEW_COUNTS[key];
+}
+
+function updateCardViewsLabel(id, value){
+  const el = grid.querySelector(`.card[data-id="${id}"] .views-value`);
+  if (el) el.textContent = String(value);
+}
+
+async function fetchViewsFromServer(id){
+  const res = await fetch(`${VIEWS_API_BASE}?id=${encodeURIComponent(id)}`, { method:'GET' });
+  if (!res.ok) throw new Error(`views GET failed: ${res.status}`);
+  const data = await res.json();
+  return Number(data.views || 0);
+}
+
+async function incrementViewsOnServer(id){
+  const res = await fetch(VIEWS_API_BASE, {
+    method:'POST',
+    headers:{ 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id, action:'increment' })
+  });
+  if (!res.ok) throw new Error(`views POST failed: ${res.status}`);
+  const data = await res.json();
+  return Number(data.views || 0);
+}
+
+function hydrateViewsForVisibleCards(){
+  grid.querySelectorAll('.card[data-id]').forEach(cardEl => {
+    const id = cardEl.dataset.id;
+    if (!id || VIEWS_LOADING.has(id)) return;
+    if (getViews(id) !== null) return;
+
+    VIEWS_LOADING.add(id);
+    fetchViewsFromServer(id)
+      .then(v => {
+        const next = setViews(id, v);
+        updateCardViewsLabel(id, next);
+      })
+      .catch(() => {
+        const fallback = setViews(id, 0);
+        updateCardViewsLabel(id, fallback);
+      })
+      .finally(() => VIEWS_LOADING.delete(id));
+  });
+}
+
 function buildSrcset(thumb400){
   const m = thumb400.match(/^(.*)-400w\.(webp|jpe?g|png)$/i);
   if(!m) return '';
@@ -270,6 +359,8 @@ function card(item){
   const srcset = buildSrcset(item.thumb);
   const fileUrl = item.url; // το ίδιο external link για Show & Download (Dropbox/Nextcloud/CDN)
   const title = escapeHtml(item.title || '');
+  const views = getViews(item.id);
+  const viewsText = (views === null) ? '...' : String(views);
 
   const shopBtnHTML = (item.shop && String(item.shop).trim() !== '')
   ? `<a class="btn small shop" href="${escapeHtml(item.shop)}" target="_blank" rel="noopener noreferrer">
@@ -289,7 +380,7 @@ function card(item){
       <img loading="lazy" src="${item.thumb}" ${srcset ? `srcset="${srcset}" sizes="(max-width:600px) 50vw, 25vw"` : ''} alt="${title}">
       ${(()=>{
 	  
-	  const showBtn = `<button class="btn small ghost show-btn" data-url="${fileUrl}" data-title="${title}" >Show</button>`;
+	  const showBtn = `<button class="btn small ghost show-btn" data-id="${item.id}" data-url="${fileUrl}" data-title="${title}" >Show</button>`;
 	  const dlBtn = `<a class="btn small primary" href="${fileUrl}" target="_self">Download</a>`;
 	  return `<div class="overlay">${showBtn}${shopBtnHTML}</div>`;})()}
     </div>
@@ -298,6 +389,7 @@ function card(item){
         <h3>${title}</h3>
         <span class="pill" title="${escapeHtml(item.difficulty)} difficulty">${dots(item.difficulty)}</span>
       </div>
+      <div class="views">Views: <span class="views-value">${viewsText}</span></div>
       <div class="tags">${tags}</div>
     </div>
   </article>`;
@@ -310,6 +402,7 @@ function renderChunk(){
   const frag = document.createElement('div');
   frag.innerHTML = slice.map(card).join('');
   grid.append(...frag.children);
+  hydrateViewsForVisibleCards();
   page++;
   count.textContent = `${filtered.length} item${filtered.length===1?'':'s'}`;
   if(page*PAGE_SIZE >= filtered.length){ stopObserving(); } else { startObserving(); }
@@ -432,6 +525,7 @@ function renderPage(){
   frag.innerHTML = slice.map(card).join('');
   grid.innerHTML = '';
   grid.append(...frag.children);
+  hydrateViewsForVisibleCards();
 
   fitTitles();
 
