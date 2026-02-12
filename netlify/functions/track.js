@@ -30,6 +30,16 @@ function normalizeVisitorId(value){
   return id;
 }
 
+function getAthensDateKey(){
+  const fmt = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Europe/Athens',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  });
+  return fmt.format(new Date());
+}
+
 function hash(value){
   return crypto.createHash('sha256').update(String(value)).digest('hex');
 }
@@ -136,8 +146,7 @@ exports.handler = async function handler(event){
       Object.entries(event.headers || {}).map(([k, v]) => [String(k).toLowerCase(), v])
     );
     const configuredHosts = getConfiguredPublicHosts();
-    const now = new Date();
-    const day = now.toISOString().slice(0, 10);
+    const day = getAthensDateKey();
     const country = getCountryFromHeaders(headers);
     const currentHost = normalizeHost(
       payload.host || headers['x-forwarded-host'] || headers.host || ''
