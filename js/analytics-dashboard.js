@@ -21,7 +21,6 @@
   let minuteWatcherId = null;
   let latestDailyRows = [];
   let latestDailyMapRows = [];
-  let latestTotals = { totalVisits: 0, uniqueVisitors: 0 };
   let chartHoverIndex = null;
   let chartMeta = null;
   let selectedRangeDays = 28;
@@ -98,7 +97,7 @@
     return out;
   }
 
-  function normalizeDailyRows(rawRows, totals, days){
+  function normalizeDailyRows(rawRows, days){
     const rowMap = new Map();
     (Array.isArray(rawRows) ? rawRows : []).forEach((row) => {
       const key = String(row && row.date || '');
@@ -117,13 +116,6 @@
       if (existing) return existing;
       return { date: key, visits: 0, uniqueVisitors: 0 };
     });
-
-    const todayKey = getAthensDateKey();
-    const todayIdx = out.findIndex(r => r.date === todayKey);
-    if (todayIdx >= 0 && !rowMap.has(todayKey)){
-      out[todayIdx].visits = Number(totals && totals.totalVisits || 0);
-      out[todayIdx].uniqueVisitors = Number(totals && totals.uniqueVisitors || 0);
-    }
 
     return out;
   }
@@ -308,8 +300,8 @@
     });
   }
 
-  function renderDailyFromRange(data){
-    latestDailyRows = normalizeDailyRows(latestDailyMapRows, data && data.totals, selectedRangeDays);
+  function renderDailyFromRange(){
+    latestDailyRows = normalizeDailyRows(latestDailyMapRows, selectedRangeDays);
     chartHoverIndex = null;
     setActiveRangeButton();
 
@@ -366,11 +358,7 @@
       2
     );
     latestDailyMapRows = Array.isArray(data.dailyLast30) ? data.dailyLast30 : [];
-    latestTotals = {
-      totalVisits: Number(data?.totals?.totalVisits || 0),
-      uniqueVisitors: Number(data?.totals?.uniqueVisitors || 0)
-    };
-    renderDailyFromRange(data);
+    renderDailyFromRange();
     armMidnightRefresh();
   }
 
@@ -434,7 +422,7 @@
       const days = Number(btn.getAttribute('data-range-days'));
       if (!Number.isFinite(days) || days <= 0) return;
       selectedRangeDays = days;
-      renderDailyFromRange({ totals: latestTotals });
+      renderDailyFromRange();
     });
   }
 
