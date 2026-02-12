@@ -1,4 +1,5 @@
 const { connectLambda, getStore } = require('@netlify/blobs');
+const crypto = require('crypto');
 
 const STORE_NAME = 'site-analytics';
 const STATS_KEY = 'stats:v1';
@@ -30,9 +31,47 @@ function sortMap(mapObj, limit = 20){
     .slice(0, limit);
 }
 
+function fromBase64url(input){
+  const normalized = String(input).replace(/-/g, '+').replace(/_/g, '/');
+  const padded = normalized + '='.repeat((4 - (normalized.length % 4)) % 4);
+  return Buffer.from(padded, 'base64').toString('utf8');
+}
+
+function verifyToken(token, secret){
+  const [data, sig] = String(token || '').split('.');
+  if (!data || !sig) return null;
+
+  const expected = crypto
+    .createHmac('sha256', secret)
+    .update(data)
+    .digest('base64')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/g, '');
+  if (sig !== expected) return null;
+
+  let payload;
+  try{
+    payload = JSON.parse(fromBase64url(data));
+  }catch{
+    return null;
+  }
+  const now = Math.floor(Date.now() / 1000);
+  if (!payload || payload.role !== 'admin' || !payload.exp || payload.exp < now) return null;
+  return payload;
+}
+
 exports.handler = async function handler(event){
   try{
     if (event.httpMethod !== 'GET') return json(405, { error: 'Method not allowed' });
+
+    const sessionSecret = process.env.ADMIN_SESSION_SECRET;
+    if (!sessionSecret) return json(500, { error: 'Missing admin env vars' });
+
+    const auth = String((event.headers && (event.headers.authorization || event.headers.Authorization)) || '');
+    const token = auth.startsWith('Bearer ') ? auth.slice(7) : '';
+    const claims = verifyToken(token, sessionSecret);
+    if (!claims) return json(401, { error: 'Unauthorized' });
 
     connectLambda(event);
     const store = getStore(STORE_NAME);

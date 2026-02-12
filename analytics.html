@@ -31,6 +31,16 @@
       <a class="btn ghost" href="index.html">Back</a>
     </div>
 
+    <section id="loginCard" class="analytics-card" style="max-width:420px;">
+      <h2>Admin Login</h2>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <input id="adminPassword" type="password" placeholder="Admin password" />
+        <button id="btnAdminLogin" class="btn" type="button">Login</button>
+      </div>
+      <p id="loginMsg" class="muted" style="margin:8px 0 0;"></p>
+    </section>
+
+    <section id="dashboard" style="display:none;">
     <div class="kpis">
       <div class="kpi"><span class="label">Total visits</span><span id="kpiVisits" class="value">0</span></div>
       <div class="kpi"><span class="label">Unique visitors</span><span id="kpiUnique" class="value">0</span></div>
@@ -70,6 +80,7 @@
       </section>
     </div>
     <p class="muted">Data source: /api/analytics</p>
+    </section>
   </main>
 
   <script src="js/analytics-dashboard.js" defer></script>
