@@ -266,26 +266,10 @@ const badge = text => `<span class="chip">${text}</span>`;
 function safeName(s){ return String(s).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); }
 
 const VIEW_STORAGE_KEY = 'outrageart_views_cache_v1';
-const VIEWER_ID_KEY = 'outrageart_viewer_id_v1';
 const VIEWS_API_ENDPOINTS = ['/api/views', '/.netlify/functions/views'];
 let VIEW_COUNTS = loadCachedViews();
 const VIEWS_LOADING = new Set();
 const VIEWS_SYNCED = new Set();
-const VIEWER_ID = getOrCreateViewerId();
-
-function getOrCreateViewerId(){
-  try{
-    const existing = localStorage.getItem(VIEWER_ID_KEY);
-    if (existing) return existing;
-    const created = (globalThis.crypto && globalThis.crypto.randomUUID)
-      ? globalThis.crypto.randomUUID()
-      : `v_${Date.now()}_${Math.random().toString(36).slice(2)}`;
-    localStorage.setItem(VIEWER_ID_KEY, created);
-    return created;
-  }catch{
-    return `ephemeral_${Date.now()}_${Math.random().toString(36).slice(2)}`;
-  }
-}
 
 function loadCachedViews(){
   try{
@@ -344,7 +328,8 @@ async function incrementViewsOnServer(id){
   const data = await viewsFetch('', {
     method:'POST',
     headers:{ 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id, action:'view', viewerId: VIEWER_ID })
+    credentials: 'same-origin',
+    body: JSON.stringify({ id, action:'view' })
   });
   return Number(data.views || 0);
 }
