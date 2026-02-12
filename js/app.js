@@ -267,7 +267,7 @@ function safeName(s){ return String(s).toLowerCase().replace(/[^a-z0-9]+/g,'-').
 
 const VIEW_STORAGE_KEY = 'outrageart_views_cache_v1';
 const VIEWER_ID_KEY = 'outrageart_viewer_id_v1';
-const VIEWS_API_BASE = '/api/views';
+const VIEWS_API_ENDPOINTS = ['/api/views', '/.netlify/functions/views'];
 let VIEW_COUNTS = loadCachedViews();
 const VIEWS_LOADING = new Set();
 const VIEWS_SYNCED = new Set();
@@ -321,21 +321,31 @@ function updateCardViewsLabel(id, value){
   if (el) el.textContent = String(value);
 }
 
+async function viewsFetch(path, options){
+  let lastErr = null;
+  for (const base of VIEWS_API_ENDPOINTS){
+    try{
+      const res = await fetch(`${base}${path}`, options);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.json();
+    }catch(err){
+      lastErr = err;
+    }
+  }
+  throw lastErr || new Error('Views API unavailable');
+}
+
 async function fetchViewsFromServer(id){
-  const res = await fetch(`${VIEWS_API_BASE}?id=${encodeURIComponent(id)}`, { method:'GET' });
-  if (!res.ok) throw new Error(`views GET failed: ${res.status}`);
-  const data = await res.json();
+  const data = await viewsFetch(`?id=${encodeURIComponent(id)}`, { method:'GET' });
   return Number(data.views || 0);
 }
 
 async function incrementViewsOnServer(id){
-  const res = await fetch(VIEWS_API_BASE, {
+  const data = await viewsFetch('', {
     method:'POST',
     headers:{ 'Content-Type': 'application/json' },
     body: JSON.stringify({ id, action:'view', viewerId: VIEWER_ID })
   });
-  if (!res.ok) throw new Error(`views POST failed: ${res.status}`);
-  const data = await res.json();
   return Number(data.views || 0);
 }
 
@@ -373,7 +383,7 @@ function card(item){
   const fileUrl = item.url; // το ίδιο external link για Show & Download (Dropbox/Nextcloud/CDN)
   const title = escapeHtml(item.title || '');
   const views = getViews(item.id);
-  const viewsText = (views === null) ? '...' : String(views);
+  const viewsText = (views === null) ? '0' : String(views);
 
   const shopBtnHTML = (item.shop && String(item.shop).trim() !== '')
   ? `<a class="btn small shop" href="${escapeHtml(item.shop)}" target="_blank" rel="noopener noreferrer">
