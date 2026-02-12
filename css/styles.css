@@ -61,18 +61,14 @@ header{
   background-size: 2040px 2040px;            /* optional if your tile is exactly 64×64 */
 }
 
-.header-socials{ display:flex; justify-content:center; margin-bottom:12px; }
 .brand{
   display:flex;
-  flex-direction:column;
   align-items:center;
-  justify-content:center;
-  text-align:center;
-  gap:10px;
+  gap:14px;
 }
 .brand img{ height:84px; width:auto;}
 .brand h1{ margin:0; font-size:clamp(20px,2.2vw,28px); letter-spacing:.3px }
-.brand-text{ text-align:center; }
+.brand-text{ text-align:left; }
 .slogan {  margin: 0;  font-style: italic;  font-size: clamp(14px, 1.4vw, 18px);  color: #555;}
 
 /* ---------- Controls ---------- */
@@ -350,9 +346,9 @@ input[type="search"]:focus, select:focus{ transform: translateY(-1px) }
 .socials{
   display:flex;
   align-items:center;
-  justify-content:center;
   flex-wrap:wrap;
   gap:8px;
+  margin-left: 12px;
 }
 .icon-btn{
   width:64px; height:34px; display:grid; place-items:center;
@@ -388,7 +384,27 @@ input[type="search"]:focus, select:focus{ transform: translateY(-1px) }
 .menu-btn{ display:none; } /* hidden on desktop */
 
 @media (max-width: 760px){
-  .menu-btn{ display:inline-block; margin:0 auto; }
+  .brand{
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 10px;
+  }
+  .brand-text{ text-align: center; }
+  .socials{
+    order: -1;
+    width: 100%;
+    margin-left: 0;
+    justify-content: center;
+  }
+
+  .menu-btn{
+    display:block;
+    width:100%;
+    max-width:260px;
+    margin:8px auto 0;
+  }
   /* Turn controls grid into an off-canvas style block */
   #controlsPanel{
     display:none;
@@ -398,6 +414,61 @@ input[type="search"]:focus, select:focus{ transform: translateY(-1px) }
     background: var(--panel);
   }
   #controlsPanel.open{ display:grid; }
+}
+
+/* --- Mobile UX upgrades (filters + grid density) --- */
+@media (max-width: 760px){
+  /* Keep 2 cards per row on mobile, except ultra-narrow screens below */
+  .grid{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    padding: 12px;
+  }
+
+  /* Better tap targets and no browser zoom-on-focus */
+  input[type="search"], select, .btn{
+    font-size: 16px;
+    min-height: 44px;
+  }
+
+  /* Cleaner mobile filter panel */
+  #controlsPanel{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .control.search{ grid-column: 1 / -1 !important; }
+  .control.select{ grid-column: span 1 !important; }
+  .control.actions{
+    grid-column: 1 / -1 !important;
+    display: block !important;
+  }
+  .control.actions .control.select{
+    grid-column: 1 / -1 !important;
+    width: 100%;
+  }
+
+  .chips-row{
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .chips{
+    margin-top: 0;
+    justify-content: center;
+  }
+  .btn-clear{
+    width: 100%;
+    max-width: 220px;
+    margin: 0 auto;
+    min-height: 40px;
+    line-height: 1.2;
+  }
+}
+
+@media (max-width: 360px){
+  .grid{ grid-template-columns: 1fr; }
 }
 
 
