@@ -305,6 +305,10 @@ function updateCardViewsLabel(id, value){
   if (el) el.textContent = String(value);
 }
 
+function canWriteViewCookie(){
+  return (typeof window.oaHasCookieConsent === 'function') ? window.oaHasCookieConsent() : false;
+}
+
 async function viewsFetch(path, options){
   let lastErr = null;
   for (const base of VIEWS_API_ENDPOINTS){
@@ -325,6 +329,9 @@ async function fetchViewsFromServer(id){
 }
 
 async function incrementViewsOnServer(id){
+  if (!canWriteViewCookie()){
+    return Number(getViews(id) || 0);
+  }
   const data = await viewsFetch('', {
     method:'POST',
     headers:{ 'Content-Type': 'application/json' },

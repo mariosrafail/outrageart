@@ -69,7 +69,8 @@ function normalizeHost(raw){
     const url = new URL(raw);
     return (url.hostname || '').toLowerCase();
   }catch{
-    return String(raw).toLowerCase();
+    const value = String(raw).toLowerCase().trim();
+    return value.replace(/^https?:\/\//, '').split('/')[0];
   }
 }
 
@@ -84,6 +85,28 @@ function classifySource(host){
   if (host.includes('bing')) return 'bing';
   if (host.includes('discord')) return 'discord';
   return 'other';
+}
+
+function getConfiguredPublicHosts(){
+  const list = String(process.env.PUBLIC_SITE_HOSTS || '')
+    .split(',')
+    .map(s => s.trim().toLowerCase())
+    .filter(Boolean);
+  return new Set(list);
+}
+
+function isInternalHost(refHost, currentHost, configuredHosts){
+  if (!refHost) return false;
+  if (currentHost && refHost === currentHost) return true;
+  if (configuredHosts.has(refHost)) return true;
+
+  // Ignore Netlify preview/branch subdomains in reports
+  if (refHost.endsWith('.netlify.app')) return true;
+
+  // Handle common custom-domain variants
+  if (refHost === 'art.outrage.ink' || refHost === 'www.art.outrage.ink') return true;
+
+  return false;
 }
 
 async function loadStats(store){
@@ -112,12 +135,17 @@ exports.handler = async function handler(event){
     const headers = Object.fromEntries(
       Object.entries(event.headers || {}).map(([k, v]) => [String(k).toLowerCase(), v])
     );
+    const configuredHosts = getConfiguredPublicHosts();
     const now = new Date();
     const day = now.toISOString().slice(0, 10);
     const country = getCountryFromHeaders(headers);
+    const currentHost = normalizeHost(
+      payload.host || headers['x-forwarded-host'] || headers.host || ''
+    );
     const referrer = payload.referrer || headers.referer || '';
     const refHost = normalizeHost(referrer);
-    const source = classifySource(refHost);
+    const internalRef = isInternalHost(refHost, currentHost, configuredHosts);
+    const source = internalRef ? 'direct' : classifySource(refHost);
     const visitorHash = hash(visitorId);
 
     const globalSeenKey = `seen:visitor:${visitorHash}`;
@@ -132,7 +160,7 @@ exports.handler = async function handler(event){
     stats.totalVisits += 1;
     incMap(stats.byCountry, country);
     incMap(stats.bySource, source);
-    if (refHost) incMap(stats.byReferrerHost, refHost);
+    if (refHost && !internalRef) incMap(stats.byReferrerHost, refHost);
 
     const dayStats = toObject(stats.daily[day]);
     dayStats.visits = toInt(dayStats.visits) + 1;

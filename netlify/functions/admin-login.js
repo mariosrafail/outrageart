@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const COOKIE_NAME = 'oa_admin';
 
 function json(statusCode, body){
   return {
@@ -31,6 +32,10 @@ function sign(payload, secret){
   return `${data}.${sig}`;
 }
 
+function buildCookie(token){
+  return `${COOKIE_NAME}=${encodeURIComponent(token)}; Path=/; Max-Age=28800; HttpOnly; Secure; SameSite=Lax`;
+}
+
 exports.handler = async function handler(event){
   try{
     if (event.httpMethod === 'OPTIONS') return json(204, {});
@@ -52,7 +57,7 @@ exports.handler = async function handler(event){
     const exp = now + (60 * 60 * 8); // 8h
     const token = sign({ role: 'admin', iat: now, exp }, sessionSecret);
 
-    return json(200, { ok: true, token, exp });
+    return json(200, { ok: true, exp }, { 'Set-Cookie': buildCookie(token) });
   }catch (err){
     return json(500, { error: 'Server error', detail: String(err && err.message || err) });
   }

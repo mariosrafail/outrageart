@@ -1,5 +1,6 @@
 const { connectLambda, getStore } = require('@netlify/blobs');
 const crypto = require('crypto');
+const COOKIE_NAME = 'oa_admin';
 
 const STORE_NAME = 'site-analytics';
 const STATS_KEY = 'stats:v1';
@@ -29,6 +30,14 @@ function sortMap(mapObj, limit = 20){
     .map(([key, value]) => ({ key, value: toInt(value) }))
     .sort((a, b) => b.value - a.value)
     .slice(0, limit);
+}
+
+function isInternalDisplayHost(host){
+  const h = String(host || '').toLowerCase();
+  if (!h) return true;
+  if (h === 'art.outrage.ink' || h === 'www.art.outrage.ink') return true;
+  if (h.endsWith('.netlify.app')) return true;
+  return false;
 }
 
 function fromBase64url(input){
@@ -61,6 +70,20 @@ function verifyToken(token, secret){
   return payload;
 }
 
+function parseCookies(cookieHeader){
+  const out = {};
+  const src = String(cookieHeader || '');
+  if (!src) return out;
+  src.split(';').forEach(part => {
+    const i = part.indexOf('=');
+    if (i <= 0) return;
+    const k = part.slice(0, i).trim();
+    const v = part.slice(i + 1).trim();
+    if (k) out[k] = decodeURIComponent(v);
+  });
+  return out;
+}
+
 exports.handler = async function handler(event){
   try{
     if (event.httpMethod !== 'GET') return json(405, { error: 'Method not allowed' });
@@ -68,8 +91,8 @@ exports.handler = async function handler(event){
     const sessionSecret = process.env.ADMIN_SESSION_SECRET;
     if (!sessionSecret) return json(500, { error: 'Missing admin env vars' });
 
-    const auth = String((event.headers && (event.headers.authorization || event.headers.Authorization)) || '');
-    const token = auth.startsWith('Bearer ') ? auth.slice(7) : '';
+    const cookies = parseCookies(event.headers && (event.headers.cookie || event.headers.Cookie));
+    const token = cookies[COOKIE_NAME] || '';
     const claims = verifyToken(token, sessionSecret);
     if (!claims) return json(401, { error: 'Unauthorized' });
 
@@ -94,7 +117,13 @@ exports.handler = async function handler(event){
       },
       byCountry: sortMap(stats.byCountry, 30),
       bySource: sortMap(stats.bySource, 20),
-      byReferrerHost: sortMap(stats.byReferrerHost, 30),
+      byReferrerHost: sortMap(
+        Object.fromEntries(
+          Object.entries(toObject(stats.byReferrerHost))
+            .filter(([host]) => !isInternalDisplayHost(host))
+        ),
+        30
+      ),
       dailyLast30: last30
     });
   }catch (err){

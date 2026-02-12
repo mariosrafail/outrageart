@@ -29,11 +29,13 @@
   }
 
   function track(){
+    if (typeof window.oaHasCookieConsent === 'function' && !window.oaHasCookieConsent()) return;
     if (alreadySentThisSession()) return;
 
     const payload = {
       visitorId: getVisitorId(),
       path: location.pathname,
+      host: location.host,
       referrer: document.referrer || ''
     };
 
