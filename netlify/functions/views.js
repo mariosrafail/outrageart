@@ -1,4 +1,4 @@
-const { getStore } = require('@netlify/blobs');
+const { connectLambda, getStore } = require('@netlify/blobs');
 const crypto = require('crypto');
 
 const STORE_NAME = 'doodle-views';
@@ -40,6 +40,8 @@ exports.handler = async function handler(event){
   try{
     if (event.httpMethod === 'OPTIONS') return json(204, {});
 
+    // Required in Netlify Lambda compatibility mode so Blobs context is available.
+    connectLambda(event);
     const store = getStore(STORE_NAME);
 
     if (event.httpMethod === 'GET'){
