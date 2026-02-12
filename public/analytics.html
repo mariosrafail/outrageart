@@ -38,8 +38,8 @@
       box-shadow: 0 0 0 var(--shadow-pink), 0 0 0 var(--shadow-yellow);
     }
     .chip.active{
-      background: var(--text);
-      color: var(--bg);
+      background: var(--shadow-pink, #ff4fd8);
+      color: #000;
       border: var(--border);
     }
     .meta-row{ display:flex; justify-content:flex-end; margin:4px 0 8px; }
@@ -66,6 +66,7 @@
     }
     .tabs{ display:flex; border-bottom:2px solid var(--ring); overflow-x:auto; }
     .tab{
+      position:relative;
       border:0;
       border-bottom:2px solid transparent;
       background:transparent;
@@ -78,10 +79,39 @@
       cursor:pointer;
       white-space:nowrap;
     }
+    .tab::before{
+      content:"";
+      position:absolute;
+      left:10px;
+      right:10px;
+      bottom:0;
+      height:2px;
+      background:transparent;
+      transition: background .15s ease;
+    }
+    .tab::after{
+      content:"";
+      position:absolute;
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      border:2px solid var(--text);
+      background:#fff;
+      left:50%;
+      transform:translateX(-50%) scale(0);
+      bottom:-5px;
+      transition: transform .15s ease;
+    }
+    .tab:hover::after{ transform:translateX(-50%) scale(1); }
     .tab.active{
       color:var(--text);
-      border-bottom-color:var(--text);
+      border-bottom-color:transparent;
       background:var(--chip);
+    }
+    .tab.active::before{ background:var(--text); }
+    .tab.active::after{
+      transform:translateX(-50%) scale(1);
+      background: var(--shadow-pink, #ff4fd8);
     }
     .table-head{ display:flex; align-items:center; justify-content:space-between; padding:10px 12px; border-bottom:2px solid var(--ring); gap:10px; flex-wrap:wrap; }
     .table-wrap{ overflow-x:auto; }
