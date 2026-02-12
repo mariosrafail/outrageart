@@ -1,13 +1,13 @@
 const crypto = require('crypto');
 const COOKIE_NAME = 'oa_admin';
 
-function json(statusCode, body){
+function json(statusCode, body, extraHeaders = {}){
   return {
     statusCode,
-    headers: {
+    headers: Object.assign({
       'Content-Type': 'application/json; charset=utf-8',
       'Cache-Control': 'no-store'
-    },
+    }, extraHeaders),
     body: JSON.stringify(body)
   };
 }
