@@ -431,9 +431,9 @@ input[type="search"]:focus, select:focus{ transform: translateY(-1px) }
 
   .btn.menu-btn,
   .btn-clear{
-    min-height: 36px;
-    padding: 6px 12px;
-    font-size: 14px;
+    min-height: 32px;
+    padding: 4px 10px;
+    font-size: 13px;
   }
 
   /* Cleaner mobile filter panel */
