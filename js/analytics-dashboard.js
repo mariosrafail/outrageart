@@ -19,6 +19,8 @@
   let athensDateKeyAtLastLoad = null;
   let minuteWatcherId = null;
   let latestDailyRows = [];
+  let chartHoverIndex = null;
+  let chartMeta = null;
 
   function num(n){ return Number(n || 0).toLocaleString(); }
   function showDashboard(){
@@ -76,7 +78,57 @@
     nextRefreshInfo.textContent = 'Auto refresh at 00:00 (Europe/Athens)';
   }
 
-  function drawDailyChart(rows){
+  function setHoverInfoLabel(row){
+    if (!nextRefreshInfo || !row) return;
+    nextRefreshInfo.textContent = `${row.date}: ${num(row.visits)} views, ${num(row.uniqueVisitors)} unique`;
+  }
+
+  function buildLastNDaysKeys(days){
+    const todayKey = getAthensDateKey();
+    const parts = todayKey.split('-').map(Number);
+    const baseUtc = Date.UTC(parts[0], parts[1] - 1, parts[2]);
+    const out = [];
+
+    for (let i = days - 1; i >= 0; i--){
+      const d = new Date(baseUtc - (i * 86400000));
+      const y = d.getUTCFullYear();
+      const m = String(d.getUTCMonth() + 1).padStart(2, '0');
+      const day = String(d.getUTCDate()).padStart(2, '0');
+      out.push(`${y}-${m}-${day}`);
+    }
+    return out;
+  }
+
+  function normalizeDailyRows(rawRows, totals){
+    const rowMap = new Map();
+    (Array.isArray(rawRows) ? rawRows : []).forEach((row) => {
+      const key = String(row && row.date || '');
+      if (!key) return;
+      rowMap.set(key, {
+        date: key,
+        visits: Number(row && row.visits || 0),
+        uniqueVisitors: Number(row && row.uniqueVisitors || 0)
+      });
+    });
+
+    const keys = buildLastNDaysKeys(30);
+    const out = keys.map((key) => {
+      const existing = rowMap.get(key);
+      if (existing) return existing;
+      return { date: key, visits: 0, uniqueVisitors: 0 };
+    });
+
+    const todayKey = getAthensDateKey();
+    const todayIdx = out.findIndex(r => r.date === todayKey);
+    if (todayIdx >= 0 && !rowMap.has(todayKey)){
+      out[todayIdx].visits = Number(totals && totals.totalVisits || 0);
+      out[todayIdx].uniqueVisitors = Number(totals && totals.uniqueVisitors || 0);
+    }
+
+    return out;
+  }
+
+  function drawDailyChart(rows, hoverIndex = null){
     if (!chartCanvas) return;
     const ctx = chartCanvas.getContext('2d');
     if (!ctx) return;
@@ -119,6 +171,7 @@
     }
 
     const count = safeRows.length;
+    chartMeta = { pad, w, count };
     const xAt = (idx) => {
       if (count <= 1) return pad.left;
       return pad.left + (w * idx / (count - 1));
@@ -154,6 +207,64 @@
       const label = labels[count - 1] || '';
       ctx.fillText(label, lx - 14, pad.top + h + 16);
     }
+
+    if (hoverIndex == null || hoverIndex < 0 || hoverIndex >= count) return;
+
+    const idx = hoverIndex;
+    const hx = xAt(idx);
+    const hv = views[idx] || 0;
+    const hu = unique[idx] || 0;
+    const yv = yAt(hv);
+    const yu = yAt(hu);
+
+    ctx.strokeStyle = '#111';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(hx, pad.top);
+    ctx.lineTo(hx, pad.top + h);
+    ctx.stroke();
+
+    function drawPoint(x, y, color){
+      ctx.beginPath();
+      ctx.fillStyle = '#fff';
+      ctx.arc(x, y, 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = color;
+      ctx.stroke();
+    }
+    drawPoint(hx, yv, '#ef4444');
+    drawPoint(hx, yu, '#2563eb');
+  }
+
+  function bindChartHover(){
+    if (!chartCanvas) return;
+    chartCanvas.addEventListener('mousemove', (ev) => {
+      if (!chartMeta || !latestDailyRows.length) return;
+      const rect = chartCanvas.getBoundingClientRect();
+      const x = ev.clientX - rect.left;
+      const { pad, w, count } = chartMeta;
+      if (x < pad.left || x > (pad.left + w)){
+        if (chartHoverIndex !== null){
+          chartHoverIndex = null;
+          drawDailyChart(latestDailyRows, null);
+          setNextRefreshLabel();
+        }
+        return;
+      }
+      const idxRaw = count <= 1 ? 0 : Math.round(((x - pad.left) / w) * (count - 1));
+      const idx = Math.max(0, Math.min(count - 1, idxRaw));
+      if (idx === chartHoverIndex) return;
+      chartHoverIndex = idx;
+      drawDailyChart(latestDailyRows, chartHoverIndex);
+      setHoverInfoLabel(latestDailyRows[idx]);
+    });
+
+    chartCanvas.addEventListener('mouseleave', () => {
+      chartHoverIndex = null;
+      drawDailyChart(latestDailyRows, null);
+      setNextRefreshLabel();
+    });
   }
 
   function armMidnightRefresh(){
@@ -202,11 +313,12 @@
     );
     fillTable(
       tblDaily,
-      (data.dailyLast30 || []).map(x => `<tr><td>${x.date}</td><td>${num(x.visits)}</td><td>${num(x.uniqueVisitors)}</td></tr>`),
+      normalizeDailyRows(data.dailyLast30, data.totals).map(x => `<tr><td>${x.date}</td><td>${num(x.visits)}</td><td>${num(x.uniqueVisitors)}</td></tr>`),
       3
     );
-    latestDailyRows = data.dailyLast30 || [];
-    drawDailyChart(latestDailyRows);
+    latestDailyRows = normalizeDailyRows(data.dailyLast30, data.totals);
+    chartHoverIndex = null;
+    drawDailyChart(latestDailyRows, null);
     armMidnightRefresh();
   }
 
@@ -264,8 +376,9 @@
   }
 
   try{
+    bindChartHover();
     await loadAnalytics();
-    window.addEventListener('resize', () => drawDailyChart(latestDailyRows));
+    window.addEventListener('resize', () => drawDailyChart(latestDailyRows, chartHoverIndex));
   }catch{
     const msg = '<tr><td colspan="3">Failed to load analytics</td></tr>';
     tblCountry.innerHTML = msg;
