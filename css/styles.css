@@ -307,7 +307,7 @@ input[type="search"]:focus, select:focus{ transform: translateY(-1px) }
 
 .pill{ flex:0 0 auto; }    /* don’t shrink the difficulty pill */
 
-/* Mobile/touch: show a hint, reveal overlay only after first tap */
+/* Mobile/touch: reveal overlay only after first tap */
 @media (hover:none), (pointer:coarse){
   /* overlay is hidden by default on touch */
   .media .overlay{
@@ -318,18 +318,6 @@ input[type="search"]:focus, select:focus{ transform: translateY(-1px) }
   }
   /* when the card gets .show-ov (set by JS), show the overlay */
   .card.show-ov .media .overlay{ opacity: 1 !important; }
-
-  /* tappable hint */
-  .media::before{
-    content: "Tap to view / download";
-    position: absolute; bottom: 10px; left: 50%;
-    transform: translateX(-50%);
-    background: #fff; color:#000; border:2px solid #000; border-radius:0;
-    padding: 4px 8px; font-size: 14px;
-    pointer-events: none;
-  }
-  /* hide the hint when overlay is open */
-  .card.show-ov .media::before{ display:none; }
 
   /* clearer buttons on touch */
   .media .overlay .btn{
@@ -432,13 +420,10 @@ input[type="search"]:focus, select:focus{ transform: translateY(-1px) }
   }
 
   /* Cleaner mobile filter panel */
-  #controlsPanel{
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
-  }
+  #controlsPanel{ grid-template-columns: 1fr; gap: 8px; }
 
   .control.search{ grid-column: 1 / -1 !important; }
-  .control.select{ grid-column: span 1 !important; }
+  .control.select{ grid-column: 1 / -1 !important; }
   .control.actions{
     grid-column: 1 / -1 !important;
     display: block !important;
@@ -465,10 +450,32 @@ input[type="search"]:focus, select:focus{ transform: translateY(-1px) }
     min-height: 40px;
     line-height: 1.2;
   }
+
+  /* Pagination: tighter + no overflow on mobile */
+  .pager{
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+    padding: 12px 8px;
+  }
+  .pager .page-info{
+    grid-column: 1 / -1;
+    order: -1;
+    text-align: center;
+    font-size: 13px;
+  }
+  .pager .btn{
+    width: 100%;
+    min-height: 38px;
+    padding: 8px 6px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
 }
 
 @media (max-width: 360px){
   .grid{ grid-template-columns: 1fr; }
+  .pager{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 
